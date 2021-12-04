@@ -10,7 +10,7 @@ router.get("/", findAll);
 router.get("/:id", [
     check('id', 'El id no es valido').notEmpty(),
     validateFields
-] , findById);
+], findById);
 
 module.exports = {
     productRouter: router

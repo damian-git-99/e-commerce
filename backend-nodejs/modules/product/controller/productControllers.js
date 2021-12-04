@@ -14,9 +14,8 @@ const findById = asyncHandler(async (req, res) => {
     const product = await productService.findById(id);
 
     if (!product) {
-        return res.status(404).json({
-            error: `ERROR: no existe un producto con el id: ${id}`,
-        });
+        res.status(404);
+        throw new Error("Product not found");
     }
 
     return res.status(200).json(product);
