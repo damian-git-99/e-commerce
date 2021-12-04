@@ -65,5 +65,12 @@ const ProductSchema = new Schema({
     timestamps: true
 });
 
+// change _id to id https://stackoverflow.com/questions/7034848/mongodb-output-id-instead-of-id
+ProductSchema.set('toJSON', {
+    virtuals: true,
+    versionKey: false,
+    transform: function (doc, ret) { delete ret._id }
+});
+
 const ProductModel = mongoose.model('Product', ProductSchema);
 module.exports = ProductModel;
