@@ -1,14 +1,14 @@
-const mongoose = require('mongoose');
-const colors = require("colors");
-const products = require("./data/products");
-const users = require("./data/users");
-const OrderModel = require("./modules/order/model/OrderModel");
-const ProductModel = require("./modules/product/model/ProductModel");
-const UserModel = require("./modules/user/model/UserModel");
-require("dotenv").config();
-const connectDB = require("./db/config");
+// eslint-disable-next-line no-unused-vars
+const colors = require('colors');
+const products = require('./data/products');
+const users = require('./data/users');
+const OrderModel = require('./modules/order/model/OrderModel');
+const ProductModel = require('./modules/product/model/ProductModel');
+const UserModel = require('./modules/user/model/UserModel');
+require('dotenv').config();
+const connectDB = require('./db/config');
 
-connectDB()
+connectDB();
 
 const importData = async () => {
   try {
@@ -21,10 +21,10 @@ const importData = async () => {
     const adminUser = createdUsers[0]._id;
 
     const sampleProducts = products.map((product) => {
-      return { ...product, user: adminUser }
-    })
+      return { ...product, user: adminUser };
+    });
 
-    await ProductModel.insertMany(sampleProducts)
+    await ProductModel.insertMany(sampleProducts);
 
     console.log('Data Imported!'.green.inverse);
     process.exit();
@@ -32,7 +32,7 @@ const importData = async () => {
     console.error(`${error}`.red.inverse);
     process.exit(1);
   }
-}
+};
 
 const destroyData = async () => {
   try {
@@ -46,7 +46,7 @@ const destroyData = async () => {
     console.error(`${error}`.red.inverse);
     process.exit(1);
   }
-}
+};
 
 if (process.argv[2]?.toLowerCase() === '-d') {
   destroyData();
