@@ -4,7 +4,7 @@ const validateFields = require('../../../middlewares/expressValidator');
 const { findAll, findById } = require('../controller/productControllers');
 const router = Router();
 
-//@route /api/products
+// @route /api/products
 
 router.get('/', findAll);
 router.get('/:id', [

@@ -21,6 +21,14 @@
   "devDependencies": {
     "concurrently": "^6.4.0",
     "eslint": "^8.4.1",
-    "nodemon": "^2.0.15"
+    "nodemon": "^2.0.15",
+    "standard": "^16.0.4"
+  },
+  "eslintConfig": {
+    "extends": "./node_modules/standard/eslintrc.json",
+    "rules": {
+      "semi": [2, "always"],
+      "space-before-function-paren":"off"
+    }
   }
 }

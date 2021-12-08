@@ -3,7 +3,6 @@ const ProductService = require('../services/productService');
 const asyncHandler = require('express-async-handler');
 const productService = new ProductService();
 
-// eslint-disable-next-line no-unused-vars
 const findAll = asyncHandler(async (req = request, res = response) => {
   const products = await productService.findAll();
   res.status(200).json(products);
@@ -23,5 +22,5 @@ const findById = asyncHandler(async (req, res) => {
 
 module.exports = {
   findAll,
-  findById,
+  findById
 };

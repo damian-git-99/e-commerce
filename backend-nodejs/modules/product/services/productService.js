@@ -7,7 +7,7 @@ class ProductService {
   }
 
   findById(id) {
-    const product = ProductModel.findById(id);    
+    const product = ProductModel.findById(id);
     return product;
   }
 }
