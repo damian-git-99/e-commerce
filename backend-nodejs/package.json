@@ -27,8 +27,14 @@
   "eslintConfig": {
     "extends": "./node_modules/standard/eslintrc.json",
     "rules": {
-      "semi": [2, "always"],
-      "space-before-function-paren":"off"
+      "semi": [
+        2,
+        "always"
+      ],
+      "space-before-function-paren": "off"
     }
-  }
+  },
+  "eslint.workingDirectories": [
+    "./"
+  ]
 }
