@@ -1,18 +1,18 @@
-import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
-import { Row, Col, Image, ListGroup, Card, Button } from "react-bootstrap";
-import { Rating } from "../components/Rating";
-import axios from "axios";
+import React, { useEffect, useState } from 'react';
+import { Link, useRouteMatch } from 'react-router-dom';
+import { Row, Col, Image, ListGroup, Card, Button } from 'react-bootstrap';
+import { Rating } from '../components/Rating';
+import axios from 'axios';
 
-export const ProductScreen = ({ match }) => {
-
+export const ProductScreen = () => {
   const [product, setProduct] = useState({});
+  const match = useRouteMatch();
 
   useEffect(() => {
     const fetchProduct = async () => {
       const { data } = await axios.get(`/api/products/${match.params.id}`);
       setProduct(data);
-    }
+    };
     fetchProduct();
   }, []);
 
@@ -56,7 +56,7 @@ export const ProductScreen = ({ match }) => {
                 <Row>
                   <Col>Status:</Col>
                   <Col>
-                    {product.countInStock > 0 ? "In Stock" : "Out Of Stock"}
+                    {product.countInStock > 0 ? 'In Stock' : 'Out Of Stock'}
                   </Col>
                 </Row>
               </ListGroup.Item>
