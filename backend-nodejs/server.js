@@ -1,5 +1,6 @@
 const express = require('express');
 const connectDB = require('./db/config');
+// eslint-disable-next-line no-unused-vars
 const colors = require('colors');
 const { productRouter } = require('./modules/product/route/productRoutes');
 const { errorHandler } = require('./middlewares/errorHandlingMiddleware');
