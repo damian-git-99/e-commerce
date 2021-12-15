@@ -1,13 +1,14 @@
 package com.backend.spring.modules.user.entities;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import java.util.Date;
 
 @Entity @Table(name = "users")
-@Data
+@Data @NoArgsConstructor
 public class User {
 
     @Id
@@ -23,7 +24,7 @@ public class User {
     private Date updatedAt;
 
     @PrePersist
-    private void PrePersist(){
+    private void prePersist(){
         this.createdAt = new Date();
         this.updatedAt = new Date();
     }
