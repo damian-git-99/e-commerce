@@ -23,6 +23,12 @@ public class User {
     private Date createdAt;
     private Date updatedAt;
 
+    public User(String name, String email, boolean isAdmin) {
+        this.name = name;
+        this.email = email;
+        this.isAdmin = isAdmin;
+    }
+
     @PrePersist
     private void prePersist(){
         this.createdAt = new Date();
