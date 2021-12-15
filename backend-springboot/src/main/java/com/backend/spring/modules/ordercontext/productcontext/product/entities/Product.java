@@ -8,6 +8,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -20,13 +21,13 @@ public class Product {
     private Long id;
     private String name;
     private String image;
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     private Brand brand;
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     private Category category;
     private String description;
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "product")
-    private List<Review> reviews;
+    private List<Review> reviews = new ArrayList<>();
     @ManyToOne(fetch = FetchType.LAZY)
     private User user;
     private float price;
@@ -34,6 +35,15 @@ public class Product {
     private Date updatedAt;
     private int numReviews;
     private float rating;
+    private int countInStock;
+
+    public Product(String name, String image, Brand brand, Category category, String description) {
+        this.name = name;
+        this.image = image;
+        this.brand = brand;
+        this.category = category;
+        this.description = description;
+    }
 
     @PrePersist
     private void prePersist(){
