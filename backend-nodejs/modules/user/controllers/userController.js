@@ -23,6 +23,18 @@ const authUser = asyncHandler(async (req = request, res = response) => {
   });
 });
 
+const getProfile = asyncHandler(async (req = request, res = response) => {
+  console.log(req.user.id);
+  const user = await userService.findById(req.user.id);
+  return res.status(200).json({
+    id: user.id,
+    name: user.name,
+    email: user.email,
+    isAdmin: user.isAdmin
+  });
+});
+
 module.exports = {
-  authUser
+  authUser,
+  getProfile
 };

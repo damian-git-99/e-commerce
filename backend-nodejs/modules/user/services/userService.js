@@ -5,6 +5,11 @@ class UserService {
     const user = UserModel.findOne({ email });
     return user;
   }
+
+  findById(id) {
+    const user = UserModel.findById(id).select('-password');
+    return user;
+  }
 }
 
 module.exports = {
