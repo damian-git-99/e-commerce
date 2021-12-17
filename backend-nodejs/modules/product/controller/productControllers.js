@@ -11,7 +11,6 @@ const findAll = asyncHandler(async (req = request, res = response) => {
 const findById = asyncHandler(async (req, res) => {
   const id = req.params.id;
   const product = await productService.findById(id);
-
   if (!product) {
     res.status(404);
     throw new Error('Product not found');
