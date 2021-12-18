@@ -38,6 +38,12 @@ const login = (email, password) => {
   };
 };
 
+const logout = () => (dispatch) => {
+  localStorage.removeItem('userInfo');
+  dispatch({ type: USER_LOGIN_TYPES.USER_LOGOUT });
+};
+
 module.exports = {
-  login
+  login,
+  logout
 };
