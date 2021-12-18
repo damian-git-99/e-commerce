@@ -10,6 +10,11 @@ class UserService {
     const user = UserModel.findById(id).select('-password');
     return user;
   }
+
+  save(user) {
+    const newUser = UserModel.create(user);
+    return newUser;
+  }
 }
 
 module.exports = {

@@ -5,10 +5,12 @@ const colors = require('colors');
 const { productRouter } = require('./modules/product/route/productRoutes');
 const { errorHandler } = require('./middlewares/errorHandlingMiddleware');
 const { userRouter } = require('./modules/user/route/userRoutes');
+const morgan = require('morgan');
 const app = express();
 require('dotenv').config();
 connectDB();
 
+app.use(morgan('combined'));
 app.use(express.json());
 app.use('/api/products', productRouter);
 app.use('/api/users', userRouter);
