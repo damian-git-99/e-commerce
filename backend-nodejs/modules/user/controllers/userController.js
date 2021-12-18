@@ -37,10 +37,12 @@ const signUp = asyncHandler(async (req = request, res = response) => {
     name,
     password: encryptPassword(password)
   });
+
   if (!newUser) {
     res.status(400);
     throw new Error('Bad request data');
   }
+
   const key = process.env.JWT_SECRET;
   const token = generateToken({ id: newUser.id }, key);
   return res.status(201).json({
