@@ -1,5 +1,5 @@
 const { Router } = require('express');
-const { authUser, getProfile, signUp } = require('../controllers/userController');
+const { authUser, getProfile, signUp, updateUserProfile } = require('../controllers/userController');
 const { check } = require('express-validator');
 const validateFields = require('../../../middlewares/expressValidator');
 const { validateJwt } = require('../../../middlewares/validateJWT');
@@ -20,7 +20,11 @@ router.post('/signup', [
   validateFields
 ], signUp);
 
-router.get('/profile', [validateJwt], getProfile);
+// router.get('/profile', [validateJwt], getProfile);
+router
+  .route('/profile')
+  .get(validateJwt, getProfile)
+  .put(validateJwt, updateUserProfile);
 
 module.exports = {
   userRouter: router

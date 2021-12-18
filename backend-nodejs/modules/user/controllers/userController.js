@@ -12,8 +12,7 @@ const authUser = asyncHandler(async (req = request, res = response) => {
     res.status(401);
     throw new Error('bad credentials');
   }
-  const key = process.env.JWT_SECRET;
-  const token = generateToken({ id: user.id }, key);
+  const token = generateToken({ id: user.id });
   return res.status(200).json({
     id: user.id,
     name: user.name,
@@ -43,8 +42,7 @@ const signUp = asyncHandler(async (req = request, res = response) => {
     throw new Error('Bad request data');
   }
 
-  const key = process.env.JWT_SECRET;
-  const token = generateToken({ id: newUser.id }, key);
+  const token = generateToken({ id: newUser.id });
   return res.status(201).json({
     id: newUser.id,
     name: newUser.name,
@@ -64,8 +62,34 @@ const getProfile = asyncHandler(async (req = request, res = response) => {
   });
 });
 
+const updateUserProfile = asyncHandler(async (req, res) => {
+  const { name, email, password } = req.body;
+  const user = await userService.findById(req.user.id);
+  if (user) {
+    user.name = name || user.name;
+    user.email = email || user.email;
+    if (password) {
+      user.password = encryptPassword(password);
+    };
+
+    const updatedUser = await user.save();
+
+    res.json({
+      id: updatedUser.id,
+      name: updatedUser.name,
+      email: updatedUser.email,
+      isAdmin: updatedUser.isAdmin,
+      token: generateToken({ id: updatedUser.id })
+    });
+  } else {
+    res.status(404);
+    throw new Error('User not found');
+  }
+});
+
 module.exports = {
   authUser,
   getProfile,
-  signUp
+  signUp,
+  updateUserProfile
 };
