@@ -19,4 +19,10 @@ public class Review {
     @JoinColumn()
     private Product product;
 
+    public Review(Long id, String name, float rating, String comment) {
+        this.id = id;
+        this.name = name;
+        this.rating = rating;
+        this.comment = comment;
+    }
 }

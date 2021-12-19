@@ -45,6 +45,12 @@ public class Product {
         this.description = description;
     }
 
+    public void addReview(Review review){
+        review.setProduct(this);
+        reviews.add(review);
+        numReviews++;
+    }
+
     @PrePersist
     private void prePersist(){
         this.createdAt = new Date();
