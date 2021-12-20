@@ -9,6 +9,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,10 +22,12 @@ import java.util.stream.Collectors;
 public class UserServiceImpl implements UserService, UserDetailsService {
 
     private UserDao userDao;
+    private PasswordEncoder passwordEncoder;
 
     @Autowired
-    public UserServiceImpl(UserDao userDao) {
+    public UserServiceImpl(UserDao userDao, PasswordEncoder passwordEncoder) {
         this.userDao = userDao;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
@@ -33,11 +36,19 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
+    public User save(User user) {
+        if (user.getPassword() != null) {
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
+        }
+        return userDao.save(user);
+    }
+
+    @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         User user = this.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException("User not found"));
         Collection<? extends GrantedAuthority> authorities = user.getRoles().stream()
                 .map(Role::getName)
                 .map(SimpleGrantedAuthority::new).collect(Collectors.toList());
-        return new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword() , authorities);
+        return new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword(), authorities);
     }
 }
