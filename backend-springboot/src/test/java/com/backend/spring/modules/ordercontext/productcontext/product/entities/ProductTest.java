@@ -4,6 +4,7 @@ import com.backend.spring.modules.ordercontext.productcontext.brand.Brand;
 import com.backend.spring.modules.ordercontext.productcontext.category.Category;
 import com.backend.spring.modules.ordercontext.productcontext.review.Review;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -26,7 +27,8 @@ class ProductTest {
     }
 
     @Test
-    void addReview() {
+    @DisplayName("should add a review to the product")
+    void shouldAddReview() {
         Review review = new Review(1L,"damian",4.5f,"good product");
         int numReviews = product.getNumReviews();
 
