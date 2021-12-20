@@ -30,14 +30,28 @@ public class User {
     @JoinTable(uniqueConstraints = {@UniqueConstraint(columnNames = {"user_id", "roles_id"})})
     private List<Role> roles = new ArrayList<>();
 
+    public User(Long id, String name, String email, String password) {
+        this.id = id;
+        this.name = name;
+        this.email = email;
+        this.password = password;
+        this.isAdmin = false;
+    }
+
     public User(String name, String email, boolean isAdmin) {
         this.name = name;
         this.email = email;
         this.isAdmin = isAdmin;
     }
 
+    public User(String name, String email, String password) {
+        this.name = name;
+        this.email = email;
+        this.password = password;
+    }
+
     @PrePersist
-    private void prePersist(){
+    private void prePersist() {
         this.createdAt = new Date();
         this.updatedAt = new Date();
     }
