@@ -1,7 +1,9 @@
 package com.backend.spring.security;
 
+import com.backend.spring.modules.usercontext.user.daos.UserDao;
+import com.backend.spring.security.filter.JWTAuthenticationFilter;
+import com.backend.spring.security.jwt.JWTService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -9,20 +11,29 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-    @Autowired
     private UserDetailsService userDetailsService;
+    private UserDao userDao;
+    private PasswordEncoder passwordEncoder;
+    private JWTService jwtService;
+
+    @Autowired
+    public SecurityConfig(UserDetailsService userDetailsService, UserDao userDao, PasswordEncoder passwordEncoder, JWTService jwtService) {
+        this.userDetailsService = userDetailsService;
+        this.userDao = userDao;
+        this.passwordEncoder = passwordEncoder;
+        this.jwtService = jwtService;
+    }
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(userDetailsService)
-                .passwordEncoder(passwordEncoder());
+                .passwordEncoder(passwordEncoder);
     }
 
     @Override
@@ -31,11 +42,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
         http.authorizeRequests().antMatchers("/**").permitAll();
-    }
-
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
+        http.addFilter(new JWTAuthenticationFilter(this.authenticationManager(), userDao, jwtService));
     }
 
 
