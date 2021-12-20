@@ -3,7 +3,7 @@ package com.backend.spring.modules.ordercontext.productcontext.product.entities;
 import com.backend.spring.modules.ordercontext.productcontext.brand.Brand;
 import com.backend.spring.modules.ordercontext.productcontext.category.Category;
 import com.backend.spring.modules.ordercontext.productcontext.review.Review;
-import com.backend.spring.modules.user.entities.User;
+import com.backend.spring.modules.usercontext.user.entities.User;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -36,6 +36,15 @@ public class Product {
     private int numReviews;
     private float rating;
     private int countInStock;
+
+    public Product(Long id, String name, String image, Brand brand, Category category, String description) {
+        this.id = id;
+        this.name = name;
+        this.image = image;
+        this.brand = brand;
+        this.category = category;
+        this.description = description;
+    }
 
     public Product(String name, String image, Brand brand, Category category, String description) {
         this.name = name;
