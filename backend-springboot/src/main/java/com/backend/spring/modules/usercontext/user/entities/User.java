@@ -26,7 +26,7 @@ public class User {
     private boolean isAdmin;
     private Date createdAt;
     private Date updatedAt;
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
     @JoinTable(uniqueConstraints = {@UniqueConstraint(columnNames = {"user_id", "roles_id"})})
     private List<Role> roles = new ArrayList<>();
 
@@ -58,5 +58,12 @@ public class User {
 
     public boolean addRole(Role role) {
         return roles.add(role);
+    }
+
+    public boolean addRoles(List<Role> roles) {
+        for (Role role : roles) {
+            if (!addRole(role)) return false;
+        }
+        return true;
     }
 }
