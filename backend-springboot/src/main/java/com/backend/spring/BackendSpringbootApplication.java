@@ -6,6 +6,7 @@ import com.backend.spring.modules.ordercontext.productcontext.category.Category;
 import com.backend.spring.modules.ordercontext.productcontext.category.CategoryDao;
 import com.backend.spring.modules.ordercontext.productcontext.product.entities.Product;
 import com.backend.spring.modules.ordercontext.productcontext.product.services.ProductService;
+import com.backend.spring.modules.usercontext.role.Role;
 import com.backend.spring.modules.usercontext.user.entities.User;
 import com.backend.spring.modules.usercontext.user.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +14,8 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @SpringBootApplication
 public class BackendSpringbootApplication implements CommandLineRunner {
@@ -30,7 +33,7 @@ public class BackendSpringbootApplication implements CommandLineRunner {
     }
 
     @Override
-	@Transactional
+    @Transactional
     public void run(String... args) throws Exception {
         importUsers();
         importProducts();
@@ -41,13 +44,16 @@ public class BackendSpringbootApplication implements CommandLineRunner {
         this.userService = userService;
     }
 
-    private void importUsers(){
-        User user = new User("damian","admin@example.com", true);
+    private void importUsers() {
+        Role role = new Role("ROLE_ADMIN");
+        Role role1 = new Role("ROLE_USER");
+        User user = new User("damian", "admin@example.com", true);
         user.setPassword("123456");
+        user.addRoles(List.of(role, role1));
         userService.save(user);
     }
 
-    private void importProducts(){
+    private void importProducts() {
         Brand brand = new Brand("Apple");
         Category category = new Category("Electronics");
         brandDao.save(brand);
@@ -59,7 +65,6 @@ public class BackendSpringbootApplication implements CommandLineRunner {
         product.setNumReviews(12);
         product.setCountInStock(0);
         product.setRating(4.5f);
-        //product.setUser(user);
 
         Product product2 = new Product("iPhone 11 Pro 256GB Memory", "/images/phone.jpg", brand, category,
                 "Introducing the iPhone 11 Pro. A transformative triple-camera system that adds tons of capability without complexity. An unprecedented leap in battery life");
