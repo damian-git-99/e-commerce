@@ -22,6 +22,7 @@ public class User {
     @NotEmpty
     @Column(unique = true)
     private String email;
+    @NotEmpty
     private String password;
     private boolean isAdmin;
     private Date createdAt;
