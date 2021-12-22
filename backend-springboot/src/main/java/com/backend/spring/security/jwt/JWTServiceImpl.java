@@ -27,7 +27,7 @@ import java.util.stream.Collectors;
 public class JWTServiceImpl implements JWTService {
 
     private UserDao userDao;
-    private final long TWO_HOURS = (10 * 6000 * 120);
+    private final Date TWO_HOURS = new Date(System.currentTimeMillis()  + (10 * 6000 * 120));
 
     public static final Key SECRET_KEY =
             Keys.hmacShaKeyFor("MI_SUPER_LLAVE_PRIVADA_QWERTY_54321".getBytes(StandardCharsets.UTF_8));
@@ -47,7 +47,7 @@ public class JWTServiceImpl implements JWTService {
                 .setClaims(claims)
                 .setSubject(username)
                 .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + TWO_HOURS))
+                .setExpiration(TWO_HOURS)
                 .signWith(SECRET_KEY)
                 .compact();
     }
