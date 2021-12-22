@@ -40,13 +40,12 @@ public class JWTServiceImpl implements JWTService {
     @Override
     public String createAccessToken(String username, Map<String, Object> payload) {
 
-        User user = userDao.findUserByEmail(username).orElseThrow(() -> new UsernameNotFoundException("User Not found"));
         Claims claims = Jwts.claims();
         claims.putAll(payload);
 
         return Jwts.builder()
                 .setClaims(claims)
-                .setSubject(user.getEmail())
+                .setSubject(username)
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + TWO_HOURS))
                 .signWith(SECRET_KEY)
