@@ -1,9 +1,13 @@
 package com.backend.spring.modules.usercontext.user.services;
 
 import com.backend.spring.modules.usercontext.role.Role;
+import com.backend.spring.modules.usercontext.role.RoleDao;
 import com.backend.spring.modules.usercontext.user.daos.UserDao;
 import com.backend.spring.modules.usercontext.user.entities.User;
+import com.backend.spring.shared.exceptions.CustomException;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -19,15 +23,18 @@ import java.util.stream.Collectors;
 
 @Service
 @Transactional
+@Log4j2
 public class UserServiceImpl implements UserService, UserDetailsService {
 
     private UserDao userDao;
     private PasswordEncoder passwordEncoder;
+    private RoleDao roleDao;
 
     @Autowired
-    public UserServiceImpl(UserDao userDao, PasswordEncoder passwordEncoder) {
+    public UserServiceImpl(UserDao userDao, PasswordEncoder passwordEncoder, RoleDao roleDao) {
         this.userDao = userDao;
         this.passwordEncoder = passwordEncoder;
+        this.roleDao = roleDao;
     }
 
     @Override
@@ -41,6 +48,30 @@ public class UserServiceImpl implements UserService, UserDetailsService {
             user.setPassword(passwordEncoder.encode(user.getPassword()));
         }
         return userDao.save(user);
+    }
+
+    @Override
+    public User signup(User user) {
+        Optional<User> persistedUser = this.findByEmail(user.getEmail());
+        if (persistedUser.isPresent()) throw new CustomException("Email already exists", HttpStatus.BAD_REQUEST);
+
+        Optional<Role> role = roleDao.findByName("ROLE_USER");
+        if (role.isEmpty()) {
+            log.error("Role: ROLE_USER not found");
+            throw new CustomException("an error occurred on the server", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        user.addRole(role.get());
+        log.info("User with email: " + user.getEmail() + " registered");
+        return save(user);
+    }
+
+    @Override
+    public User updateUser(User newUser, User user) {
+        user.setEmail(newUser.getEmail() != null ? newUser.getEmail() : user.getEmail());
+        user.setName(newUser.getName() != null ? newUser.getName() : user.getName());
+        user.setPassword(newUser.getPassword() != null ? passwordEncoder.encode(newUser.getPassword()): user.getPassword());
+        userDao.save(user);
+        return user;
     }
 
     @Override
