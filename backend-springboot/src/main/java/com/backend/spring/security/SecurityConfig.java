@@ -2,17 +2,21 @@ package com.backend.spring.security;
 
 import com.backend.spring.modules.usercontext.user.daos.UserDao;
 import com.backend.spring.security.filter.JWTAuthenticationFilter;
+import com.backend.spring.security.filter.JWTAuthorizationFilter;
 import com.backend.spring.security.jwt.JWTService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+@EnableGlobalMethodSecurity(securedEnabled = true) // habilitar anotaciones
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
@@ -41,8 +45,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.csrf().disable();
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
-        http.authorizeRequests().antMatchers("/**").permitAll();
+        //http.authorizeRequests().antMatchers("/").permitAll();
         http.addFilter(new JWTAuthenticationFilter(this.authenticationManager(), userDao, jwtService));
+        http.addFilterBefore(new JWTAuthorizationFilter(this.authenticationManager(), jwtService), UsernamePasswordAuthenticationFilter.class);
     }
 
 
