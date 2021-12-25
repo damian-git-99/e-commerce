@@ -1,29 +1,26 @@
 import React, { useEffect } from 'react';
-import { Link, useRouteMatch, useHistory } from 'react-router-dom';
+import { Link, useRouteMatch, useHistory, useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { Row, Col, ListGroup, Image, Form, Button, Card } from 'react-bootstrap';
 import { addToCart, removeFromCart } from '../actions/cartActions';
 import { Message } from '../components/Message';
 
-// eslint-disable-next-line react/prop-types
-export const CartScreen = ({ location }) => {
+export const CartScreen = () => {
+  const location = useLocation();
   const history = useHistory();
   const match = useRouteMatch();
-  const productId = match.params.id;
-
-  // eslint-disable-next-line react/prop-types
-  const qty = location.search ? Number(location.search.split('=')[1]) : 1;
-
   const dispatch = useDispatch();
+  const productId = match.params.id;
+  const quantity = location.search ? Number(location.search.split('=')[1]) : 1;
 
   const cart = useSelector((state) => state.cart);
   const { cartItems } = cart;
 
   useEffect(() => {
     if (productId) {
-      dispatch(addToCart(productId, qty));
+      dispatch(addToCart(productId, quantity));
     }
-  }, [dispatch, productId, qty]);
+  }, [dispatch, productId, quantity]);
 
   const removeFromCartHandler = (id) => {
     dispatch(removeFromCart(id));
