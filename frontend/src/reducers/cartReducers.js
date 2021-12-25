@@ -17,12 +17,13 @@ export const cartReducer = (state = { cartItems: [] }, action) => {
             p.product === existItemInCart.product ? item : p
           )
         };
-      } else {
-        return {
-          ...state,
-          cartItems: [...state.cartItems, item]
-        };
       }
+
+      return {
+        ...state,
+        cartItems: [...state.cartItems, item]
+      };
+
     case CART_TYPES.CART_REMOVE_ITEM:
       return {
         ...state,
