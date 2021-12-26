@@ -13,7 +13,7 @@ export const addToCart = (id, quantity) => {
         image: data.image,
         price: data.price,
         countInStock: data.countInStock,
-        qty: quantity
+        quantity
       }
     });
 
