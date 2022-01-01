@@ -5,6 +5,11 @@ class OrderService {
     const newOrder = OrderModel.create(order);
     return newOrder;
   }
+
+  findById(id) {
+    const order = OrderModel.findById(id);
+    return order;
+  }
 }
 
 module.exports = {
