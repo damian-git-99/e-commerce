@@ -10,6 +10,11 @@ class OrderService {
     const order = OrderModel.findById(id);
     return order;
   }
+
+  findByIdWithUser(id) {
+    const order = OrderModel.findById(id).populate('user', 'name email');
+    return order;
+  }
 }
 
 module.exports = {

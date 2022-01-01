@@ -37,9 +37,7 @@ const addOrderItems = asyncHandler(async (req = request, res = response) => {
 
 // @route GET /api/orders/:id
 const getOrderById = asyncHandler(async (req = request, res = response) => {
-  const order = await orderService
-    .findById(req.params.id)
-    .populate('user', 'name email');
+  const order = await orderService.findByIdWithUser(req.params.id);
 
   if (!order) {
     res.status(404);
