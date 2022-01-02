@@ -1,4 +1,5 @@
 const { default: axios } = require('axios');
+const { ORDER_LIST_TYPES } = require('../reducers/orderReducers');
 const {
   USER_LOGIN_TYPES,
   USER_REGISTER_TYPES,
@@ -46,6 +47,8 @@ const login = (email, password) => {
 const logout = () => (dispatch) => {
   localStorage.removeItem('userInfo');
   dispatch({ type: USER_LOGIN_TYPES.USER_LOGOUT });
+  dispatch({ type: USER_DETAILS_TYPES.USER_DETAILS_RESET });
+  dispatch({ type: ORDER_LIST_TYPES.ORDER_LIST_MY_RESET });
 };
 
 const register = (name, email, password) => {

@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import { Button, Row, Col, ListGroup, Image, Card } from 'react-bootstrap';
 import { useSelector, useDispatch } from 'react-redux';
 import { CheckoutSteps } from '../components/CheckoutSteps';
@@ -7,6 +7,7 @@ import { Message } from '../components/Message';
 import { createOrder } from '../actions/orderActions';
 
 export const PlaceOrderScreen = () => {
+  const history = useHistory();
   const dispatch = useDispatch();
   const cart = useSelector((state) => state.cart);
 
