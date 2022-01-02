@@ -6,13 +6,12 @@ import { getUserDetails, updateUser } from '../actions/userActions';
 import { Loader } from '../components/Loader';
 import { Message } from '../components/Message';
 import { FormContainer } from '../components/FormContainer';
-import { USER_ADMIN_UPDATE_TYPES } from '../reducers/userReducers';
+import { USER_ADMIN_UPDATE_TYPES, USER_DETAILS_TYPES } from '../reducers/userReducers';
 
 export const UserEditScreen = () => {
   const history = useHistory();
   const match = useRouteMatch();
   const userId = match.params.id;
-  console.log(userId);
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [isAdmin, setIsAdmin] = useState(false);
@@ -43,6 +42,13 @@ export const UserEditScreen = () => {
       }
     }
   }, [dispatch, history, userId, user, successUpdate]);
+
+  // useEffect to clean up the userDetails when the component is unmounted and evit bug with component ProfileScreen
+  useEffect(() => {
+    return () => {
+      dispatch({ type: USER_DETAILS_TYPES.USER_DETAILS_RESET });
+    };
+  }, []);
 
   const submitHandler = (e) => {
     e.preventDefault();
