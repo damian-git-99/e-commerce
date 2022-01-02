@@ -4,10 +4,13 @@ const {
   USER_LOGIN_TYPES,
   USER_REGISTER_TYPES,
   USER_DETAILS_TYPES,
-  USER_UPDATE_TYPES
+  USER_UPDATE_TYPES,
+  USER_LIST_TYPES,
+  USER_DELETE_TYPES,
+  USER_ADMIN_UPDATE_TYPES
 } = require('../reducers/userReducers');
 
-const login = (email, password) => {
+export const login = (email, password) => {
   return async (dispatch) => {
     try {
       dispatch({
@@ -44,14 +47,15 @@ const login = (email, password) => {
   };
 };
 
-const logout = () => (dispatch) => {
+export const logout = () => (dispatch) => {
   localStorage.removeItem('userInfo');
   dispatch({ type: USER_LOGIN_TYPES.USER_LOGOUT });
   dispatch({ type: USER_DETAILS_TYPES.USER_DETAILS_RESET });
   dispatch({ type: ORDER_LIST_TYPES.ORDER_LIST_MY_RESET });
+  dispatch({ type: USER_LIST_TYPES.USER_LIST_RESET });
 };
 
-const register = (name, email, password) => {
+export const register = (name, email, password) => {
   return async (dispatch) => {
     try {
       dispatch({
@@ -92,7 +96,7 @@ const register = (name, email, password) => {
   };
 };
 
-const getUserDetails = (id) => {
+export const getUserDetails = (id) => {
   return async (dispatch, getState) => {
     try {
       dispatch({
@@ -107,7 +111,7 @@ const getUserDetails = (id) => {
           Authorization: `Bearer ${userInfo.token}`
         }
       };
-
+      console.log(id);
       const { data } = await axios.get(`/api/users/${id}`, config);
 
       dispatch({
@@ -126,7 +130,7 @@ const getUserDetails = (id) => {
   };
 };
 
-const updateUserProfile = (user) => {
+export const updateUserProfile = (user) => {
   return async (dispatch, getState) => {
     try {
       dispatch({
@@ -168,10 +172,97 @@ const updateUserProfile = (user) => {
   };
 };
 
-module.exports = {
-  login,
-  logout,
-  register,
-  getUserDetails,
-  updateUserProfile
+export const listUsers = () => {
+  return async (dispatch, getState) => {
+    try {
+      dispatch({
+        type: USER_LIST_TYPES.USER_LIST_REQUEST
+      });
+
+      const { userLogin: { userInfo } } = getState();
+
+      const config = {
+        headers: {
+          Authorization: `Bearer ${userInfo.token}`
+        }
+      };
+
+      const { data } = await axios.get('/api/users', config);
+
+      dispatch({
+        type: USER_LIST_TYPES.USER_LIST_SUCCESS,
+        payload: data
+      });
+    } catch (error) {
+      dispatch({
+        type: USER_LIST_TYPES.USER_LIST_FAIL,
+        payload:
+          error.response && error.response.data.message
+            ? error.response.data.message
+            : error.message
+      });
+    }
+  };
+};
+
+export const deleteUser = (id) => {
+  return async (dispatch, getState) => {
+    try {
+      dispatch({
+        type: USER_DELETE_TYPES.USER_DELETE_REQUEST
+      });
+
+      const { userLogin: { userInfo } } = getState();
+      const config = {
+        headers: {
+          Authorization: `Bearer ${userInfo.token}`
+        }
+      };
+      // eslint-disable-next-line no-unused-vars
+      const { data } = await axios.delete(`/api/users/${id}`, config);
+
+      dispatch({ type: USER_DELETE_TYPES.USER_DELETE_SUCCESS });
+    } catch (error) {
+      dispatch({
+        type: USER_DELETE_TYPES.USER_DELETE_FAIL,
+        payload:
+          error.response && error.response.data.message
+            ? error.response.data.message
+            : error.message
+      });
+    }
+  };
+};
+
+export const updateUser = (user) => {
+  return async (dispatch, getState) => {
+    try {
+      dispatch({
+        type: USER_ADMIN_UPDATE_TYPES.USER_UPDATE_REQUEST
+      });
+
+      const { userLogin: { userInfo } } = getState();
+
+      const config = {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${userInfo.token}`
+        }
+      };
+
+      const { data } = await axios.put(`/api/users/${user.id}`, user, config);
+
+      dispatch({ type: USER_ADMIN_UPDATE_TYPES.USER_UPDATE_SUCCESS });
+
+      dispatch({ type: USER_DETAILS_TYPES.USER_DETAILS_SUCCESS, payload: data });
+    } catch (error) {
+      dispatch({
+        type: USER_ADMIN_UPDATE_TYPES.USER_UPDATE_FAIL,
+        payload:
+          error.response && error.response.data.message
+            ? error.response.data.message
+            : error.message
+      });
+    }
+  };
 };

@@ -1,8 +1,8 @@
 const { Router } = require('express');
-const { authUser, getProfile, signUp, updateUserProfile } = require('../controllers/userController');
+const { authUser, getProfile, signUp, updateUserProfile, getUsers, deleteUser, getUserById, updateUser } = require('../controllers/userController');
 const { check } = require('express-validator');
 const validateFields = require('../../../middlewares/expressValidator');
-const { validateJwt } = require('../../../middlewares/validateJWT');
+const { validateJwt, isAdmin } = require('../../../middlewares/validateJWT');
 const router = Router();
 
 // @route /api/users
@@ -25,6 +25,12 @@ router
   .route('/profile')
   .get(validateJwt, getProfile)
   .put(validateJwt, updateUserProfile);
+
+router.route('/').get(validateJwt, isAdmin, getUsers);
+router.route('/:id')
+  .delete(validateJwt, isAdmin, deleteUser)
+  .get(validateJwt, isAdmin, getUserById)
+  .put(validateJwt, isAdmin, updateUser);
 
 module.exports = {
   userRouter: router

@@ -87,9 +87,62 @@ const updateUserProfile = asyncHandler(async (req, res) => {
   }
 });
 
+const getUsers = asyncHandler(async (req, res) => {
+  const users = await userService.findAll();
+  res.json(users);
+});
+
+const deleteUser = asyncHandler(async (req, res) => {
+  const result = await userService.deleteUser(req.params.id);
+
+  if (result) {
+    res.json({ message: 'User removed' });
+  } else {
+    res.status(404);
+    throw new Error('User not found');
+  }
+});
+
+const getUserById = asyncHandler(async (req, res) => {
+  const user = await userService.findById(req.params.id);
+
+  if (user) {
+    res.json(user);
+  } else {
+    res.status(404);
+    throw new Error('User not found');
+  }
+});
+
+const updateUser = asyncHandler(async (req, res) => {
+  const user = await userService.findById(req.params.id);
+
+  if (user) {
+    user.name = req.body.name || user.name;
+    user.email = req.body.email || user.email;
+    user.isAdmin = req.body.isAdmin || user.isAdmin;
+
+    const updatedUser = await user.save();
+
+    res.json({
+      id: updatedUser.id,
+      name: updatedUser.name,
+      email: updatedUser.email,
+      isAdmin: updatedUser.isAdmin
+    });
+  } else {
+    res.status(404);
+    throw new Error('User not found');
+  }
+});
+
 module.exports = {
   authUser,
   getProfile,
   signUp,
-  updateUserProfile
+  updateUserProfile,
+  getUsers,
+  deleteUser,
+  getUserById,
+  updateUser
 };
