@@ -74,5 +74,14 @@ const orderSchema = new Schema(
   }
 );
 
+// change _id to id https://stackoverflow.com/questions/7034848/mongodb-output-id-instead-of-id
+orderSchema.set('toJSON', {
+  virtuals: true,
+  versionKey: false,
+  transform: function (doc, ret) {
+    delete ret._id;
+  }
+});
+
 const OrderModel = mongoose.model('Order', orderSchema);
 module.exports = OrderModel;
