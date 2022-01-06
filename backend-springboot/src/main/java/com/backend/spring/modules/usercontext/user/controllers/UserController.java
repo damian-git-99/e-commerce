@@ -1,9 +1,6 @@
 package com.backend.spring.modules.usercontext.user.controllers;
 
-import com.backend.spring.modules.usercontext.user.dtos.UserDtoToken;
-import com.backend.spring.modules.usercontext.user.dtos.UserDtoTokenConverter;
-import com.backend.spring.modules.usercontext.user.dtos.UserProfileDTO;
-import com.backend.spring.modules.usercontext.user.dtos.UserProfileDTOConverter;
+import com.backend.spring.modules.usercontext.user.dtos.*;
 import com.backend.spring.modules.usercontext.user.entities.User;
 import com.backend.spring.modules.usercontext.user.services.UserService;
 import com.backend.spring.shared.BindingResultUtils;
@@ -23,8 +20,7 @@ import java.security.Principal;
 public class UserController {
 
     private UserService userService;
-    @Autowired
-    private UserProfileDTOConverter userProfileDTOConverter;
+
     @Autowired
     private UserDtoTokenConverter userDtoTokenConverter;
 
@@ -44,7 +40,7 @@ public class UserController {
     @GetMapping("/profile")
     public UserProfileDTO getProfile(Principal principal) {
         User user = userService.findByEmail(principal.getName()).orElseThrow(() -> new ResourceNotFoundException("user not found"));
-        return userProfileDTOConverter.toDTO(user);
+        return UserProfileDTOMapper.INSTANCE.toDTO(user);
     }
 
     @Secured("ROLE_USER")
