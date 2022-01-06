@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -72,6 +73,35 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         user.setPassword(newUser.getPassword() != null ? passwordEncoder.encode(newUser.getPassword()): user.getPassword());
         userDao.save(user);
         return user;
+    }
+
+    @Override
+    public User updateUserFromAdmin(User newUser, User oldUser) {
+        oldUser.setEmail(newUser.getEmail() != null ? newUser.getEmail() : oldUser.getEmail());
+        oldUser.setName(newUser.getName() != null ? newUser.getName() : oldUser.getName());
+        oldUser.setAdmin(newUser.isAdmin() != oldUser.isAdmin() ? newUser.isAdmin() : oldUser.isAdmin());
+        userDao.save(oldUser);
+        return oldUser;
+    }
+
+    @Override
+    public List<User> findAll() {
+        return userDao.findAll();
+    }
+
+    @Override
+    public Optional<User> findById(Long id) {
+        return userDao.findById(id);
+    }
+
+    @Override
+    public void deleteById(Long id) {
+        userDao.deleteById(id);
+    }
+
+    @Override
+    public void delete(User user) {
+        userDao.delete(user);
     }
 
     @Override
