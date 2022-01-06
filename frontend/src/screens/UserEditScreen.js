@@ -1,3 +1,4 @@
+/* eslint-disable eqeqeq */
 import React, { useState, useEffect } from 'react';
 import { Link, useRouteMatch, useHistory } from 'react-router-dom';
 import { Form, Button } from 'react-bootstrap';
@@ -6,7 +7,7 @@ import { getUserDetails, updateUser } from '../actions/userActions';
 import { Loader } from '../components/Loader';
 import { Message } from '../components/Message';
 import { FormContainer } from '../components/FormContainer';
-import { USER_ADMIN_UPDATE_TYPES, USER_DETAILS_TYPES } from '../reducers/userReducers';
+import { USER_ADMIN_UPDATE_TYPES } from '../reducers/userReducers';
 
 export const UserEditScreen = () => {
   const history = useHistory();
@@ -15,12 +16,12 @@ export const UserEditScreen = () => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [isAdmin, setIsAdmin] = useState(false);
-
+  console.log(userId);
   const dispatch = useDispatch();
 
   const userDetails = useSelector((state) => state.userDetails);
   const { loading, error, user } = userDetails;
-
+  console.log(user.id);
   const userUpdate = useSelector((state) => state.userUpdate);
   const {
     loading: loadingUpdate,
@@ -33,7 +34,7 @@ export const UserEditScreen = () => {
       dispatch({ type: USER_ADMIN_UPDATE_TYPES.USER_UPDATE_RESET });
       history.push('/admin/userlist');
     } else {
-      if (!user.name || user.id !== userId) {
+      if (!user.name || user.id != userId) {
         dispatch(getUserDetails(userId));
       } else {
         setName(user.name);
@@ -42,13 +43,6 @@ export const UserEditScreen = () => {
       }
     }
   }, [dispatch, history, userId, user, successUpdate]);
-
-  // useEffect to clean up the userDetails when the component is unmounted and evit bug with component ProfileScreen
-  useEffect(() => {
-    return () => {
-      dispatch({ type: USER_DETAILS_TYPES.USER_DETAILS_RESET });
-    };
-  }, []);
 
   const submitHandler = (e) => {
     e.preventDefault();

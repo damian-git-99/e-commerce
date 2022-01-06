@@ -43,7 +43,8 @@ export const OrderScreen = () => {
       document.body.appendChild(script);
     };
 
-    if (!order || successPay) {
+    // eslint-disable-next-line eqeqeq
+    if (!order || successPay || order.id != orderId) {
       dispatch({ type: ORDER_PAY_TYPES.ORDER_PAY_RESET });
       dispatch(getOrderDetails(orderId));
     } else if (!order.isPaid) {
