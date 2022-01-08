@@ -8,6 +8,7 @@ import com.backend.spring.shared.exceptions.CustomException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mapstruct.control.MappingControl;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.invocation.InvocationOnMock;
@@ -19,6 +20,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -27,8 +29,8 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
-import static org.mockito.Mockito.atMostOnce;
-import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.atLeastOnce;
 
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
@@ -54,7 +56,7 @@ class UserServiceImplTest {
         assertThat(user).isNotNull();
         assertThat(user.getEmail()).isEqualTo("damian@gmail.com");
         assertThat(user.getId()).isEqualTo(1L);
-        then(userDao).should(atMostOnce()).findUserByEmail("damian@gmail.com");
+        then(userDao).should(atLeastOnce()).findUserByEmail("damian@gmail.com");
     }
 
     @Test
@@ -65,7 +67,7 @@ class UserServiceImplTest {
         UserDetails userDetails = userService.loadUserByUsername("damian@gmail.com");
         assertThat(userDetails.getUsername()).isEqualTo("damian@gmail.com");
         assertThat(userDetails.getPassword()).isEqualTo("12345");
-        then(userDao).should(atMostOnce()).findUserByEmail("damian@gmail.com");
+        then(userDao).should(atLeastOnce()).findUserByEmail("damian@gmail.com");
     }
 
     @Test
@@ -79,7 +81,7 @@ class UserServiceImplTest {
 
         assertThat(exception.getClass()).isEqualTo(UsernameNotFoundException.class);
         assertThat(exception.getMessage()).isEqualTo("User not found");
-        then(userDao).should(atMostOnce()).findUserByEmail("damian@gmail.com");
+        then(userDao).should(atLeastOnce()).findUserByEmail("damian@gmail.com");
     }
 
     @Test
@@ -103,7 +105,7 @@ class UserServiceImplTest {
         assertThat(user.getId()).isNotNull().isEqualTo(10L);
         assertThat(user.getPassword()).isEqualTo("encrypted password");
         then(userDao).should(atMostOnce()).save(any(User.class));
-        then(passwordEncoder).should(atMostOnce()).encode(anyString());
+        then(passwordEncoder).should(atLeastOnce()).encode(anyString());
     }
 
     @Test
@@ -126,8 +128,8 @@ class UserServiceImplTest {
         User user = userService.signup(userData);
         assertThat(user.getId()).isEqualTo(10L);
         assertThat(user.getRoles()).isNotEmpty().hasSize(1);
-        then(userDao).should(atMostOnce()).findUserByEmail(anyString());
-        then(roleDao).should(atMostOnce()).findByName(anyString());
+        then(userDao).should(atLeastOnce()).findUserByEmail(anyString());
+        then(roleDao).should(atLeastOnce()).findByName(anyString());
     }
 
     @Test
@@ -158,8 +160,61 @@ class UserServiceImplTest {
 
         assertThat(updatedUser.getName()).isEqualTo("Damian actualizado");
         assertThat(updatedUser.getEmail()).isEqualTo("damian@gmail.com actualizado");
-        then(userDao).should(atMostOnce()).save(any(User.class));
+        then(userDao).should(atLeastOnce()).save(any(User.class));
 
+    }
+
+    @Test
+    @DisplayName("should find all the users")
+    void shouldFindAll(){
+        List<User> data = USER_DATA.getUsers();
+        given(userDao.findAll()).willReturn(data);
+
+        List<User> users = userService.findAll();
+
+        assertThat(users).isNotEmpty().hasSize(3);
+        then(userDao).should().findAll();
+    }
+
+    @Test
+    @DisplayName("should find a user by id")
+    void shouldFindById(){
+        Optional<User> data = USER_DATA.getUserWithRoles();
+        given(userDao.findById(1L)).willReturn(data);
+
+        User user = userService.findById(1L).orElse(null);
+
+        assertThat(user).isNotNull();
+        assertThat(user.getEmail()).isEqualTo("damian@gmail.com");
+        assertThat(user.getId()).isEqualTo(1L);
+        then(userDao).should(atLeastOnce()).findById(1L);
+    }
+
+    @Test
+    @DisplayName("should delete a user by id")
+    void shouldDeleteById(){
+        userService.deleteById(1L);
+        then(userDao).should(atLeastOnce()).deleteById(1L);
+    }
+
+    @Test
+    @DisplayName("should delete user by entity")
+    void shouldDeleteUser(){
+        User user = new User("Damian", "damian@gmail.com", "123456");
+        userService.delete(user);
+        then(userDao).should(atLeastOnce()).delete(user);
+    }
+    
+    void shouldUpdateUserFromAdmin(){
+        User user = new User("Damian", "damian@gmail.com", "123456");
+        User newUser = new User("Damian actualizado", "damian@gmail.com actualizado", "123456");
+        given(userDao.save(any(User.class))).willReturn(user);
+
+        User updatedUser = userService.updateUserFromAdmin(newUser, user);
+
+        assertThat(updatedUser.getName()).isEqualTo("Damian actualizado");
+        assertThat(updatedUser.getEmail()).isEqualTo("damian@gmail.com actualizado");
+        then(userDao).should(atLeastOnce()).save(any(User.class));
     }
 
 }
