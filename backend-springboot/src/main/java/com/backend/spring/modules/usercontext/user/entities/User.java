@@ -1,5 +1,6 @@
 package com.backend.spring.modules.usercontext.user.entities;
 
+import com.backend.spring.modules.ordercontext.order.entities.Order;
 import com.backend.spring.modules.usercontext.role.Role;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -30,6 +31,8 @@ public class User {
     @ManyToMany(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
     @JoinTable(uniqueConstraints = {@UniqueConstraint(columnNames = {"user_id", "roles_id"})})
     private List<Role> roles = new ArrayList<>();
+    @OneToMany(cascade = CascadeType.ALL)
+    private List<Order> orders = new ArrayList<>();
 
     public User(Long id, String name, String email, String password) {
         this.id = id;
@@ -66,5 +69,10 @@ public class User {
             if (!addRole(role)) return false;
         }
         return true;
+    }
+
+    public void addOrder(Order order){
+        order.setUser(this);
+        orders.add(order);
     }
 }
