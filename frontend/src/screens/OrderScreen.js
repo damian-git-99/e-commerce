@@ -29,7 +29,7 @@ export const OrderScreen = () => {
       order.orderItems.reduce((acc, item) => acc + item.price * item.quantity, 0)
     );
   }
-
+  console.log(order);
   useEffect(() => {
     const addPayPalScript = async () => {
       const { data: clientId } = await axios.get('/api/config/paypal');
@@ -55,7 +55,13 @@ export const OrderScreen = () => {
 
   const successPaymentHandler = (paymentResult) => {
     console.log(paymentResult);
-    dispatch(payOrder(orderId, paymentResult));
+    const data = {
+      id: paymentResult.id,
+      status: paymentResult.status,
+      update_time: paymentResult.update_time,
+      email_address: paymentResult.payer.email_address
+    };
+    dispatch(payOrder(orderId, data));
   };
 
   return loading

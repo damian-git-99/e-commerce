@@ -6,6 +6,7 @@ import com.backend.spring.modules.order.order.entities.Order;
 import com.backend.spring.modules.order.order.dtos.OrderRequestDTO;
 import com.backend.spring.modules.order.order.dtos.OrderRequestMapper;
 import com.backend.spring.modules.order.order.services.OrderService;
+import com.backend.spring.modules.order.payment_result.PaymentResult;
 import com.backend.spring.modules.user.user.entities.User;
 import com.backend.spring.modules.user.user.services.UserService;
 import com.backend.spring.shared.exceptions.ResourceNotFoundException;
@@ -46,6 +47,12 @@ public class OrderController {
     public List<OrderRequestDTO> getMyOrders(Principal principal){
         User user = userService.findByEmail(principal.getName()).orElseThrow(() -> new ResourceNotFoundException("User Not found"));
         return user.getOrders().stream().map(OrderRequestMapper.INSTANCE::toDTO).collect(Collectors.toList());
+    }
+
+    @PutMapping("/{id}/pay")
+    public OrderDetailsDTO updateOrderToPaid(@PathVariable Long id, @RequestBody PaymentResult paymentResult){
+        Order order = orderService.updateOrderToPaid(id, paymentResult);
+        return OrderDetailsDTOMapper.INSTANCE.toDTO(order);
     }
 
 }

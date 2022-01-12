@@ -5,6 +5,7 @@ import com.backend.spring.modules.order.order.daos.OrderDao;
 import com.backend.spring.modules.order.order.dtos.OrderRequestDTO;
 import com.backend.spring.modules.order.order.dtos.OrderRequestMapper;
 import com.backend.spring.modules.order.order_item.dtos.OrderItemDTO;
+import com.backend.spring.modules.order.payment_result.PaymentResult;
 import com.backend.spring.modules.product.product.entities.Product;
 import com.backend.spring.modules.product.product.services.ProductService;
 import com.backend.spring.modules.user.user.entities.User;
@@ -18,6 +19,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.security.Principal;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -57,6 +59,16 @@ public class OrderServiceImpl implements OrderService{
         orderDao.save(order);
         orderRequestDTO.setId(order.getId());
         return orderRequestDTO;
+    }
+
+    @Override
+    public Order updateOrderToPaid(Long orderId, PaymentResult paymentResult) {
+        Order order = orderDao.findById(orderId).orElseThrow(() -> new ResourceNotFoundException("Order Not found"));
+        order.setPaymentResult(paymentResult);
+        order.setPaid(true);
+        order.setPaidAt(new Date());
+        orderDao.save(order);
+        return order;
     }
 
     private double calculateTotal(OrderRequestDTO orderRequestDTO){

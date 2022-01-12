@@ -10,14 +10,12 @@ import javax.persistence.*;
 public class PaymentResult {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-    private String paypalId;
+    private String id;
     private String status;
     @Column(name = "update_time")
-    private String updateTime;
-    @Column(name = "update_address")
-    private String emailAddress;
+    private String update_time;
+    @Column(name = "email_address")
+    private String email_address;
 
     
 
