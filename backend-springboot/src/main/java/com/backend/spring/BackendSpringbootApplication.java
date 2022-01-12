@@ -1,14 +1,14 @@
 package com.backend.spring;
 
-import com.backend.spring.modules.ordercontext.productcontext.brand.Brand;
-import com.backend.spring.modules.ordercontext.productcontext.brand.BrandDao;
-import com.backend.spring.modules.ordercontext.productcontext.category.Category;
-import com.backend.spring.modules.ordercontext.productcontext.category.CategoryDao;
-import com.backend.spring.modules.ordercontext.productcontext.product.entities.Product;
-import com.backend.spring.modules.ordercontext.productcontext.product.services.ProductService;
-import com.backend.spring.modules.usercontext.role.Role;
-import com.backend.spring.modules.usercontext.user.entities.User;
-import com.backend.spring.modules.usercontext.user.services.UserService;
+import com.backend.spring.modules.product.brand.Brand;
+import com.backend.spring.modules.product.brand.BrandDao;
+import com.backend.spring.modules.product.category.Category;
+import com.backend.spring.modules.product.category.CategoryDao;
+import com.backend.spring.modules.product.product.entities.Product;
+import com.backend.spring.modules.product.product.services.ProductService;
+import com.backend.spring.modules.user.role.Role;
+import com.backend.spring.modules.user.user.entities.User;
+import com.backend.spring.modules.user.user.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;

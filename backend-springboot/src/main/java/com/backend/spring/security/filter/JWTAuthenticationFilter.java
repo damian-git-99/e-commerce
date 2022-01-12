@@ -1,7 +1,7 @@
 package com.backend.spring.security.filter;
 
-import com.backend.spring.modules.usercontext.user.daos.UserDao;
-import com.backend.spring.modules.usercontext.user.entities.User;
+import com.backend.spring.modules.user.user.daos.UserDao;
+import com.backend.spring.modules.user.user.entities.User;
 import com.backend.spring.security.jwt.JWTService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.security.authentication.AuthenticationManager;

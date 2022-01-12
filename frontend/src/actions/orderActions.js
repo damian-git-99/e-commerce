@@ -58,12 +58,13 @@ export const getOrderDetails = (id) => {
       };
 
       const { data } = await axios.get(`/api/orders/${id}`, config);
-
+      console.log(data);
       dispatch({
         type: ORDER_DETAILS_TYPES.ORDER_DETAILS_SUCCESS,
         payload: data
       });
     } catch (error) {
+      console.log(error);
       dispatch({
         type: ORDER_DETAILS_TYPES.ORDER_DETAILS_FAIL,
         payload:

@@ -1,6 +1,6 @@
 package com.backend.spring.security;
 
-import com.backend.spring.modules.usercontext.user.daos.UserDao;
+import com.backend.spring.modules.user.user.daos.UserDao;
 import com.backend.spring.security.filter.JWTAuthenticationFilter;
 import com.backend.spring.security.filter.JWTAuthorizationFilter;
 import com.backend.spring.security.jwt.JWTService;

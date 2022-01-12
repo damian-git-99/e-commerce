@@ -49,6 +49,7 @@ export const orderDetailsReducer = (
       };
     case ORDER_DETAILS_TYPES.ORDER_DETAILS_SUCCESS:
       return {
+        ...state,
         loading: false,
         order: action.payload
       };

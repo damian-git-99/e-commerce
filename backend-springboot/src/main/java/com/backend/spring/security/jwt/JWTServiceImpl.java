@@ -1,8 +1,8 @@
 package com.backend.spring.security.jwt;
 
-import com.backend.spring.modules.usercontext.role.Role;
-import com.backend.spring.modules.usercontext.user.daos.UserDao;
-import com.backend.spring.modules.usercontext.user.entities.User;
+import com.backend.spring.modules.user.role.Role;
+import com.backend.spring.modules.user.user.daos.UserDao;
+import com.backend.spring.modules.user.user.entities.User;
 import com.backend.spring.shared.exceptions.CustomException;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
