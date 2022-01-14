@@ -1,5 +1,6 @@
 import axios from 'axios';
 import {
+  PRODUCT_CREATE_TYPES,
   PRODUCT_DELETE_TYPES,
   PRODUCT_DETAILS_TYPES,
   PRODUCT_TYPES
@@ -72,6 +73,41 @@ export const deleteProduct = (id) => {
     } catch (error) {
       dispatch({
         type: PRODUCT_DELETE_TYPES.PRODUCT_DELETE_FAIL,
+        payload:
+          error.response && error.response.data.message
+            ? error.response.data.message
+            : error.message
+      });
+    }
+  };
+};
+
+export const createProduct = () => {
+  return async (dispatch, getState) => {
+    try {
+      dispatch({
+        type: PRODUCT_CREATE_TYPES.PRODUCT_CREATE_REQUEST
+      });
+
+      const {
+        userLogin: { userInfo }
+      } = getState();
+
+      const config = {
+        headers: {
+          Authorization: `Bearer ${userInfo.token}`
+        }
+      };
+
+      const { data } = await axios.post('/api/products', {}, config);
+
+      dispatch({
+        type: PRODUCT_CREATE_TYPES.PRODUCT_CREATE_SUCCESS,
+        payload: data
+      });
+    } catch (error) {
+      dispatch({
+        type: PRODUCT_CREATE_TYPES.PRODUCT_CREATE_FAIL,
         payload:
           error.response && error.response.data.message
             ? error.response.data.message
