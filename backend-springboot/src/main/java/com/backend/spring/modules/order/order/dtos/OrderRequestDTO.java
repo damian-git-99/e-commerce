@@ -1,7 +1,7 @@
 package com.backend.spring.modules.order.order.dtos;
 
 import com.backend.spring.modules.order.order_item.dtos.OrderItemDTO;
-import com.backend.spring.modules.order.shipping_address.ShippingAddress;
+import com.backend.spring.modules.order.order.entities.ShippingAddress;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 

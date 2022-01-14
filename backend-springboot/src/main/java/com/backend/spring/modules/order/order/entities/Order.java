@@ -1,9 +1,6 @@
 package com.backend.spring.modules.order.order.entities;
 
 import com.backend.spring.modules.order.order_item.OrderItem;
-import com.backend.spring.modules.order.payment_method.PaymentMethod;
-import com.backend.spring.modules.order.payment_result.PaymentResult;
-import com.backend.spring.modules.order.shipping_address.ShippingAddress;
 import com.backend.spring.modules.user.user.entities.User;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;

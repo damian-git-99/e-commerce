@@ -1,8 +1,8 @@
 package com.backend.spring.modules.order.order.dtos;
 
 import com.backend.spring.modules.order.order_item.dtos.OrderItemDTO;
-import com.backend.spring.modules.order.payment_result.PaymentResult;
-import com.backend.spring.modules.order.shipping_address.ShippingAddress;
+import com.backend.spring.modules.order.order.entities.PaymentResult;
+import com.backend.spring.modules.order.order.entities.ShippingAddress;
 import com.backend.spring.modules.user.user.dtos.UserDetailsDTO;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;

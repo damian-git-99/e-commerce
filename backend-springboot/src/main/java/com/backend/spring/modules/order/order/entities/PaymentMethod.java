@@ -1,4 +1,4 @@
-package com.backend.spring.modules.order.shipping_address;
+package com.backend.spring.modules.order.order.entities;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -10,14 +10,11 @@ import javax.persistence.Id;
 
 @Entity
 @Data @NoArgsConstructor
-public class ShippingAddress {
+public class PaymentMethod {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String address;
-    private String city;
-    private String postalCode;
-    private String country;
+    private String name;
 
 }

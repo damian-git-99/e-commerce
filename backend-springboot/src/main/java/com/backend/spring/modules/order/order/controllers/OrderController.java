@@ -6,7 +6,7 @@ import com.backend.spring.modules.order.order.entities.Order;
 import com.backend.spring.modules.order.order.dtos.OrderRequestDTO;
 import com.backend.spring.modules.order.order.dtos.OrderRequestMapper;
 import com.backend.spring.modules.order.order.services.OrderService;
-import com.backend.spring.modules.order.payment_result.PaymentResult;
+import com.backend.spring.modules.order.order.entities.PaymentResult;
 import com.backend.spring.modules.user.user.entities.User;
 import com.backend.spring.modules.user.user.services.UserService;
 import com.backend.spring.shared.exceptions.ResourceNotFoundException;

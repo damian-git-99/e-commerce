@@ -1,4 +1,4 @@
-package com.backend.spring.modules.order.payment_result;
+package com.backend.spring.modules.order.order.entities;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;

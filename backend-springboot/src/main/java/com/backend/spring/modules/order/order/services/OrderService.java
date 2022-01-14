@@ -2,7 +2,7 @@ package com.backend.spring.modules.order.order.services;
 
 import com.backend.spring.modules.order.order.entities.Order;
 import com.backend.spring.modules.order.order.dtos.OrderRequestDTO;
-import com.backend.spring.modules.order.payment_result.PaymentResult;
+import com.backend.spring.modules.order.order.entities.PaymentResult;
 
 import java.security.Principal;
 import java.util.List;

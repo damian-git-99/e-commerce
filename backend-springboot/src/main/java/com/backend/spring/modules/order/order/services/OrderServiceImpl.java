@@ -5,7 +5,7 @@ import com.backend.spring.modules.order.order.daos.OrderDao;
 import com.backend.spring.modules.order.order.dtos.OrderRequestDTO;
 import com.backend.spring.modules.order.order.dtos.OrderRequestMapper;
 import com.backend.spring.modules.order.order_item.dtos.OrderItemDTO;
-import com.backend.spring.modules.order.payment_result.PaymentResult;
+import com.backend.spring.modules.order.order.entities.PaymentResult;
 import com.backend.spring.modules.product.product.entities.Product;
 import com.backend.spring.modules.product.product.services.ProductService;
 import com.backend.spring.modules.user.user.entities.User;
