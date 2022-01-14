@@ -10,6 +10,16 @@ class ProductService {
     const product = ProductModel.findById(id);
     return product;
   }
+
+  async deleteById(id) {
+    const product = await this.findById(id);
+    if (product) {
+      await product.remove();
+      return true;
+    } else {
+      return false;
+    }
+  }
 }
 
 module.exports = ProductService;

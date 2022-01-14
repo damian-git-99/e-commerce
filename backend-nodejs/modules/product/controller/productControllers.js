@@ -19,7 +19,19 @@ const findById = asyncHandler(async (req, res) => {
   return res.status(200).json(product);
 });
 
+const deleteProduct = asyncHandler(async (req, res) => {
+  const result = await productService.deleteById((req.params.id));
+
+  if (result) {
+    res.json({ message: 'Product removed' });
+  } else {
+    res.status(404);
+    throw new Error('Product not found');
+  }
+});
+
 module.exports = {
   findAll,
-  findById
+  findById,
+  deleteProduct
 };
