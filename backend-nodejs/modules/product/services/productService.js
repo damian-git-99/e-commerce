@@ -2,7 +2,7 @@ const ProductModel = require('../model/ProductModel');
 
 class ProductService {
   create(product) {
-    const newProduct = ProductModel.create(ProductService);
+    const newProduct = ProductModel.create(product);
     return newProduct;
   }
 

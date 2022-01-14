@@ -42,7 +42,7 @@ export const ProductListScreen = () => {
     }
 
     if (successCreate) {
-      history.push(`/admin/product/${createdProduct._id}/edit`);
+      history.push(`/admin/product/${createdProduct.id}/edit`);
     } else {
       dispatch(listProducts());
     }

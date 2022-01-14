@@ -42,8 +42,8 @@ const createProduct = asyncHandler(async (req, res) => {
   const product = {
     name: 'Sample name',
     price: 0,
-    user: req.user._id,
-    image: '../../../images/sample.jpg',
+    user: req.user.id,
+    image: '/images/sample.jpg',
     brand: 'Sample brand',
     category: 'Sample category',
     countInStock: 0,
@@ -52,6 +52,7 @@ const createProduct = asyncHandler(async (req, res) => {
   };
 
   const createdProduct = await productService.create(product);
+  console.log(createdProduct);
   res.status(201).json(createdProduct);
 });
 

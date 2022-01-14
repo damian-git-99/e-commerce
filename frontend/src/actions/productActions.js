@@ -3,7 +3,8 @@ import {
   PRODUCT_CREATE_TYPES,
   PRODUCT_DELETE_TYPES,
   PRODUCT_DETAILS_TYPES,
-  PRODUCT_TYPES
+  PRODUCT_TYPES,
+  PRODUCT_UPDATE_TYPES
 } from '../reducers/productReducers';
 
 export const listProducts = () => {
@@ -108,6 +109,46 @@ export const createProduct = () => {
     } catch (error) {
       dispatch({
         type: PRODUCT_CREATE_TYPES.PRODUCT_CREATE_FAIL,
+        payload:
+          error.response && error.response.data.message
+            ? error.response.data.message
+            : error.message
+      });
+    }
+  };
+};
+
+export const updateProduct = (product) => {
+  return async (dispatch, getState) => {
+    try {
+      dispatch({
+        type: PRODUCT_UPDATE_TYPES.PRODUCT_UPDATE_REQUEST
+      });
+
+      const {
+        userLogin: { userInfo }
+      } = getState();
+
+      const config = {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${userInfo.token}`
+        }
+      };
+
+      const { data } = await axios.put(
+        `/api/products/${product.id}`,
+        product,
+        config
+      );
+
+      dispatch({
+        type: PRODUCT_UPDATE_TYPES.PRODUCT_UPDATE_SUCCESS,
+        payload: data
+      });
+    } catch (error) {
+      dispatch({
+        type: PRODUCT_UPDATE_TYPES.PRODUCT_UPDATE_FAIL,
         payload:
           error.response && error.response.data.message
             ? error.response.data.message
