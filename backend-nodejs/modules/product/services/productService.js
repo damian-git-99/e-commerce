@@ -1,6 +1,11 @@
 const ProductModel = require('../model/ProductModel');
 
 class ProductService {
+  create(product) {
+    const newProduct = ProductModel.create(ProductService);
+    return newProduct;
+  }
+
   findAll() {
     const products = ProductModel.find({});
     return products;
