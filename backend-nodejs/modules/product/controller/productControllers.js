@@ -1,7 +1,6 @@
 const { request, response } = require('express');
-const ProductService = require('../services/productService');
 const asyncHandler = require('express-async-handler');
-const productService = new ProductService();
+const productService = require('../services/productService');
 
 // @desc    Fetch all products
 // @route   GET /api/products
@@ -43,7 +42,7 @@ const createProduct = asyncHandler(async (req, res) => {
     name: 'Sample name',
     price: 0,
     user: req.user.id,
-    image: '/images/sample.jpg',
+    image: '',
     brand: 'Sample brand',
     category: 'Sample category',
     countInStock: 0,
