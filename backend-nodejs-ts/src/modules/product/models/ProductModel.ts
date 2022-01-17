@@ -27,8 +27,8 @@ export interface Product {
   brand: string;
   category: string;
   description: string;
-  reviews: [];
-  rating: number;
+  reviews?: [];
+  rating?: number;
   numReviews: number;
   countInStock: number;
   price: number;
@@ -47,7 +47,7 @@ const ProductSchema = new Schema<Product>(
     },
     image: {
       type: String,
-      required: true,
+      required: false,
     },
     brand: {
       type: String,

@@ -79,3 +79,24 @@ export const getMyOrders = asyncHandler(async (req: Request, res: Response) => {
   const orders = await orderService.findOrdersByUser(id);
   res.json(orders);
 });
+
+export const updateOrderToDelivered = asyncHandler(async (req, res) => {
+  const order = await orderService.findById(req.params.id);
+
+  if (order) {
+    order.isDelivered = true;
+    order.deliveredAt = new Date();
+
+    const updatedOrder = await order.save();
+
+    res.json(updatedOrder);
+  } else {
+    res.status(404);
+    throw new Error('Order not found');
+  }
+});
+
+export const getOrders = asyncHandler(async (req, res) => {
+  const orders = await orderService.findAllWithUser();
+  res.json(orders);
+});
