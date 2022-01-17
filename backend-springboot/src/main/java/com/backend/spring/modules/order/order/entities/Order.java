@@ -37,6 +37,7 @@ public class Order {
     private PaymentMethod paymentMethod;
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<OrderItem> orderItems = new ArrayList<>();
+    private Date deliveredAt;
 
     @PrePersist
     private void prePersist(){

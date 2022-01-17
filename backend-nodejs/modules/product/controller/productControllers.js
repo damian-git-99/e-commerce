@@ -51,7 +51,6 @@ const createProduct = asyncHandler(async (req, res) => {
   };
 
   const createdProduct = await productService.create(product);
-  console.log(createdProduct);
   res.status(201).json(createdProduct);
 });
 

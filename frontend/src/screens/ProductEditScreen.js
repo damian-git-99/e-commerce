@@ -27,7 +27,6 @@ export const ProductEditScreen = () => {
 
   const productDetails = useSelector((state) => state.productDetails);
   const { loading, error, product } = productDetails;
-  console.log(productDetails);
   const productUpdate = useSelector((state) => state.productUpdate);
   const {
     loading: loadingUpdate,
@@ -40,7 +39,8 @@ export const ProductEditScreen = () => {
       dispatch({ type: PRODUCT_UPDATE_TYPES.PRODUCT_UPDATE_RESET });
       history.push('/admin/productlist');
     } else {
-      if (!product.name || product.id !== productId) {
+      // eslint-disable-next-line eqeqeq
+      if (!product.name || product.id != productId) {
         dispatch(listProductDetails(productId));
       } else {
         setName(product.name);

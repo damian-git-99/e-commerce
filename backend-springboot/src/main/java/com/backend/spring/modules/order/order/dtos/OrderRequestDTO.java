@@ -2,6 +2,7 @@ package com.backend.spring.modules.order.order.dtos;
 
 import com.backend.spring.modules.order.order_item.dtos.OrderItemDTO;
 import com.backend.spring.modules.order.order.entities.ShippingAddress;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -21,4 +22,10 @@ public class OrderRequestDTO {
     private double itemsPrice;
     private Long user;
     private Date createdAt;
+    @JsonProperty("isDelivered")
+    private boolean isDelivered;
+    private Date deliveredAt;
+    @JsonProperty("isPaid")
+    private boolean isPaid;
+
 }

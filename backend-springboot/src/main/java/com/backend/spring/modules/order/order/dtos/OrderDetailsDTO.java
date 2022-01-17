@@ -21,6 +21,7 @@ public class OrderDetailsDTO {
     private double totalPrice;
     @JsonProperty("isPaid")
     private boolean isPaid;
+    @JsonProperty("isDelivered")
     private boolean isDelivered;
     private Date createdAt;
     private Date updatedAt;
@@ -30,5 +31,6 @@ public class OrderDetailsDTO {
     private PaymentResult paymentResult;
     private String paymentMethod;
     private List<OrderItemDTO> orderItems = new ArrayList<>();
+    private Date deliveredAt;
 
 }

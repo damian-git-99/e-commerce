@@ -55,4 +55,16 @@ public class OrderController {
         return OrderDetailsDTOMapper.INSTANCE.toDTO(order);
     }
 
+    @GetMapping("")
+    public List<OrderRequestDTO> getOrders(){
+        return orderService.findAll().stream()
+                .map(OrderRequestMapper.INSTANCE::toDTO)
+                .collect(Collectors.toList());
+    }
+
+    @PutMapping("/{id}/deliver")
+    public OrderRequestDTO updateOrderToDelivered(@PathVariable Long id){
+        return OrderRequestMapper.INSTANCE.toDTO(orderService.updateToDelivered(id));
+    }
+
 }

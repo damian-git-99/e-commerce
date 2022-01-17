@@ -71,6 +71,15 @@ public class OrderServiceImpl implements OrderService{
         return order;
     }
 
+    @Override
+    public Order updateToDelivered(Long id) {
+        Order order = findById(id).orElseThrow(() -> new ResourceNotFoundException("Order Not found"));
+        order.setDelivered(true);
+        order.setDeliveredAt(new Date());
+        orderDao.save(order);
+        return order;
+    }
+
     private double calculateTotal(OrderRequestDTO orderRequestDTO){
         double total = 0;
         for (OrderItemDTO item: orderRequestDTO.getOrderItems()) {

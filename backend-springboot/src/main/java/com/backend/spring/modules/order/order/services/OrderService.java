@@ -13,4 +13,5 @@ public interface OrderService {
     List<Order> findAll();
     OrderRequestDTO createOrder(OrderRequestDTO orderRequestDTO, Principal principal);
     Order updateOrderToPaid(Long orderId, PaymentResult paymentResult);
+    Order updateToDelivered(Long id);
 }

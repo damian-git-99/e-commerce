@@ -4,6 +4,7 @@ import com.backend.spring.modules.product.brand.Brand;
 import com.backend.spring.modules.product.category.Category;
 import com.backend.spring.modules.product.review.Review;
 import com.backend.spring.modules.user.user.entities.User;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -29,6 +30,7 @@ public class Product {
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "product")
     private List<Review> reviews = new ArrayList<>();
     @ManyToOne(fetch = FetchType.LAZY)
+    @JsonIgnore
     private User user;
     private double price;
     private Date createdAt;
