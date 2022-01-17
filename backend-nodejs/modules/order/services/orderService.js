@@ -20,6 +20,11 @@ class OrderService {
     const orders = OrderModel.find({ user: userId });
     return orders;
   }
+
+  findAllWithUser() {
+    const orders = OrderModel.find({}).populate('user', 'id name');
+    return orders;
+  }
 }
 
 module.exports = {

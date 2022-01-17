@@ -1,6 +1,8 @@
 import axios from 'axios';
 import {
+  ORDER_DELIVER_TYPES,
   ORDER_DETAILS_TYPES,
+  ORDER_LIST_ADMIN_TYPES,
   ORDER_LIST_TYPES,
   ORDER_PAY_TYPES,
   ORDER_TYPES
@@ -139,6 +141,80 @@ export const listMyOrders = () => {
     } catch (error) {
       dispatch({
         type: ORDER_LIST_TYPES.ORDER_LIST_MY_FAIL,
+        payload:
+          error.response && error.response.data.message
+            ? error.response.data.message
+            : error.message
+      });
+    }
+  };
+};
+
+export const deliverOrder = (order) => {
+  return async (dispatch, getState) => {
+    try {
+      dispatch({
+        type: ORDER_DELIVER_TYPES.ORDER_DELIVER_REQUEST
+      });
+
+      const {
+        userLogin: { userInfo }
+      } = getState();
+
+      const config = {
+        headers: {
+          Authorization: `Bearer ${userInfo.token}`
+        }
+      };
+
+      const { data } = await axios.put(
+        `/api/orders/${order.id}/deliver`,
+        {},
+        config
+      );
+
+      dispatch({
+        type: ORDER_DELIVER_TYPES.ORDER_DELIVER_SUCCESS,
+        payload: data
+      });
+    } catch (error) {
+      dispatch({
+        type: ORDER_DELIVER_TYPES.ORDER_DELIVER_FAIL,
+        payload:
+          error.response && error.response.data.message
+            ? error.response.data.message
+            : error.message
+      });
+    }
+  };
+};
+
+export const listOrders = () => {
+  return async (dispatch, getState) => {
+    try {
+      dispatch({
+        type: ORDER_LIST_ADMIN_TYPES.ORDER_LIST_REQUEST
+      });
+
+      const {
+        userLogin: { userInfo }
+      } = getState();
+
+      const config = {
+        headers: {
+          Authorization: `Bearer ${userInfo.token}`
+        }
+      };
+
+      const { data } = await axios.get('/api/orders', config);
+
+      dispatch({
+        type: ORDER_LIST_ADMIN_TYPES.ORDER_LIST_SUCCESS,
+        payload: data
+      });
+    } catch (error) {
+      dispatch({
+        type: ORDER_LIST_ADMIN_TYPES.ORDER_LIST_FAIL,
         payload:
           error.response && error.response.data.message
             ? error.response.data.message
