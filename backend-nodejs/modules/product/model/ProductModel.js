@@ -17,6 +17,15 @@ const reviewSchema = new Schema(
   }
 );
 
+// change _id to id https://stackoverflow.com/questions/7034848/mongodb-output-id-instead-of-id
+reviewSchema.set('toJSON', {
+  virtuals: true,
+  versionKey: false,
+  transform: function (doc, ret) {
+    delete ret._id;
+  }
+});
+
 const ProductSchema = new Schema(
   {
     user: {

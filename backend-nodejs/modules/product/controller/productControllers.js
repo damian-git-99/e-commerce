@@ -5,7 +5,16 @@ const productService = require('../services/productService');
 // @desc    Fetch all products
 // @route   GET /api/products
 const findAll = asyncHandler(async (req = request, res = response) => {
-  const products = await productService.findAll();
+  const keyword = req.query.keyword
+    ? {
+      name: {
+        $regex: req.query.keyword,
+        $options: 'i' // case insensitive
+      }
+    }
+    : {};
+
+  const products = await productService.find({ ...keyword });
   res.status(200).json(products);
 });
 
@@ -86,7 +95,7 @@ const createProductReview = asyncHandler(async (req, res) => {
 
   if (product) {
     const alreadyReviewed = product.reviews.find(
-      (r) => r.user.toString() === req.user._id.toString()
+      (r) => r.user.toString() === req.user.id.toString()
     );
 
     if (alreadyReviewed) {

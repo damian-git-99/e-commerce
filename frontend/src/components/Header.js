@@ -1,8 +1,10 @@
 import React from 'react';
+import { Route } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { Container, Nav, Navbar, NavDropdown } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
 import { logout } from '../actions/userActions';
+import { SearchBox } from './SearchBox';
 
 export const Header = () => {
   const dispatch = useDispatch();
@@ -61,6 +63,7 @@ export const Header = () => {
                 </NavDropdown>
                   )}
             </Nav>
+            <Route render={({ history }) => <SearchBox history={history} />} />
           </Navbar.Collapse>
         </Container>
       </Navbar>
