@@ -4,6 +4,8 @@ import com.backend.spring.modules.product.brand.Brand;
 import com.backend.spring.modules.product.category.Category;
 import com.backend.spring.modules.product.product.daos.ProductDao;
 import com.backend.spring.modules.product.product.entities.Product;
+import com.backend.spring.modules.product.review.Review;
+import com.backend.spring.modules.user.user.entities.User;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -23,6 +25,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.atMostOnce;
+import static org.mockito.Mockito.doAnswer;
 
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
@@ -41,7 +44,6 @@ class ProductServiceImplTest {
         given(productDao.findAll()).willReturn(productsData);
 
         List<Product> products = productService.findAll();
-
         Product product = products.get(0);
         assertThat(products).isNotEmpty().hasSize(3);
         assertThat(product).isNotNull();
@@ -85,4 +87,21 @@ class ProductServiceImplTest {
         assertThat(product.getName()).isEqualTo("Galaxy S10");
         then(productDao).should(atMostOnce()).save(any(Product.class));
     }
+
+    @Test
+    @DisplayName("Should add review to a product")
+    void shouldAddReviewToProduct(){
+        Review review = new Review(1L, 4.5, "good!!!");
+        Product productData = new Product("Galaxy S10", "/image/url3", new Brand("Samsung"), new Category("electronics"), "Description samsung galaxy");
+        User userData = new User("Damian", "damian@gmail.com", "123456");
+
+        productService.addReviewToProduct(productData, review, userData);
+
+        assertThat(productData.getRating()).isEqualTo(4.5);
+        assertThat(review.getName()).isEqualTo(userData.getName());
+        assertThat(productData.getReviews()).contains(review);
+        assertThat(productData.getNumReviews()).isEqualTo(1);
+        then(productDao).should(atMostOnce()).save(productData);
+    }
+
 }

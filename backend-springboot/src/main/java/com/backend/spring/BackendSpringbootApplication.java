@@ -62,14 +62,14 @@ public class BackendSpringbootApplication implements CommandLineRunner {
         Product product = new Product("Airpods Wireless Bluetooth Headphones", "/images/airpods.jpg", brand, category,
                 "Bluetooth technology lets you connect it with compatible devices wirelessly High-quality AAC audio offers immersive listening experience Built-in microphone allows you to take calls while working");
         product.setPrice(89.99f);
-        product.setNumReviews(12);
+        product.setNumReviews(0);
         product.setCountInStock(0);
         product.setRating(4.5f);
 
         Product product2 = new Product("iPhone 11 Pro 256GB Memory", "/images/phone.jpg", brand, category,
                 "Introducing the iPhone 11 Pro. A transformative triple-camera system that adds tons of capability without complexity. An unprecedented leap in battery life");
         product2.setPrice(599.99f);
-        product2.setNumReviews(8);
+        product2.setNumReviews(0);
         product2.setCountInStock(7);
         product2.setRating(4.0f);
         productService.save(product);

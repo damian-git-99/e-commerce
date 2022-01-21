@@ -6,6 +6,7 @@ import com.backend.spring.modules.product.category.Category;
 import com.backend.spring.modules.product.category.CategoryDao;
 import com.backend.spring.modules.product.product.daos.ProductDao;
 import com.backend.spring.modules.product.product.entities.Product;
+import com.backend.spring.modules.product.review.Review;
 import com.backend.spring.modules.user.user.entities.User;
 import com.backend.spring.modules.user.user.services.UserService;
 import com.backend.spring.shared.exceptions.ResourceNotFoundException;
@@ -26,6 +27,7 @@ public class ProductServiceImpl implements ProductService{
     private BrandDao brandDao;
     private CategoryDao categoryDao;
 
+    @Autowired
     public ProductServiceImpl(ProductDao productDao, UserService userService, BrandDao brandDao, CategoryDao categoryDao) {
         this.productDao = productDao;
         this.userService = userService;
@@ -84,6 +86,25 @@ public class ProductServiceImpl implements ProductService{
         product.setDescription(newProduct.getDescription());
         productDao.save(product);
         return product;
+    }
+
+    @Override
+    public void addReviewToProduct(Product product, Review review,User user) {
+        Optional<Review> alreadyReviewed =  product.getReviews().stream().filter(r -> r.getUser() == user).findFirst();
+        if (alreadyReviewed.isPresent()) return;
+        review.setName(user.getName());
+        review.setUser(user);
+        product.addReview(review);
+        product.setRating(calculateRatingAverage(product));
+        productDao.save(product);
+    }
+
+    private double calculateRatingAverage(Product product){
+        if (product.getNumReviews() == 0) return 0;
+        return product.getReviews().stream()
+                .mapToDouble(Review::getRating)
+                .average()
+                .orElse(0);
     }
 
 }

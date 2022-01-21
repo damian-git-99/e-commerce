@@ -34,7 +34,8 @@ public class OrderController {
 
     @PostMapping("")
     public OrderRequestDTO addOrderItems(@RequestBody OrderRequestDTO orderRequestDTO,Principal principal){
-        return orderService.createOrder(orderRequestDTO, principal);
+        User user = userService.findByEmail(principal.getName()).orElseThrow(() -> new ResourceNotFoundException("User not found"));
+        return orderService.createOrder(orderRequestDTO, user);
     }
 
     @GetMapping("/{id}")

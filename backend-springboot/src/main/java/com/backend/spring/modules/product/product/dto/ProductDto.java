@@ -21,7 +21,7 @@ public class ProductDto {
     private Date createdAt;
     private Date updatedAt;
     private int numReviews;
-    private float rating;
+    private double rating;
     private Long user;
     private int countInStock;
 

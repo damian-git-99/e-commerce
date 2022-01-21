@@ -12,4 +12,11 @@ public class OrderItemDTO {
     private String image;
     private Long product;
     private double price;
+
+    public OrderItemDTO(Long id, String name, int quantity, Long product) {
+        this.id = id;
+        this.name = name;
+        this.quantity = quantity;
+        this.product = product;
+    }
 }

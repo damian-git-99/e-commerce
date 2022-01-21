@@ -36,7 +36,7 @@ public class Product {
     private Date createdAt;
     private Date updatedAt;
     private int numReviews;
-    private float rating;
+    private double rating;
     private int countInStock;
 
     public Product(Long id, String name, String image, Brand brand, Category category, String description) {
