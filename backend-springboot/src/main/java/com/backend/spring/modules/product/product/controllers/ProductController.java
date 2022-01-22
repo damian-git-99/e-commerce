@@ -1,7 +1,7 @@
 package com.backend.spring.modules.product.product.controllers;
 
 import com.backend.spring.modules.product.product.dto.ProductDto;
-import com.backend.spring.modules.product.product.dto.ProductDtoConverter;
+import com.backend.spring.modules.product.product.dto.ProductDtoMapper;
 import com.backend.spring.modules.product.product.entities.Product;
 import com.backend.spring.modules.product.product.services.ProductService;
 import com.backend.spring.modules.product.review.Review;
@@ -25,7 +25,6 @@ import java.util.stream.Collectors;
 public class ProductController {
 
     private final ProductService productService;
-    private ProductDtoConverter productDtoConverter;
     private final UserService userService;
 
     @Autowired
@@ -38,7 +37,7 @@ public class ProductController {
     @ResponseStatus(HttpStatus.OK)
     public List<ProductDto> findAll(){
         return productService.findAll().stream()
-                .map(productDtoConverter::toDTO)
+                .map(ProductDtoMapper.INSTANCE::toDTO)
                 .collect(Collectors.toList());
     }
 
@@ -47,7 +46,7 @@ public class ProductController {
     public ProductDto findById(@PathVariable(name = "id") Long id){
          Product product = productService.findById(id)
                 .orElseThrow(() -> new RuntimeException("error id doesn't exist"));
-         return productDtoConverter.toDTO(product);
+         return ProductDtoMapper.INSTANCE.toDTO(product);
     }
 
     @DeleteMapping("/{id}")
