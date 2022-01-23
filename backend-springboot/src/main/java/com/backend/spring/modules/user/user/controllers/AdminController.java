@@ -29,14 +29,14 @@ public class AdminController {
 
     @Secured("ROLE_USER")
     @GetMapping("")
-    public List<UserProfileDTO> getUsers(){
+    public List<UserProfileDTO> getUsers() {
         return userService.findAll().stream()
                 .map(UserProfileDTOMapper.INSTANCE::toDTO)
                 .collect(Collectors.toList());
     }
 
     @DeleteMapping("/{id}")
-    public Map<String, Object> deleteUser(@PathVariable(name = "id") Long id, Principal principal){
+    public Map<String, Object> deleteUser(@PathVariable(name = "id") Long id, Principal principal) {
         User user = userService.findById(id).orElseThrow(() -> new ResourceNotFoundException("user not found"));
         if (!principal.getName().equals(user.getEmail())) userService.delete(user);
         var map = new HashMap<String, Object>();
@@ -45,13 +45,13 @@ public class AdminController {
     }
 
     @GetMapping("/{id}")
-    public UserProfileDTO getUserById(@PathVariable(name = "id") Long id){
+    public UserProfileDTO getUserById(@PathVariable(name = "id") Long id) {
         User user = userService.findById(id).orElseThrow(() -> new ResourceNotFoundException("user not found"));
         return UserProfileDTOMapper.INSTANCE.toDTO(user);
     }
 
     @PutMapping("/{id}")
-    public UserProfileDTO updateUser(@PathVariable(name = "id") Long id, @RequestBody UserProfileDTO newUser){
+    public UserProfileDTO updateUser(@PathVariable(name = "id") Long id, @RequestBody UserProfileDTO newUser) {
         User oldUser = userService.findById(id).orElseThrow(() -> new ResourceNotFoundException("user not found"));
         User updatedUser = userService.updateUserFromAdmin(UserProfileDTOMapper.INSTANCE.toEntity(newUser), oldUser);
         return UserProfileDTOMapper.INSTANCE.toDTO(updatedUser);

@@ -11,8 +11,12 @@ import java.util.Optional;
 
 public interface OrderService {
     Optional<Order> findById(Long id);
+
     List<Order> findAll();
+
     OrderRequestDTO createOrder(OrderRequestDTO orderRequestDTO, User user);
+
     Order updateOrderToPaid(Long orderId, PaymentResult paymentResult);
+
     Order updateToDelivered(Long id);
 }

@@ -33,38 +33,38 @@ public class OrderController {
     }
 
     @PostMapping("")
-    public OrderRequestDTO addOrderItems(@RequestBody OrderRequestDTO orderRequestDTO,Principal principal){
+    public OrderRequestDTO addOrderItems(@RequestBody OrderRequestDTO orderRequestDTO, Principal principal) {
         User user = userService.findByEmail(principal.getName()).orElseThrow(() -> new ResourceNotFoundException("User not found"));
         return orderService.createOrder(orderRequestDTO, user);
     }
 
     @GetMapping("/{id}")
-    public OrderDetailsDTO getOrderById(@PathVariable Long id){
+    public OrderDetailsDTO getOrderById(@PathVariable Long id) {
         Order order = orderService.findById(id).orElseThrow(() -> new ResourceNotFoundException("Order not found"));
         return OrderDetailsDTOMapper.INSTANCE.toDTO(order);
     }
 
     @GetMapping("/myorders")
-    public List<OrderRequestDTO> getMyOrders(Principal principal){
+    public List<OrderRequestDTO> getMyOrders(Principal principal) {
         User user = userService.findByEmail(principal.getName()).orElseThrow(() -> new ResourceNotFoundException("User Not found"));
         return user.getOrders().stream().map(OrderRequestMapper.INSTANCE::toDTO).collect(Collectors.toList());
     }
 
     @PutMapping("/{id}/pay")
-    public OrderDetailsDTO updateOrderToPaid(@PathVariable Long id, @RequestBody PaymentResult paymentResult){
+    public OrderDetailsDTO updateOrderToPaid(@PathVariable Long id, @RequestBody PaymentResult paymentResult) {
         Order order = orderService.updateOrderToPaid(id, paymentResult);
         return OrderDetailsDTOMapper.INSTANCE.toDTO(order);
     }
 
     @GetMapping("")
-    public List<OrderRequestDTO> getOrders(){
+    public List<OrderRequestDTO> getOrders() {
         return orderService.findAll().stream()
                 .map(OrderRequestMapper.INSTANCE::toDTO)
                 .collect(Collectors.toList());
     }
 
     @PutMapping("/{id}/deliver")
-    public OrderRequestDTO updateOrderToDelivered(@PathVariable Long id){
+    public OrderRequestDTO updateOrderToDelivered(@PathVariable Long id) {
         return OrderRequestMapper.INSTANCE.toDTO(orderService.updateToDelivered(id));
     }
 

@@ -30,7 +30,7 @@ public class UserController {
     }
 
     @PostMapping("/signup")
-    public UserDtoToken signUp(@RequestBody @Valid User user, BindingResult result){
+    public UserDtoToken signUp(@RequestBody @Valid User user, BindingResult result) {
         if (result.hasErrors()) BindingResultUtils.returnBindingErrors(result);
         User newUser = userService.signup(user);
         return userDtoTokenConverter.toDTO(newUser);
@@ -45,7 +45,7 @@ public class UserController {
 
     @Secured("ROLE_USER")
     @PutMapping("/profile")
-    public UserDtoToken updateUser(@RequestBody User newUser, Principal principal){
+    public UserDtoToken updateUser(@RequestBody User newUser, Principal principal) {
         User user = userService.findByEmail(principal.getName()).orElseThrow(() -> new CustomException("User not found in session", HttpStatus.UNAUTHORIZED));
         User updatedUser = userService.updateUser(newUser, user);
         return userDtoTokenConverter.toDTO(updatedUser);

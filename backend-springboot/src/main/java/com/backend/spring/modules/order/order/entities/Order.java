@@ -39,6 +39,14 @@ public class Order {
     private List<OrderItem> orderItems = new ArrayList<>();
     private Date deliveredAt;
 
+    public Order(Long id, double taxPrice, double shippingPrice, double totalPrice, Date createdAt) {
+        this.id = id;
+        this.taxPrice = taxPrice;
+        this.shippingPrice = shippingPrice;
+        this.totalPrice = totalPrice;
+        this.createdAt = createdAt;
+    }
+
     @PrePersist
     private void prePersist(){
         this.createdAt = new Date();
