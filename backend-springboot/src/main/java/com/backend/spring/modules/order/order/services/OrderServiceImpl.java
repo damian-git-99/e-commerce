@@ -85,6 +85,7 @@ public class OrderServiceImpl implements OrderService {
         }
         total += taxCalculator.calculateTax(total);
         total += shippingCalculator.calculateShippingPrice(total);
+        System.out.println(total);
         return total;
     }
 

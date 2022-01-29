@@ -25,8 +25,10 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.in;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyDouble;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 
@@ -71,12 +73,14 @@ class OrderServiceImplTest {
         given(productService.findById(1L)).willReturn(Optional.of(productData));
         given(productService.findById(2L)).willReturn(Optional.of(productData2));
         given(productService.findById(3L)).willReturn(Optional.of(productData3));
+        given(taxCalculatorService.calculateTax(anyDouble())).willCallRealMethod();
+        given(shippingCalculatorService.calculateShippingPrice(anyDouble())).willCallRealMethod();
 
 
         OrderRequestDTO orderRequestDTO = orderService.createOrder(orderRequestDATA, userData);
 
         assertThat(userData.getOrders()).isNotEmpty();
-        assertThat(orderRequestDTO.getTotalPrice()).isEqualTo(3096);
+        assertThat(orderRequestDTO.getTotalPrice()).isEqualTo(3591.36);
         then(orderDao).should().save(any(Order.class));
 
     }
