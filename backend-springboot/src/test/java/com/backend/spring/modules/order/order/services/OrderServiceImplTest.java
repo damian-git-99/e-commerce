@@ -42,9 +42,9 @@ class OrderServiceImplTest {
     @Mock
     private ProductService productService;
     @Mock
-    private TaxCalculatorServiceImpl taxCalculatorService;
+    private TaxCalculatorService taxCalculatorService;
     @Mock
-    private ShippingCalculatorServiceImpl shippingCalculatorService;
+    private ShippingCalculatorService shippingCalculatorService;
 
     @InjectMocks
     private OrderServiceImpl orderService;
@@ -63,7 +63,7 @@ class OrderServiceImplTest {
         productData3.setPrice(899);
         productData3.setCountInStock(10);
 
-        OrderItemDTO orderItemDTO = new OrderItemDTO(1L, "product 1", 1 , 1L);
+        OrderItemDTO orderItemDTO = new OrderItemDTO(1L, "product 1", 1, 1L);
         OrderItemDTO orderItemDTO1 = new OrderItemDTO(2L, "product 2", 1, 2L);
         OrderItemDTO orderItemDTO2 = new OrderItemDTO(3L, "product 3", 2, 3L);
         OrderRequestDTO orderRequestDATA = new OrderRequestDTO();
@@ -73,8 +73,14 @@ class OrderServiceImplTest {
         given(productService.findById(1L)).willReturn(Optional.of(productData));
         given(productService.findById(2L)).willReturn(Optional.of(productData2));
         given(productService.findById(3L)).willReturn(Optional.of(productData3));
-        given(taxCalculatorService.calculateTax(anyDouble())).willCallRealMethod();
-        given(shippingCalculatorService.calculateShippingPrice(anyDouble())).willCallRealMethod();
+        given(taxCalculatorService.calculateTax(anyDouble())).willAnswer(invocation -> {
+            double subtotal = invocation.getArgument(0);
+            return subtotal * 0.16;
+        });
+        given(shippingCalculatorService.calculateShippingPrice(anyDouble())).willAnswer(invocation -> {
+            double subtotal = invocation.getArgument(0);
+            return subtotal > 100 ? 0.0 : 100.0;
+        });
 
 
         OrderRequestDTO orderRequestDTO = orderService.createOrder(orderRequestDATA, userData);
