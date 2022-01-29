@@ -39,6 +39,10 @@ class OrderServiceImplTest {
     private OrderDao orderDao;
     @Mock
     private ProductService productService;
+    @Mock
+    private TaxCalculatorServiceImpl taxCalculatorService;
+    @Mock
+    private ShippingCalculatorServiceImpl shippingCalculatorService;
 
     @InjectMocks
     private OrderServiceImpl orderService;

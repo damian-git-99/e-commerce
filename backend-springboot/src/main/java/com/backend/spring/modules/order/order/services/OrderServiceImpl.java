@@ -26,11 +26,15 @@ public class OrderServiceImpl implements OrderService {
 
     private OrderDao orderDao;
     private ProductService productService;
+    private TaxCalculatorService taxCalculator;
+    private ShippingCalculatorService shippingCalculator;
 
     @Autowired
-    public OrderServiceImpl(OrderDao orderDao, ProductService productService) {
+    public OrderServiceImpl(OrderDao orderDao, ProductService productService, TaxCalculatorService taxCalculator, ShippingCalculatorService shippingCalculator) {
         this.orderDao = orderDao;
         this.productService = productService;
+        this.taxCalculator = taxCalculator;
+        this.shippingCalculator = shippingCalculator;
     }
 
     @Override
@@ -79,8 +83,8 @@ public class OrderServiceImpl implements OrderService {
         for (OrderItemDTO item : orderRequestDTO.getOrderItems()) {
             total += calculatePrice(item.getProduct(), item.getQuantity());
         }
-        total += orderRequestDTO.getShippingPrice();
-        total += orderRequestDTO.getTaxPrice();
+        total += taxCalculator.calculateTax(total);
+        total += shippingCalculator.calculateShippingPrice(total);
         return total;
     }
 
