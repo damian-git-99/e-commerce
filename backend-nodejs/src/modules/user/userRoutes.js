@@ -1,8 +1,8 @@
 const { Router } = require('express');
 const { authUser, getProfile, signUp, updateUserProfile, getUsers, deleteUser, getUserById, updateUser } = require('./userController');
 const { check } = require('express-validator');
-const validateFields = require('../../../middlewares/expressValidator');
-const { validateJwt, isAdmin } = require('../../../middlewares/validateJWT');
+const validateFields = require('../../middlewares/expressValidator');
+const { validateJwt, isAdmin } = require('../../middlewares/validateJWT');
 const router = Router();
 
 // @route /api/users

@@ -1,4 +1,4 @@
-const { UserService } = require('../src/modules/user/userService');
+const { UserService } = require('../modules/user/userService');
 const { request, response } = require('express');
 const jwt = require('jsonwebtoken');
 const asyncHandler = require('express-async-handler');

@@ -1,7 +1,7 @@
 const { request, response } = require('express');
 const asyncHandler = require('express-async-handler');
-const { comparePasswords, encryptPassword } = require('../../../utils/encrypt');
-const { generateToken } = require('../../../utils/generateToken');
+const { comparePasswords, encryptPassword } = require('../shared/utils/encrypt');
+const { generateToken } = require('../shared/utils/generateToken');
 const { UserService } = require('./userService');
 const userService = new UserService();
 
