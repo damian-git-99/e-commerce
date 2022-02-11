@@ -1,6 +1,6 @@
 const { request, response } = require('express');
 const asyncHandler = require('express-async-handler');
-const productService = require('../services/productService');
+const productService = require('./productService');
 
 // @desc    Fetch all products
 // @route   GET /api/products

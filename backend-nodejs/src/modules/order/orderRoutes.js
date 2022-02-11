@@ -1,6 +1,6 @@
 const { Router } = require('express');
 const { validateJwt, isAdmin } = require('../../../middlewares/validateJWT');
-const { addOrderItems, getOrderById, updateOrderToPaid, getMyOrders, getOrders, updateOrderToDelivered } = require('../controllers/orderController.js');
+const { addOrderItems, getOrderById, updateOrderToPaid, getMyOrders, getOrders, updateOrderToDelivered } = require('./orderController.js');
 const router = Router();
 
 router.route('/').post(validateJwt, addOrderItems).get(validateJwt, isAdmin, getOrders);

@@ -1,4 +1,4 @@
-const OrderModel = require('../model/OrderModel');
+const OrderModel = require('./OrderModel');
 
 class OrderService {
   save(order) {

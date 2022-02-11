@@ -1,6 +1,6 @@
 const { request, response } = require('express');
 const asyncHandler = require('express-async-handler');
-const { OrderService } = require('../services/orderService');
+const { OrderService } = require('./orderService');
 const orderService = new OrderService();
 
 // @route POST /api/orders

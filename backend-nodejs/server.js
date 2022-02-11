@@ -3,12 +3,12 @@ const path = require('path');
 const connectDB = require('./db/config');
 // eslint-disable-next-line no-unused-vars
 const colors = require('colors');
-const { productRouter } = require('./modules/product/route/productRoutes');
+const { productRouter } = require('./src/modules/product/productRoutes');
 const { errorHandler } = require('./middlewares/errorHandlingMiddleware');
-const { userRouter } = require('./modules/user/route/userRoutes');
-const { orderRouter } = require('./modules/order/routes/orderRoutes');
+const { userRouter } = require('./src/modules/user/userRoutes');
+const { orderRouter } = require('./src/modules/order/orderRoutes');
 const morgan = require('morgan');
-const { uploadRoutes } = require('./modules/shared/uploadRoutes');
+const { uploadRoutes } = require('./src/modules/shared/uploadRoutes');
 const app = express();
 require('dotenv').config();
 connectDB();
