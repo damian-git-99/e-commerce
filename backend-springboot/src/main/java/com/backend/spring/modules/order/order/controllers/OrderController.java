@@ -34,19 +34,25 @@ public class OrderController {
 
     @PostMapping("")
     public OrderRequestDTO addOrderItems(@RequestBody OrderRequestDTO orderRequestDTO, Principal principal) {
-        User user = userService.findByEmail(principal.getName()).orElseThrow(() -> new ResourceNotFoundException("User not found"));
+        User user = userService
+                .findByEmail(principal.getName())
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
         return orderService.createOrder(orderRequestDTO, user);
     }
 
     @GetMapping("/{id}")
     public OrderDetailsDTO getOrderById(@PathVariable Long id) {
-        Order order = orderService.findById(id).orElseThrow(() -> new ResourceNotFoundException("Order not found"));
+        Order order = orderService
+                .findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Order not found"));
         return OrderDetailsDTOMapper.INSTANCE.toDTO(order);
     }
 
     @GetMapping("/myorders")
     public List<OrderRequestDTO> getMyOrders(Principal principal) {
-        User user = userService.findByEmail(principal.getName()).orElseThrow(() -> new ResourceNotFoundException("User Not found"));
+        User user = userService
+                .findByEmail(principal.getName())
+                .orElseThrow(() -> new ResourceNotFoundException("User Not found"));
         return user.getOrders().stream().map(OrderRequestMapper.INSTANCE::toDTO).collect(Collectors.toList());
     }
 

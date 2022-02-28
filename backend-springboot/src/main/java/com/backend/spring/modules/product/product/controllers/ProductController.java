@@ -72,9 +72,13 @@ public class ProductController {
     @PutMapping("/{id}/reviews")
     @Secured({"ROLE_USER"})
     public ResponseEntity<?> createProductReview(@PathVariable Long id, @RequestBody Review review, Principal principal){
-        Product product = productService.findById(id).orElseThrow(() -> new ResourceNotFoundException("Product Not Found"));
+        Product product = productService
+                .findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Product Not Found"));
 
-        User user = userService.findByEmail(principal.getName()).orElseThrow(() -> new ResourceNotFoundException("User not Found"));
+        User user = userService
+                .findByEmail(principal.getName())
+                .orElseThrow(() -> new ResourceNotFoundException("User not Found"));
         productService.addReviewToProduct(product, review, user);
         Map<String, Object> map = new HashMap<>();
         map.put("message", "Review added");

@@ -24,10 +24,10 @@ import java.util.Optional;
 @Transactional
 public class OrderServiceImpl implements OrderService {
 
-    private OrderDao orderDao;
-    private ProductService productService;
-    private TaxCalculatorService taxCalculator;
-    private ShippingCalculatorService shippingCalculator;
+    private final OrderDao orderDao;
+    private final ProductService productService;
+    private final TaxCalculatorService taxCalculator;
+    private final ShippingCalculatorService shippingCalculator;
 
     @Autowired
     public OrderServiceImpl(OrderDao orderDao, ProductService productService, TaxCalculatorService taxCalculator, ShippingCalculatorService shippingCalculator) {
@@ -49,7 +49,8 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public Order updateOrderToPaid(Long orderId, PaymentResult paymentResult) {
-        Order order = orderDao.findById(orderId).orElseThrow(() -> new ResourceNotFoundException("Order Not found"));
+        Order order = orderDao.findById(orderId)
+                .orElseThrow(() -> new ResourceNotFoundException("Order Not found"));
         order.setPaymentResult(paymentResult);
         order.setPaid(true);
         order.setPaidAt(new Date());
@@ -59,7 +60,8 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public Order updateToDelivered(Long id) {
-        Order order = findById(id).orElseThrow(() -> new ResourceNotFoundException("Order Not found"));
+        Order order = findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Order Not found"));
         order.setDelivered(true);
         order.setDeliveredAt(new Date());
         orderDao.save(order);
@@ -92,7 +94,9 @@ public class OrderServiceImpl implements OrderService {
 
     private double calculatePrice(Long productId, int quantity) {
         if (quantity < 1) throw new CustomException("quantity has to be at least 1", HttpStatus.BAD_REQUEST);
-        Product product = productService.findById(productId).orElseThrow(() -> new ResourceNotFoundException("Product not found"));
+        Product product = productService
+                .findById(productId)
+                .orElseThrow(() -> new ResourceNotFoundException("Product not found"));
         if (product.getCountInStock() < quantity)
             throw new CustomException("Some of the products no longer have enough stock", HttpStatus.BAD_REQUEST);
         return product.getPrice() * quantity;
