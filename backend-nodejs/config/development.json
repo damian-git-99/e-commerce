@@ -1,0 +1,8 @@
+{
+  "database": {
+    "URI": "mongodb://localhost:27017/node_backend"
+  },
+  "port": 5000,
+  "JWT_SECRET": "supersecretpassword",
+  "PAYPAL_CLIENT_ID": "AaIycBSJf3sZfI5cjlHUqFjtOODTBOqReeCD3aPBDSeBjSPVDdkESEfSwOp4mvDaRAS7NoCJMp4JsWSu"
+}
