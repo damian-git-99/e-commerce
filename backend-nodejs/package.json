@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node server.js",
     "dev": "cross-env NODE_ENV=development nodemon server.js",
-    "test": "jest --watch"
+    "test": "cross-env NODE_ENV=test jest --watch --detectOpenHandles"
   },
   "author": "damian",
   "license": "ISC",
