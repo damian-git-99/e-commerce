@@ -8,8 +8,8 @@ const router = Router();
 // @route /api/users
 
 router.post('/login', [
-  check('email', 'el email no es valido').notEmpty().isEmail(),
-  check('password', 'el password no puede estar vacio').notEmpty(),
+  check('email', 'The email is not valid').notEmpty().isEmail(),
+  check('password', 'The password cannot be empty').notEmpty(),
   validateFields
 ], authUser);
 
