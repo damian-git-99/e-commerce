@@ -1,9 +1,8 @@
 const UserModel = require('./UserModel');
-
+const { userRepository } = require('./UserRepository');
 class UserService {
   findByEmail(email) {
-    const user = UserModel.findOne({ email });
-    return user;
+    return userRepository.findByEmail(email);
   }
 
   findById(id) {
