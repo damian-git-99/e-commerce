@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Form, Button, Row, Col } from 'react-bootstrap';
-import { useLocation, useHistory, Link } from 'react-router-dom';
+import { useHistory, Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { login } from '../actions/userActions';
 import { FormContainer } from '../components/FormContainer';
@@ -8,7 +8,6 @@ import { Message } from '../components/Message';
 import { Loader } from '../components/Loader';
 
 export const LoginScreen = () => {
-  const location = useLocation();
   const history = useHistory();
   const initialState = {
     email: '',
@@ -19,14 +18,14 @@ export const LoginScreen = () => {
   const dispatch = useDispatch();
 
   const userLogin = useSelector((state) => state.userLogin);
-  const { loading, error, userInfo } = userLogin;
-  const redirect = location.search ? location.search.split('=')[1] : '/';
+  const { loading, error, userInfo: loggedUser } = userLogin;
 
   useEffect(() => {
-    if (userInfo) {
-      history.push(redirect);
+    /* Redirecting the user to the home page if the user is logged in. */
+    if (loggedUser) {
+      history.push('/');
     }
-  }, [history, userInfo, redirect]);
+  }, [history, loggedUser]);
 
   const handleChange = (e) => {
     setform({
@@ -68,7 +67,7 @@ export const LoginScreen = () => {
           ></Form.Control>
         </Form.Group>
 
-        <Button type="submit" variant="primary">
+        <Button type="submit" variant="primary" className='mt-3'>
           Sign In
         </Button>
       </Form>
@@ -76,7 +75,7 @@ export const LoginScreen = () => {
       <Row className="py-3">
         <Col>
           New Customer?{' '}
-          <Link to={redirect ? `/register?redirect=${redirect}` : '/register'}>
+          <Link to={'/register'}>
             Register
           </Link>
         </Col>

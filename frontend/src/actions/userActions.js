@@ -1,5 +1,7 @@
+const { userAPI } = require('../api/userAPI');
 const { default: axios } = require('axios');
 const { ORDER_LIST_TYPES } = require('../reducers/orderReducers');
+
 const {
   USER_LOGIN_TYPES,
   USER_REGISTER_TYPES,
@@ -17,17 +19,7 @@ export const login = (email, password) => {
         type: USER_LOGIN_TYPES.USER_LOGIN_REQUEST
       });
 
-      const config = {
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      };
-
-      const { data } = await axios.post(
-        '/api/users/login',
-        { email, password },
-        config
-      );
+      const data = await userAPI.login(email, password);
 
       dispatch({
         type: USER_LOGIN_TYPES.USER_LOGIN_SUCCESS,
