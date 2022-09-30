@@ -4,7 +4,6 @@ const { ORDER_LIST_TYPES } = require('../reducers/orderReducers');
 
 const {
   USER_LOGIN_TYPES,
-  USER_REGISTER_TYPES,
   USER_DETAILS_TYPES,
   USER_UPDATE_TYPES,
   USER_LIST_TYPES,
@@ -51,24 +50,10 @@ export const register = (name, email, password) => {
   return async (dispatch) => {
     try {
       dispatch({
-        type: USER_REGISTER_TYPES.USER_REGISTER_REQUEST
+        type: USER_LOGIN_TYPES.USER_LOGIN_REQUEST
       });
 
-      const config = {
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      };
-
-      const { data } = await axios.post('/api/users/signup',
-        { name, email, password },
-        config
-      );
-
-      dispatch({
-        type: USER_REGISTER_TYPES.USER_REGISTER_SUCCESS,
-        payload: data
-      });
+      const data = await userAPI.signup(name, email, password);
 
       dispatch({
         type: USER_LOGIN_TYPES.USER_LOGIN_SUCCESS,
@@ -78,7 +63,7 @@ export const register = (name, email, password) => {
       localStorage.setItem('userInfo', JSON.stringify(data));
     } catch (error) {
       dispatch({
-        type: USER_REGISTER_TYPES.USER_REGISTER_FAIL,
+        type: USER_LOGIN_TYPES.USER_LOGIN_FAIL,
         payload:
           error.response && error.response.data.message
             ? error.response.data.message

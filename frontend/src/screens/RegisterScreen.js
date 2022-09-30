@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useLocation, useHistory, Link } from 'react-router-dom';
+import { useHistory, Link } from 'react-router-dom';
 import { Form, Button, Row, Col } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import { Message } from '../components/Message';
@@ -8,10 +8,10 @@ import { register } from '../actions/userActions';
 import { FormContainer } from '../components/FormContainer';
 
 export const RegisterScreen = () => {
-  const location = useLocation();
   const history = useHistory();
-
+  const dispatch = useDispatch();
   const [message, setMessage] = useState(null);
+
   const initialState = {
     email: '',
     password: '',
@@ -20,18 +20,15 @@ export const RegisterScreen = () => {
   };
   const [form, setform] = useState(initialState);
   const { email, password, name, confirmPassword } = form;
-  const dispatch = useDispatch();
 
-  const userRegister = useSelector((state) => state.userRegister);
-  const { loading, error, userInfo } = userRegister;
-
-  const redirect = location.search ? location.search.split('=')[1] : '/';
+  const userLogin = useSelector((state) => state.userLogin);
+  const { loading, error, userInfo: loggedUser } = userLogin;
 
   useEffect(() => {
-    if (userInfo) {
-      history.push(redirect);
+    if (loggedUser) {
+      history.push('/');
     }
-  }, [history, userInfo, redirect]);
+  }, [history, loggedUser]);
 
   const handleChange = (e) => {
     setform({
@@ -108,7 +105,7 @@ export const RegisterScreen = () => {
       <Row className='py-3'>
         <Col>
           Have an Account?{' '}
-          <Link to={redirect ? `/login?redirect=${redirect}` : '/login'}>
+          <Link to={'/login'}>
             Login
           </Link>
         </Col>
