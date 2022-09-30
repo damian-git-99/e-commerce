@@ -1,3 +1,4 @@
+const { encryptPassword } = require('../shared/utils/encrypt');
 const UserModel = require('./UserModel');
 const { userRepository } = require('./UserRepository');
 class UserService {
@@ -6,13 +7,12 @@ class UserService {
   }
 
   findById(id) {
-    const user = UserModel.findById(id).select('-password');
-    return user;
+    return userRepository.findById(id);
   }
 
   save(user) {
-    const newUser = UserModel.create(user);
-    return newUser;
+    user.password = encryptPassword(user.password);
+    return userRepository.save(user);
   }
 
   findAll() {

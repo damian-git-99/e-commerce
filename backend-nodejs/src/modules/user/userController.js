@@ -1,6 +1,9 @@
 const { request, response } = require('express');
 const asyncHandler = require('express-async-handler');
-const { comparePasswords, encryptPassword } = require('../shared/utils/encrypt');
+const {
+  comparePasswords,
+  encryptPassword
+} = require('../shared/utils/encrypt');
 const { generateToken } = require('../shared/utils/generateToken');
 const { UserService } = require('./userService');
 const userService = new UserService();
@@ -34,15 +37,11 @@ const signUp = asyncHandler(async (req = request, res = response) => {
   const newUser = await userService.save({
     email,
     name,
-    password: encryptPassword(password)
+    password
   });
 
-  if (!newUser) {
-    res.status(400);
-    throw new Error('Bad request data');
-  }
-
   const token = generateToken({ id: newUser.id });
+
   return res.status(201).json({
     id: newUser.id,
     name: newUser.name,
@@ -70,7 +69,7 @@ const updateUserProfile = asyncHandler(async (req, res) => {
     user.email = email || user.email;
     if (password) {
       user.password = encryptPassword(password);
-    };
+    }
 
     const updatedUser = await user.save();
 

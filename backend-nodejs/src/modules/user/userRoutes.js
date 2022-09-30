@@ -14,9 +14,9 @@ router.post('/login', [
 ], authUser);
 
 router.post('/signup', [
-  check('email', 'el email no es valido').notEmpty().isEmail(),
-  check('password', 'el password no puede estar vacio').notEmpty(),
-  check('name', 'El name no puede estar vacio').notEmpty(),
+  check('email', 'The email is not valid').notEmpty().isEmail(),
+  check('password', 'The password cannot be empty').notEmpty(),
+  check('name', 'The name cannot be empty').notEmpty(),
   validateFields
 ], signUp);
 
