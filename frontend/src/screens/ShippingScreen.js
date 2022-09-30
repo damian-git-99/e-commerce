@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Form, Button } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import { FormContainer } from '../components/FormContainer';
@@ -8,6 +8,7 @@ import { CheckoutSteps } from '../components/CheckoutSteps';
 
 export const ShippingScreen = () => {
   const history = useHistory();
+  const dispatch = useDispatch();
   const cart = useSelector((state) => state.cart);
   const { shippingAddress } = cart;
 
@@ -15,8 +16,15 @@ export const ShippingScreen = () => {
   const [city, setCity] = useState(shippingAddress.city);
   const [postalCode, setPostalCode] = useState(shippingAddress.postalCode);
   const [country, setCountry] = useState(shippingAddress.country);
+  const userLogin = useSelector((state) => state.userLogin);
+  const { userInfo: loggedUser } = userLogin;
 
-  const dispatch = useDispatch();
+  useEffect(() => {
+    /* Checking if the user is logged in. If not, it will redirect to the home page. */
+    if (!loggedUser) {
+      history.push('/');
+    }
+  }, [history, loggedUser]);
 
   const submitHandler = (e) => {
     e.preventDefault();

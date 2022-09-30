@@ -73,7 +73,7 @@ export const register = (name, email, password) => {
   };
 };
 
-export const getUserDetails = (id) => {
+export const getUserDetails = () => {
   return async (dispatch, getState) => {
     try {
       dispatch({
@@ -88,8 +88,7 @@ export const getUserDetails = (id) => {
           Authorization: `Bearer ${userInfo.token}`
         }
       };
-      console.log(id);
-      const { data } = await axios.get(`/api/users/${id}`, config);
+      const { data } = await axios.get('/api/users/profile', config);
 
       dispatch({
         type: USER_DETAILS_TYPES.USER_DETAILS_SUCCESS,
@@ -130,9 +129,15 @@ export const updateUserProfile = (user) => {
         payload: data
       });
 
-      // Actualizar el estado del usuario en la store de redux
+      // Update user state in redux store
       dispatch({
         type: USER_LOGIN_TYPES.USER_LOGIN_SUCCESS,
+        payload: data
+      });
+
+      // Update user profile in redux store
+      dispatch({
+        type: USER_DETAILS_TYPES.USER_DETAILS_SUCCESS,
         payload: data
       });
 

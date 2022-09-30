@@ -6,37 +6,36 @@ import { getUserDetails, updateUserProfile } from '../actions/userActions';
 import { Loader } from '../components/Loader';
 import { Message } from '../components/Message';
 import { listMyOrders } from '../actions/orderActions';
+import { useHistory } from 'react-router-dom';
 
 export const ProfileScreen = () => {
-  const dispatch = useDispatch();
-  const [message, setMessage] = useState(null);
   const initialState = {
     email: '',
     password: '',
     name: '',
     confirmPassword: ''
   };
+  const history = useHistory();
+  const dispatch = useDispatch();
+  const [message, setMessage] = useState(null);
   const [form, setform] = useState(initialState);
-  const { email, password, name, confirmPassword } = form;
-
   const userDetails = useSelector((state) => state.userDetails);
-  const { loading, error, user } = userDetails;
-
   const userLogin = useSelector((state) => state.userLogin);
-  const { userInfo } = userLogin;
-
   const userUpdateProfile = useSelector((state) => state.userUpdateProfile);
-  const { success } = userUpdateProfile;
+  const { email, password, name, confirmPassword } = form;
+  const { loading, error, user } = userDetails;
+  const { userInfo: loggedUser } = userLogin;
 
+  const { success } = userUpdateProfile;
   const orderListMy = useSelector((state) => state.orderListMy);
   const { loading: loadingOrders, error: errorOrders, orders } = orderListMy;
 
   useEffect(() => {
-    if (!userInfo) {
+    if (!loggedUser) {
       history.push('/login');
     } else {
       if (!user.name) {
-        dispatch(getUserDetails('profile'));
+        dispatch(getUserDetails());
         dispatch(listMyOrders());
       } else {
         setform({
@@ -46,7 +45,7 @@ export const ProfileScreen = () => {
         });
       }
     }
-  }, [dispatch, history, userInfo, user]);
+  }, [dispatch, history, loggedUser, user]);
 
   const handleChange = (e) => {
     setform({
@@ -65,7 +64,7 @@ export const ProfileScreen = () => {
   };
   return (
     <Row>
-      <Col md={3}>
+      <Col md={4}>
         <h2>User Profile</h2>
         {message && <Message variant='danger'>{message}</Message>}
         {error && <Message variant='danger'>{error}</Message>}
@@ -116,12 +115,12 @@ export const ProfileScreen = () => {
             ></Form.Control>
           </Form.Group>
 
-          <Button type='submit' variant='primary'>
+          <Button type='submit' variant='primary' className='mt-3 w-100'>
             Update
           </Button>
         </Form>
       </Col>
-      <Col md={9}>
+      <Col md={8} className="mt-5 mt-md-0">
         <h2>My Orders</h2>
         {loadingOrders
           ? (
