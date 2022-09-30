@@ -33,6 +33,15 @@ const createUserInDB = (user = validUser) => {
   return UserModel.create(user);
 };
 
+const getToken = async () => {
+  await createUserInDB();
+  const response = await requestAuth({
+    email: 'damian@gmail.com',
+    password: '1234'
+  });
+  return response.body.token;
+};
+
 describe('Auth tests', () => {
   test('should return 400 when email is not sent', async () => {
     const response = await requestAuth({
@@ -195,6 +204,36 @@ describe('Sign up tests', () => {
         email: expect.any(String),
         isAdmin: expect.any(Boolean),
         token: expect.any(String)
+      })
+    );
+  });
+});
+
+describe('Get Profile Tests', () => {
+  test('should return 401 when token is not sent', async () => {
+    const response = await request(app).get(`${url}/profile`).send();
+    expect(response.statusCode).toBe(401);
+  });
+  test('should return 200 when token is sent', async () => {
+    const token = await getToken();
+    const response = await request(app)
+      .get(`${url}/profile`)
+      .set('Authorization', `Bearer ${token}`)
+      .send();
+    expect(response.statusCode).toBe(200);
+  });
+  test('should return user info when token is sent', async () => {
+    const token = await getToken();
+    const response = await request(app)
+      .get(`${url}/profile`)
+      .set('Authorization', `Bearer ${token}`)
+      .send();
+    expect(response.body).toEqual(
+      expect.objectContaining({
+        id: expect.any(String),
+        name: expect.any(String),
+        email: expect.any(String),
+        isAdmin: expect.any(Boolean)
       })
     );
   });
