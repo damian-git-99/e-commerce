@@ -4,13 +4,15 @@ const config = require('config');
 const KEY = config.get('JWT_SECRET');
 const jwt = require('jsonwebtoken');
 const asyncHandler = require('express-async-handler');
+const InvalidTokenException = require('./errors/InvalidTokenExceptiion');
+const UserNotFoundException = require('../errors/UserNotFoundException');
+const UnauthorizedUserException = require('./errors/UnauthorizedUserException');
 const userService = new UserService();
 
 const validateJwt = asyncHandler(async (req = request, res = response, next) => {
   const authorizationHeader = req.header('Authorization');
   if (!authorizationHeader || !authorizationHeader.startsWith('Bearer ')) {
-    res.status(401);
-    throw new Error('invalid token');
+    throw new InvalidTokenException();
   }
 
   const token = authorizationHeader.replace('Bearer ', '');
@@ -20,15 +22,13 @@ const validateJwt = asyncHandler(async (req = request, res = response, next) => 
     const user = await userService.findById(id);
 
     if (!user) {
-      res.status(404);
-      throw new Error('user not found');
+      throw new UserNotFoundException();
     }
 
     req.user = user;
     next();
   } catch (err) {
-    res.status(401);
-    throw new Error('invalid token: ' + err);
+    throw new InvalidTokenException();
   }
 });
 
@@ -36,8 +36,7 @@ const isAdmin = (req, res, next) => {
   if (req.user && req.user.isAdmin) {
     next();
   } else {
-    res.status(401);
-    throw new Error('Not authorized as an admin');
+    throw new UnauthorizedUserException();
   }
 };
 

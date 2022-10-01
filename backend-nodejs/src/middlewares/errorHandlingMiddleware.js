@@ -1,6 +1,9 @@
 // eslint-disable-next-line no-unused-vars
 const errorHandler = (err, req, res, next) => {
-  const statusCode = res.statusCode === 200 ? 500 : res.statusCode;
+  let statusCode = res.statusCode === 200 ? 500 : res.statusCode;
+  if (err.status) {
+    statusCode = err.status;
+  }
   res.status(statusCode).json({
     message: err.message
   });

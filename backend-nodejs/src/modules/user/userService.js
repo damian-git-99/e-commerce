@@ -30,6 +30,18 @@ class UserService {
 
     return false;
   }
+
+  async updateUser(user, newUser) {
+    const { name, email, password } = newUser;
+    user.name = name || user.name;
+    user.email = email || user.email;
+
+    if (password) {
+      user.password = encryptPassword(password);
+    }
+
+    return userRepository.update(user.id, user);
+  }
 }
 
 module.exports = {

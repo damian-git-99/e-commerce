@@ -1,10 +1,11 @@
 const { request, response } = require('express');
 const asyncHandler = require('express-async-handler');
 const {
-  comparePasswords,
-  encryptPassword
+  comparePasswords
 } = require('../shared/utils/encrypt');
 const { generateToken } = require('../shared/utils/generateToken');
+const BadCredentialsException = require('./errors/BadCredentialsException');
+const EmailAlreadyTakenException = require('./errors/EmailAlreadyTakenException');
 const { UserService } = require('./userService');
 const userService = new UserService();
 
@@ -12,8 +13,7 @@ const authUser = asyncHandler(async (req = request, res = response) => {
   const { email, password } = req.body;
   const user = await userService.findByEmail(email);
   if (!user || !comparePasswords(password, user.password)) {
-    res.status(401);
-    throw new Error('bad credentials');
+    throw new BadCredentialsException();
   }
   const token = generateToken({ id: user.id });
   return res.status(200).json({
@@ -30,8 +30,7 @@ const signUp = asyncHandler(async (req = request, res = response) => {
   const user = await userService.findByEmail(email);
 
   if (user) {
-    res.status(400);
-    throw new Error('Email is already taken');
+    throw new EmailAlreadyTakenException();
   }
 
   const newUser = await userService.save({
@@ -63,27 +62,17 @@ const getProfile = asyncHandler(async (req = request, res = response) => {
 
 const updateUserProfile = asyncHandler(async (req, res) => {
   const { name, email, password } = req.body;
-  const user = await userService.findById(req.user.id);
-  if (user) {
-    user.name = name || user.name;
-    user.email = email || user.email;
-    if (password) {
-      user.password = encryptPassword(password);
-    }
+  const user = req.user;
 
-    const updatedUser = await user.save();
+  const updatedUser = await userService.updateUser(user, { name, email, password });
 
-    res.json({
-      id: updatedUser.id,
-      name: updatedUser.name,
-      email: updatedUser.email,
-      isAdmin: updatedUser.isAdmin,
-      token: generateToken({ id: updatedUser.id })
-    });
-  } else {
-    res.status(404);
-    throw new Error('User not found');
-  }
+  res.json({
+    id: updatedUser.id,
+    name: updatedUser.name,
+    email: updatedUser.email,
+    isAdmin: updatedUser.isAdmin,
+    token: generateToken({ id: updatedUser.id })
+  });
 });
 
 const getUsers = asyncHandler(async (req, res) => {

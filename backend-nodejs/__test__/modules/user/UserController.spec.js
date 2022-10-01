@@ -238,3 +238,44 @@ describe('Get Profile Tests', () => {
     );
   });
 });
+
+describe('Update User Profile Tests', () => {
+  test('should return 401 when token is not sent', async () => {
+    const response = await request(app).put(`${url}/profile`).send();
+    expect(response.statusCode).toBe(401);
+  });
+  test('should update the user name when token is sent', async () => {
+    const token = await getToken();
+    const response = await request(app)
+      .put(`${url}/profile`)
+      .set('Authorization', `Bearer ${token}`)
+      .send({
+        name: 'damian 2',
+        email: 'damian2@gmail.com'
+      });
+    expect(response.body.name).toBe('damian 2');
+  });
+  test('should update the user email when token is sent', async () => {
+    const token = await getToken();
+    const response = await request(app)
+      .put(`${url}/profile`)
+      .set('Authorization', `Bearer ${token}`)
+      .send({
+        name: 'damian 2',
+        email: 'damian2@gmail.com'
+      });
+    expect(response.body.email).toBe('damian2@gmail.com');
+  });
+  test('should update the user in the db when token is sent', async () => {
+    const token = await getToken();
+    await request(app)
+      .put(`${url}/profile`)
+      .set('Authorization', `Bearer ${token}`)
+      .send({
+        name: 'damian 2',
+        email: 'damian2@gmail.com'
+      });
+    const user = await UserModel.findOne({ email: 'damian2@gmail.com' });
+    expect(user).toBeTruthy();
+  });
+});
