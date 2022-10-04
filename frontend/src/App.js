@@ -16,8 +16,8 @@ import { ProductScreen } from './screens/ProductScreen';
 import { ProfileScreen } from './screens/ProfileScreen';
 import { RegisterScreen } from './screens/RegisterScreen';
 import { ShippingScreen } from './screens/ShippingScreen';
-import { UserEditScreen } from './screens/UserEditScreen';
-import { UserListScreen } from './screens/UserListScreen';
+import { UserEditScreen } from './screens/admin/UserEditScreen';
+import { UserListScreen } from './screens/admin/UserListScreen';
 
 const App = () => {
   return (

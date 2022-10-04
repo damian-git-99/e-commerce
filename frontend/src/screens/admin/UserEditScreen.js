@@ -3,25 +3,24 @@ import React, { useState, useEffect } from 'react';
 import { Link, useRouteMatch, useHistory } from 'react-router-dom';
 import { Form, Button } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
-import { getUserDetails, updateUser } from '../actions/userActions';
-import { Loader } from '../components/Loader';
-import { Message } from '../components/Message';
-import { FormContainer } from '../components/FormContainer';
-import { USER_ADMIN_UPDATE_TYPES } from '../reducers/userReducers';
+import { Loader } from '../../components/Loader';
+import { Message } from '../../components/Message';
+import { FormContainer } from '../../components/FormContainer';
+import { getUserDetailsAdmin, updateUser } from '../../actions/adminActions';
+import { USER_ADMIN_UPDATE_TYPES } from '../../reducers/adminReducers';
 
 export const UserEditScreen = () => {
+  const dispatch = useDispatch();
   const history = useHistory();
   const match = useRouteMatch();
   const userId = match.params.id;
+
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [isAdmin, setIsAdmin] = useState(false);
-  console.log(userId);
-  const dispatch = useDispatch();
 
-  const userDetails = useSelector((state) => state.userDetails);
+  const userDetails = useSelector((state) => state.userDetailsAdminReducer);
   const { loading, error, user } = userDetails;
-  console.log(user.id);
   const userUpdate = useSelector((state) => state.userUpdate);
   const {
     loading: loadingUpdate,
@@ -35,19 +34,20 @@ export const UserEditScreen = () => {
       history.push('/admin/userlist');
     } else {
       if (!user.name || user.id != userId) {
-        dispatch(getUserDetails(userId));
+        dispatch(getUserDetailsAdmin(userId));
       } else {
         setName(user.name);
         setEmail(user.email);
         setIsAdmin(user.isAdmin);
       }
     }
-  }, [dispatch, history, userId, user, successUpdate]);
+  }, [userId, user, successUpdate]);
 
   const submitHandler = (e) => {
     e.preventDefault();
     dispatch(updateUser({ id: userId, name, email, isAdmin }));
   };
+
   return (
     <>
       <Link to='/admin/userlist' className='btn btn-light my-3'>
@@ -77,7 +77,7 @@ export const UserEditScreen = () => {
               ></Form.Control>
             </Form.Group>
 
-            <Form.Group controlId='email'>
+            <Form.Group controlId='email' className='mt-2'>
               <Form.Label>Email Address</Form.Label>
               <Form.Control
                 type='email'
@@ -87,7 +87,7 @@ export const UserEditScreen = () => {
               ></Form.Control>
             </Form.Group>
 
-            <Form.Group controlId='isadmin'>
+            <Form.Group controlId='isadmin' className='mt-3'>
               <Form.Check
                 type='checkbox'
                 label='Is Admin'
@@ -96,7 +96,7 @@ export const UserEditScreen = () => {
               ></Form.Check>
             </Form.Group>
 
-            <Button type='submit' variant='primary'>
+            <Button type='submit' variant='primary' className='mt-3'>
               Update
             </Button>
           </Form>
