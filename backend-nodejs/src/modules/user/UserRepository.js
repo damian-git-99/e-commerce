@@ -22,6 +22,15 @@ class UserRepository {
   }
 
   /**
+   * Find all users and return them, but don't return their passwords.
+   * @returns An array of users.
+   */
+  findAll() {
+    const users = UserModel.find({}).select('-password');
+    return users;
+  }
+
+  /**
    * It creates a new user and returns it
    * @param user - The user object that you want to save.
    * @returns The newUser is being returned.

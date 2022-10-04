@@ -26,6 +26,7 @@ router
   .get(validateJwt, getProfile)
   .put(validateJwt, updateUserProfile);
 
+// admin routes
 router.route('/').get(validateJwt, isAdmin, getUsers);
 router.route('/:id')
   .delete(validateJwt, isAdmin, deleteUser)

@@ -16,8 +16,7 @@ class UserService {
   }
 
   findAll() {
-    const users = UserModel.find({}).select('-password');
-    return users;
+    return userRepository.findAll();
   }
 
   async deleteUser(userId) {

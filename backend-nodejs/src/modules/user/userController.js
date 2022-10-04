@@ -1,5 +1,6 @@
 const { request, response } = require('express');
 const asyncHandler = require('express-async-handler');
+const UserNotFoundException = require('../../errors/UserNotFoundException');
 const {
   comparePasswords
 } = require('../shared/utils/encrypt');
@@ -75,6 +76,8 @@ const updateUserProfile = asyncHandler(async (req, res) => {
   });
 });
 
+// Admin routes
+
 const getUsers = asyncHandler(async (req, res) => {
   const users = await userService.findAll();
   res.json(users);
@@ -94,12 +97,11 @@ const deleteUser = asyncHandler(async (req, res) => {
 const getUserById = asyncHandler(async (req, res) => {
   const user = await userService.findById(req.params.id);
 
-  if (user) {
-    res.json(user);
-  } else {
-    res.status(404);
-    throw new Error('User not found');
+  if (!user) {
+    throw new UserNotFoundException();
   }
+
+  res.json(user);
 });
 
 const updateUser = asyncHandler(async (req, res) => {
