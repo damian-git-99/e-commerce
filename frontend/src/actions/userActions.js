@@ -82,13 +82,7 @@ export const getUserDetails = () => {
 
       const { userLogin: { userInfo } } = getState();
 
-      const config = {
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${userInfo.token}`
-        }
-      };
-      const { data } = await axios.get('/api/users/profile', config);
+      const data = await userAPI.getUserDetails(userInfo.token);
 
       dispatch({
         type: USER_DETAILS_TYPES.USER_DETAILS_SUCCESS,

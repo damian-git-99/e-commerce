@@ -15,37 +15,41 @@ export const ProfileScreen = () => {
     name: '',
     confirmPassword: ''
   };
+
   const history = useHistory();
   const dispatch = useDispatch();
   const [message, setMessage] = useState(null);
   const [form, setform] = useState(initialState);
+
   const userDetails = useSelector((state) => state.userDetails);
   const userLogin = useSelector((state) => state.userLogin);
   const userUpdateProfile = useSelector((state) => state.userUpdateProfile);
+  const orderListMy = useSelector((state) => state.orderListMy);
+
   const { email, password, name, confirmPassword } = form;
   const { loading, error, user } = userDetails;
   const { userInfo: loggedUser } = userLogin;
-
   const { success } = userUpdateProfile;
-  const orderListMy = useSelector((state) => state.orderListMy);
   const { loading: loadingOrders, error: errorOrders, orders } = orderListMy;
 
+  if (!loggedUser) {
+    history.push('/login');
+  }
+
   useEffect(() => {
-    if (!loggedUser) {
-      history.push('/login');
-    } else {
-      if (!user.name) {
-        dispatch(getUserDetails());
-        dispatch(listMyOrders());
-      } else {
-        setform({
-          ...form,
-          name: user.name,
-          email: user.email
-        });
-      }
+    if (!user.name) {
+      dispatch(getUserDetails());
     }
+
+    setform({
+      name: user.name,
+      email: user.email
+    });
   }, [dispatch, history, loggedUser, user]);
+
+  useEffect(() => {
+    dispatch(listMyOrders());
+  }, []);
 
   const handleChange = (e) => {
     setform({
@@ -59,7 +63,7 @@ export const ProfileScreen = () => {
     if (password !== confirmPassword) {
       setMessage('Passwords do not match');
     } else {
-      dispatch(updateUserProfile({ id: user.id, name, email, password }));
+      dispatch(updateUserProfile({ name, email, password }));
     }
   };
   return (
