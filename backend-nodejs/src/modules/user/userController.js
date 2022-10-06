@@ -51,6 +51,8 @@ const signUp = asyncHandler(async (req = request, res = response) => {
   });
 });
 
+// @desc    Fetch User info
+// @route   GET /api/users/profile
 const getProfile = asyncHandler(async (req = request, res = response) => {
   const user = await userService.findById(req.user.id);
   return res.status(200).json({
@@ -61,6 +63,8 @@ const getProfile = asyncHandler(async (req = request, res = response) => {
   });
 });
 
+// @desc    Update User
+// @route   PUT /api/users/profile
 const updateUserProfile = asyncHandler(async (req, res) => {
   const { name, email, password } = req.body;
   const user = req.user;
@@ -77,23 +81,27 @@ const updateUserProfile = asyncHandler(async (req, res) => {
 });
 
 // Admin routes
-
+// @desc    Fetch All users
+// @route   GET /api/users/
 const getUsers = asyncHandler(async (req, res) => {
   const users = await userService.findAll();
   res.json(users);
 });
 
+// @desc    Delete user
+// @route   DELETE /api/users/:id
 const deleteUser = asyncHandler(async (req, res) => {
   const result = await userService.deleteUser(req.params.id);
 
-  if (result) {
-    res.json({ message: 'User removed' });
-  } else {
-    res.status(404);
-    throw new Error('User not found');
+  if (!result) {
+    throw new UserNotFoundException();
   }
+
+  res.json({ message: 'User removed' });
 });
 
+// @desc    Fetch User
+// @route   GET /api/users/:id
 const getUserById = asyncHandler(async (req, res) => {
   const user = await userService.findById(req.params.id);
 
@@ -104,26 +112,23 @@ const getUserById = asyncHandler(async (req, res) => {
   res.json(user);
 });
 
+// @desc    Update User
+// @route   PUT /api/users/:id
 const updateUser = asyncHandler(async (req, res) => {
   const user = await userService.findById(req.params.id);
 
-  if (user) {
-    user.name = req.body.name || user.name;
-    user.email = req.body.email || user.email;
-    user.isAdmin = req.body.isAdmin || user.isAdmin;
-
-    const updatedUser = await user.save();
-
-    res.json({
-      id: updatedUser.id,
-      name: updatedUser.name,
-      email: updatedUser.email,
-      isAdmin: updatedUser.isAdmin
-    });
-  } else {
-    res.status(404);
-    throw new Error('User not found');
+  if (!user) {
+    throw new UserNotFoundException();
   }
+
+  const updatedUser = await userService.updateUser(user, { ...req.body });
+
+  res.json({
+    id: updatedUser.id,
+    name: updatedUser.name,
+    email: updatedUser.email,
+    isAdmin: updatedUser.isAdmin
+  });
 });
 
 module.exports = {

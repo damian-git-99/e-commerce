@@ -356,3 +356,101 @@ describe('Get User By id tests', () => {
     );
   });
 });
+
+describe('Delete user tests', () => {
+  test('should return 401 when token is not sent', async () => {
+    const response = await request(app).delete(`${url}/41224d776a326fb40f000001`)
+      .send();
+    expect(response.statusCode).toBe(401);
+  });
+  test('should return 403 when user is not admin', async () => {
+    const token = await getToken();
+    const response = await request(app).delete(`${url}/41224d776a326fb40f000001`)
+      .set('Authorization', `Bearer ${token}`)
+      .send();
+    expect(response.statusCode).toBe(403);
+  });
+  test('should return 404 when user does not exist', async () => {
+    const token = await getToken(true);
+    const response = await request(app).delete(`${url}/41224d776a326fb40f000001`)
+      .set('Authorization', `Bearer ${token}`)
+      .send();
+    expect(response.statusCode).toBe(404);
+  });
+  test('should return 200 when user exist and was deleted', async () => {
+    const token = await getToken(true);
+    const user = await UserModel.findOne({ email: validUser.email });
+    const response = await request(app).delete(`${url}/${user.id}`)
+      .set('Authorization', `Bearer ${token}`)
+      .send();
+    expect(response.statusCode).toBe(200);
+  });
+  test('should delete the user in the database', async () => {
+    const token = await getToken(true);
+    const user = await UserModel.findOne({ email: validUser.email });
+    await request(app).delete(`${url}/${user.id}`)
+      .set('Authorization', `Bearer ${token}`)
+      .send();
+    const deletedUser = await UserModel.findOne({ email: validUser.email });
+    expect(deletedUser).toBeFalsy();
+  });
+});
+
+describe('Update User Tests', () => {
+  const newUser = {
+    name: 'user updated',
+    email: 'userUpdated@gmail.com'
+  };
+  test('should return 401 when token is not sent', async () => {
+    const response = await request(app).put(`${url}/41224d776a326fb40f000001`)
+      .send(newUser);
+    expect(response.statusCode).toBe(401);
+  });
+  test('should return 403 when user is not admin', async () => {
+    const token = await getToken();
+    const response = await request(app).put(`${url}/41224d776a326fb40f000001`)
+      .set('Authorization', `Bearer ${token}`)
+      .send(newUser);
+    expect(response.statusCode).toBe(403);
+  });
+  test('should return 404 when user does not exist', async () => {
+    const token = await getToken(true);
+    const response = await request(app).delete(`${url}/41224d776a326fb40f000001`)
+      .set('Authorization', `Bearer ${token}`)
+      .send(newUser);
+    expect(response.statusCode).toBe(404);
+  });
+  test('should return 200 when user exist and was updated', async () => {
+    const token = await getToken(true);
+    const user = await UserModel.findOne({ email: validUser.email });
+    const response = await request(app).put(`${url}/${user.id}`)
+      .set('Authorization', `Bearer ${token}`)
+      .send(newUser);
+    expect(response.statusCode).toBe(200);
+  });
+  test('should update the user in the database', async () => {
+    const token = await getToken(true);
+    const user = await UserModel.findOne({ email: validUser.email });
+    await request(app).put(`${url}/${user.id}`)
+      .set('Authorization', `Bearer ${token}`)
+      .send(newUser);
+    const updatedUser = await UserModel.findById(user.id);
+    expect(updatedUser.name).toBe(newUser.name);
+    expect(updatedUser.email).toBe(newUser.email);
+  });
+  test('should return user info when user exist and was updated', async () => {
+    const token = await getToken(true);
+    const user = await UserModel.findOne({ email: validUser.email });
+    const response = await request(app).put(`${url}/${user.id}`)
+      .set('Authorization', `Bearer ${token}`)
+      .send(newUser);
+    expect(response.body).toEqual(
+      expect.objectContaining({
+        id: expect.any(String),
+        name: expect.any(String),
+        email: expect.any(String),
+        isAdmin: expect.any(Boolean)
+      })
+    );
+  });
+});

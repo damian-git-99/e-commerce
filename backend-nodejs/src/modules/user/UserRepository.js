@@ -50,6 +50,21 @@ class UserRepository {
   update(id, newProperties) {
     return UserModel.findByIdAndUpdate(id, newProperties, { new: true });
   }
+
+  /**
+   * @param userId - The id of the user to delete.
+   * @returns A boolean value.
+   */
+  async deleteUserById(userId) {
+    const user = await UserModel.findById(userId);
+
+    if (user) {
+      await user.remove();
+      return true;
+    }
+
+    return false;
+  }
 }
 
 const userRepository = new UserRepository();

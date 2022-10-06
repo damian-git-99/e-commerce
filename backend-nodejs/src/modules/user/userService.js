@@ -1,5 +1,4 @@
 const { encryptPassword } = require('../shared/utils/encrypt');
-const UserModel = require('./UserModel');
 const { userRepository } = require('./UserRepository');
 class UserService {
   findByEmail(email) {
@@ -20,14 +19,7 @@ class UserService {
   }
 
   async deleteUser(userId) {
-    const user = UserModel.findById(userId);
-
-    if (user) {
-      await user.remove();
-      return true;
-    }
-
-    return false;
+    return userRepository.deleteUserById(userId);
   }
 
   async updateUser(user, newUser) {
