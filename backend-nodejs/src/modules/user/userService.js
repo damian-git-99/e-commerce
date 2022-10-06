@@ -1,4 +1,4 @@
-const { encryptPassword } = require('../shared/utils/encrypt');
+const { encryptPassword } = require('../../utils/encrypt');
 const { userRepository } = require('./UserRepository');
 class UserService {
   findByEmail(email) {
@@ -35,6 +35,8 @@ class UserService {
   }
 }
 
+const userService = new UserService();
+
 module.exports = {
-  UserService
+  userService
 };

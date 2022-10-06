@@ -1,4 +1,4 @@
-const { UserService } = require('../modules/user/userService');
+const { userService } = require('../modules/user/userService');
 const { request, response } = require('express');
 const config = require('config');
 const KEY = config.get('JWT_SECRET');
@@ -7,7 +7,6 @@ const asyncHandler = require('express-async-handler');
 const InvalidTokenException = require('./errors/InvalidTokenExceptiion');
 const UserNotFoundException = require('../errors/UserNotFoundException');
 const UnauthorizedUserException = require('./errors/UnauthorizedUserException');
-const userService = new UserService();
 
 const validateJwt = asyncHandler(async (req = request, res = response, next) => {
   const authorizationHeader = req.header('Authorization');
