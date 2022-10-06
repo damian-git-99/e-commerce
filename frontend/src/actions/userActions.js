@@ -1,3 +1,5 @@
+import { USER_LIST_TYPES } from '../reducers/adminReducers';
+
 const { userAPI } = require('../api/userAPI');
 const { default: axios } = require('axios');
 const { ORDER_LIST_TYPES } = require('../reducers/orderReducers');
@@ -5,8 +7,7 @@ const { ORDER_LIST_TYPES } = require('../reducers/orderReducers');
 const {
   USER_LOGIN_TYPES,
   USER_DETAILS_TYPES,
-  USER_UPDATE_TYPES,
-  USER_LIST_TYPES
+  USER_UPDATE_TYPES
 } = require('../reducers/userReducers');
 
 export const login = (email, password) => {

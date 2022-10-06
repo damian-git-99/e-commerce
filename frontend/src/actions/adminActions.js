@@ -86,8 +86,8 @@ export const deleteUser = (id) => {
           Authorization: `Bearer ${userInfo.token}`
         }
       };
-      // eslint-disable-next-line no-unused-vars
-      const { data } = await axios.delete(`/api/users/${id}`, config);
+
+      await axios.delete(`/api/users/${id}`, config);
 
       dispatch({ type: USER_DELETE_TYPES.USER_DELETE_SUCCESS });
     } catch (error) {

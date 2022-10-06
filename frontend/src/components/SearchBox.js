@@ -19,7 +19,7 @@ export const SearchBox = () => {
     <Form className="d-flex" onSubmit={submitHandler}>
         <Form.Control
           type="search"
-          placeholder="Search"
+          placeholder="Search Products"
           className="me-2"
           aria-label="Search"
           onChange={(e) => setKeyword(e.target.value)}
