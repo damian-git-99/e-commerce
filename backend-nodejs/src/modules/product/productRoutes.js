@@ -4,10 +4,14 @@ const { findAll, findById, deleteProduct, createProduct, updateProduct, createPr
 const router = Router();
 
 // @route /api/products
-router.route('/').get(findAll).post(validateJwt, isAdmin, createProduct);
-router.route('/:id/reviews').post(validateJwt, createProductReview);
-router
-  .route('/:id')
+router.route('/')
+  .get(findAll)
+  .post(validateJwt, isAdmin, createProduct);
+
+router.route('/:id/reviews')
+  .post(validateJwt, createProductReview);
+
+router.route('/:id')
   .get(findById)
   .delete(validateJwt, isAdmin, deleteProduct)
   .put(validateJwt, isAdmin, updateProduct);
