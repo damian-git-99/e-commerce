@@ -14,6 +14,11 @@ class ProductRepository {
     const product = ProductModel.findById(id);
     return product;
   }
+
+  create(product) {
+    const newProduct = ProductModel.create(product);
+    return newProduct;
+  }
 }
 
 const productRepository = new ProductRepository();

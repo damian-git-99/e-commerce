@@ -1,11 +1,9 @@
 const ProductNotFoundException = require('./errors/ProductNotFoundException');
-const ProductModel = require('./ProductModel');
 const { productRepository } = require('./productRepository');
 
 class ProductService {
   create(product) {
-    const newProduct = ProductModel.create(product);
-    return newProduct;
+    return productRepository.create(product);
   }
 
   find(keyword) {

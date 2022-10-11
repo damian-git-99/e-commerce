@@ -167,3 +167,25 @@ describe('delete product tests', () => {
     expect(deletedProduct).toBeFalsy();
   });
 });
+
+describe('create produt tests', () => {
+  test('should return 401 when token is not sent', async () => {
+    const response = await request(app).post(url).send();
+    expect(response.statusCode).toBe(401);
+  });
+  test('should return 403 when user is not admin', async () => {
+    const token = await getToken();
+    const response = await request(app).post(url)
+      .set('Authorization', `Bearer ${token}`)
+      .send();
+    expect(response.statusCode).toBe(403);
+  });
+  test('should return 201 when a new product is created', async () => {
+    const token = await getToken(true);
+    const response = await request(app)
+      .post(`${url}`)
+      .set('Authorization', `Bearer ${token}`)
+      .send();
+    expect(response.statusCode).toBe(201);
+  });
+});

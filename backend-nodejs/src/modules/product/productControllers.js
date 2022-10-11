@@ -32,6 +32,7 @@ const deleteProduct = asyncHandler(async (req, res) => {
 
 // @desc    Create a product
 // @route   POST /api/products
+// create a product with sample data and then update it
 const createProduct = asyncHandler(async (req, res) => {
   const product = {
     name: 'Sample name',
