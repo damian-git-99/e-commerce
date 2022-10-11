@@ -1,4 +1,5 @@
 const ProductModel = require('./ProductModel');
+const { productRepository } = require('./productRepository');
 
 class ProductService {
   create(product) {
@@ -6,14 +7,8 @@ class ProductService {
     return newProduct;
   }
 
-  find(options) {
-    const products = ProductModel.find(options);
-    return products;
-  }
-
-  findAll() {
-    const products = ProductModel.find({});
-    return products;
+  find(keyword) {
+    return productRepository.findAll(keyword);
   }
 
   findById(id) {

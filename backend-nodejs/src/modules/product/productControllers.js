@@ -5,16 +5,8 @@ const productService = require('./productService');
 // @desc    Fetch all products
 // @route   GET /api/products
 const findAll = asyncHandler(async (req = request, res = response) => {
-  const keyword = req.query.keyword
-    ? {
-      name: {
-        $regex: req.query.keyword,
-        $options: 'i' // case insensitive
-      }
-    }
-    : {};
-
-  const products = await productService.find({ ...keyword });
+  const keyword = req.query.keyword;
+  const products = await productService.find(keyword);
   res.status(200).json(products);
 });
 
