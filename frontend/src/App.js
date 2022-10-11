@@ -11,13 +11,13 @@ import { OrderScreen } from './screens/OrderScreen';
 import PaymentScreen from './screens/PaymentScreen';
 import { PlaceOrderScreen } from './screens/PlaceOrderScreen';
 import { ProductEditScreen } from './screens/ProductEditScreen';
-import { ProductListScreen } from './screens/ProductListScreen';
 import { ProductScreen } from './screens/ProductScreen';
 import { ProfileScreen } from './screens/ProfileScreen';
 import { RegisterScreen } from './screens/RegisterScreen';
 import { ShippingScreen } from './screens/ShippingScreen';
 import { UserEditScreen } from './screens/admin/UserEditScreen';
 import { UserListScreen } from './screens/admin/UserListScreen';
+import { ProductListScreen } from './screens/admin/ProductListScreen';
 
 const App = () => {
   return (

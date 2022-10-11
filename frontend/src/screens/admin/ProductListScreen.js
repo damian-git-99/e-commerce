@@ -3,10 +3,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import LinkContainer from 'react-router-bootstrap/lib/LinkContainer';
 import { Table, Button, Row, Col } from 'react-bootstrap';
 import { useHistory } from 'react-router-dom';
-import { createProduct, deleteProduct, listProducts } from '../actions/productActions';
-import { Loader } from '../components/Loader';
-import { Message } from '../components/Message';
-import { PRODUCT_CREATE_TYPES } from '../reducers/productReducers';
+import { createProduct, deleteProduct, listProducts } from '../../actions/productActions';
+import { Loader } from '../../components/Loader';
+import { Message } from '../../components/Message';
+import { PRODUCT_CREATE_TYPES } from '../../reducers/productReducers';
 
 export const ProductListScreen = () => {
   const history = useHistory();
