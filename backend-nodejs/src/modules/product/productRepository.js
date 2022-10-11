@@ -9,6 +9,11 @@ class ProductRepository {
 
     return ProductModel.find({ name });
   }
+
+  findById(id) {
+    const product = ProductModel.findById(id);
+    return product;
+  }
 }
 
 const productRepository = new ProductRepository();

@@ -1,5 +1,6 @@
 const { request, response } = require('express');
 const asyncHandler = require('express-async-handler');
+const ProductNotFoundException = require('./errors/ProductNotFoundException');
 const productService = require('./productService');
 
 // @desc    Fetch all products
@@ -16,8 +17,7 @@ const findById = asyncHandler(async (req, res) => {
   const id = req.params.id;
   const product = await productService.findById(id);
   if (!product) {
-    res.status(404);
-    throw new Error('Product not found');
+    throw new ProductNotFoundException();
   }
 
   return res.status(200).json(product);

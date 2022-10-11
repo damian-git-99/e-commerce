@@ -23,7 +23,7 @@ const createProducts = async (size = 10) => {
     password: '123',
     email: 'damian@email.com'
   });
-  for (let i = 0; i < size; i++) {
+  for (let i = 1; i <= size; i++) {
     const product = {
       user: user,
       name: `product${i}`,
@@ -47,9 +47,48 @@ describe('find all tests', () => {
   });
   test('should return only the products that matches the keyword sent', async () => {
     await createProducts();
-    const response = await request(app).get(url)
+    const response = await request(app)
+      .get(url)
       .query({ keyword: 'product4' })
       .send();
     expect(response.body.length).toBe(1);
+  });
+});
+
+describe('find by id tests', () => {
+  test('should return 404 when product does not exist', async () => {
+    const id = '63276eb6b656271ef476fd1e';
+    const response = await request(app).get(`${url}/${id}`).send();
+    expect(response.statusCode).toBe(404);
+  });
+  test('should return 200 when product exists', async () => {
+    await createProducts(1);
+    const product = await ProductModel.findOne({ name: 'product1' });
+    const id = product.id;
+    const response = await request(app).get(`${url}/${id}`).send();
+    expect(response.statusCode).toBe(200);
+  });
+  test('should return product info when product exists', async () => {
+    await createProducts(1);
+    const product = await ProductModel.findOne({ name: 'product1' });
+    const id = product.id;
+    const response = await request(app).get(`${url}/${id}`).send();
+    expect(response.body).toEqual(
+      expect.objectContaining({
+        user: expect.any(String),
+        name: expect.any(String),
+        brand: expect.any(String),
+        category: expect.any(String),
+        description: expect.any(String),
+        rating: expect.any(Number),
+        numReviews: expect.any(Number),
+        countInStock: expect.any(Number),
+        price: expect.any(Number),
+        reviews: expect.any(Array),
+        createdAt: expect.any(String),
+        updatedAt: expect.any(String),
+        id: expect.any(String)
+      })
+    );
   });
 });

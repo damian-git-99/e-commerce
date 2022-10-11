@@ -12,8 +12,7 @@ class ProductService {
   }
 
   findById(id) {
-    const product = ProductModel.findById(id);
-    return product;
+    return productRepository.findById(id);
   }
 
   async deleteById(id) {

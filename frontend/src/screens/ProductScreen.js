@@ -9,18 +9,18 @@ import { Message } from '../components/Message';
 import { PRODUCT_CREATE_REVIEW } from '../reducers/productReducers';
 
 export const ProductScreen = () => {
-  const [quantity, setQuantity] = useState(1);
-  const [rating, setRating] = useState(0);
-  const [comment, setComment] = useState('');
   const history = useHistory();
   const match = useRouteMatch();
   const dispatch = useDispatch();
+
+  const [quantity, setQuantity] = useState(1);
+  const [rating, setRating] = useState(0);
+  const [comment, setComment] = useState('');
+
   const productDetails = useSelector((state) => state.productDetails);
   const { loading, error, product } = productDetails;
-
   const userLogin = useSelector((state) => state.userLogin);
   const { userInfo } = userLogin;
-
   const productReviewCreate = useSelector((state) => state.productReviewCreate);
   const {
     success: successProductReview,
@@ -29,7 +29,6 @@ export const ProductScreen = () => {
 
   useEffect(() => {
     if (successProductReview) {
-      alert('Review Submitted!');
       setRating(0);
       setComment('');
       dispatch({ type: PRODUCT_CREATE_REVIEW.PRODUCT_CREATE_REVIEW_RESET });
