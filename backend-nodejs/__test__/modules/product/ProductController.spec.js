@@ -2,6 +2,7 @@ const request = require('supertest');
 const { app } = require('../../../app');
 const ProductModel = require('../../../src/modules/product/ProductModel');
 const UserModel = require('../../../src/modules/user/UserModel');
+const { encryptPassword } = require('../../../src/utils/encrypt');
 const { clearDatabase, connect, closeDatabase } = require('../../config/db');
 const url = '/api/products';
 
@@ -90,5 +91,79 @@ describe('find by id tests', () => {
         id: expect.any(String)
       })
     );
+  });
+});
+
+/// todo refactor, move this code to another file
+const validUser = {
+  name: 'damian',
+  email: 'damian@gmail.com',
+  password: encryptPassword('1234')
+};
+
+const requestAuth = (userData) => {
+  return request(app).post('/api/users/login').send(userData);
+};
+
+const createUserInDB = (user = validUser, isAdmin) => {
+  return UserModel.create({ ...user, isAdmin });
+};
+
+const getToken = async (isAdmin = false) => {
+  await createUserInDB(validUser, isAdmin);
+  const response = await requestAuth({
+    email: 'damian@gmail.com',
+    password: '1234'
+  });
+  return response.body.token;
+};
+///
+
+describe('delete product tests', () => {
+  test('should return 401 when token is not sent', async () => {
+    const id = '63276eb6b656271ef476fd1e';
+    const response = await request(app).delete(`${url}/${id}`).send();
+    expect(response.statusCode).toBe(401);
+  });
+  test('should return 403 when user is not admin', async () => {
+    const id = '63276eb6b656271ef476fd1e';
+    const token = await getToken();
+    const response = await request(app)
+      .delete(`${url}/${id}`)
+      .set('Authorization', `Bearer ${token}`)
+      .send();
+    expect(response.statusCode).toBe(403);
+  });
+  test('should return 404 when product does not exist', async () => {
+    const id = '63276eb6b656271ef476fd1e';
+    const token = await getToken(true);
+    const response = await request(app)
+      .delete(`${url}/${id}`)
+      .set('Authorization', `Bearer ${token}`)
+      .send();
+    expect(response.statusCode).toBe(404);
+  });
+  test('should return 200 when product was deleted', async () => {
+    await createProducts(1);
+    const product = await ProductModel.findOne({ name: 'product1' });
+    const id = product.id;
+    const token = await getToken(true);
+    const response = await request(app)
+      .delete(`${url}/${id}`)
+      .set('Authorization', `Bearer ${token}`)
+      .send();
+    expect(response.statusCode).toBe(200);
+  });
+  test('should delete the product from the db', async () => {
+    await createProducts(1);
+    const product = await ProductModel.findOne({ name: 'product1' });
+    const id = product.id;
+    const token = await getToken(true);
+    await request(app)
+      .delete(`${url}/${id}`)
+      .set('Authorization', `Bearer ${token}`)
+      .send();
+    const deletedProduct = await ProductModel.findOne({ name: 'product1' });
+    expect(deletedProduct).toBeFalsy();
   });
 });

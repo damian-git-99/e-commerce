@@ -1,3 +1,4 @@
+const ProductNotFoundException = require('./errors/ProductNotFoundException');
 const ProductModel = require('./ProductModel');
 const { productRepository } = require('./productRepository');
 
@@ -17,12 +18,11 @@ class ProductService {
 
   async deleteById(id) {
     const product = await this.findById(id);
-    if (product) {
-      await product.remove();
-      return true;
-    } else {
-      return false;
+    if (!product) {
+      throw new ProductNotFoundException();
     }
+
+    await product.remove();
   }
 
   async addReview(productId, review, userId) {
