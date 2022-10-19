@@ -39,7 +39,13 @@ const ProductSchema = new Schema(
     },
     image: {
       type: String,
-      required: false
+      required: false,
+      default: ''
+    },
+    public_id_image: {
+      type: String,
+      required: false,
+      default: ''
     },
     brand: {
       type: String,

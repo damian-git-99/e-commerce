@@ -6,9 +6,9 @@ const { productRouter } = require('./src/modules/product/productRoutes');
 const { errorHandler } = require('./src/middlewares/errorHandlingMiddleware');
 const { userRouter } = require('./src/modules/user/userRoutes');
 const { orderRouter } = require('./src/modules/order/orderRoutes');
-const { uploadRoutes } = require('./src/modules/shared/uploadRoutes');
 const config = require('config');
 const { authRouter } = require('./src/modules/auth/AuthRoutes');
+const { uploadRoutes } = require('./src/modules/file/FileRoutes');
 const PAYPAL_CLIENT_ID = config.get('PAYPAL_CLIENT_ID');
 
 app.use(morgan('combined'));
