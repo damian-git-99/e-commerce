@@ -1,7 +1,9 @@
 const { Router } = require('express');
+const multer = require('multer');
 const { isAdmin, validateJwt } = require('../../middlewares/validateJWT');
-const { findAll, findById, deleteProduct, createProduct, updateProduct, createProductReview } = require('./productControllers');
+const { findAll, findById, deleteProduct, createProduct, updateProduct, createProductReview, updateProductImage } = require('./productControllers');
 const router = Router();
+const upload = multer();
 
 // @route /api/products
 router.route('/')
@@ -16,6 +18,8 @@ router.route('/:id')
   .delete(validateJwt, isAdmin, deleteProduct)
   .put(validateJwt, isAdmin, updateProduct);
 
+router.post('/image/upload/:id', upload.single('image'), updateProductImage);
+// /api/products/image/upload/:id
 module.exports = {
   productRouter: router
 };

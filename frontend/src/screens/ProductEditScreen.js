@@ -67,7 +67,7 @@ export const ProductEditScreen = () => {
         }
       };
 
-      const { data } = await axios.post(`/api/upload/${productId}`, formData, config);
+      const { data } = await axios.post(`/api/products/image/upload/${productId}`, formData, config);
 
       setImage(data);
       setUploading(false);
@@ -84,7 +84,6 @@ export const ProductEditScreen = () => {
         id: productId,
         name,
         price,
-        image,
         brand,
         category,
         description,

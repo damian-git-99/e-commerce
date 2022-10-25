@@ -48,6 +48,13 @@ class ProductService {
       throw new Error('Product not found');
     }
   }
+
+  async updateImage(productID, image, publicId) {
+    const product = await this.findById(productID);
+    product.image = image;
+    product.public_id_image = publicId;
+    await product.save();
+  }
 }
 const productService = new ProductService();
 module.exports = productService;
