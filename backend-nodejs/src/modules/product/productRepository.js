@@ -19,6 +19,11 @@ class ProductRepository {
     const newProduct = ProductModel.create(product);
     return newProduct;
   }
+
+  update(productId, product) {
+    return ProductModel
+      .findOneAndUpdate({ id: productId }, { ...product }, { new: true });
+  }
 }
 
 const productRepository = new ProductRepository();

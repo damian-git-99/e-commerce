@@ -1,7 +1,5 @@
 const { request, response } = require('express');
 const asyncHandler = require('express-async-handler');
-const InvalidImageException = require('../file/errors/InvalidImageException');
-const fileService = require('../file/FileService');
 const ProductNotFoundException = require('./errors/ProductNotFoundException');
 const productService = require('./productService');
 
@@ -55,52 +53,13 @@ const createProduct = asyncHandler(async (req, res) => {
 // @desc    Update a product
 // @route   PUT /api/products/:id
 const updateProduct = asyncHandler(async (req, res) => {
-  const { name, price, description, brand, category, countInStock } =
-    req.body;
-
-  const product = await productService.findById(req.params.id);
-
-  if (product) {
-    product.name = name;
-    product.price = price;
-    product.description = description;
-    product.brand = brand;
-    product.category = category;
-    product.countInStock = countInStock;
-
-    const updatedProduct = await product.save();
-    res.json(updatedProduct);
-  } else {
-    res.status(404);
-    throw new Error('Product not found');
-  }
+  const updatedProduct = await productService.updateProduct(req.params.id, { ...req.body });
+  res.json(updatedProduct);
 });
 
 const updateProductImage = asyncHandler(async (req, res) => {
-  if (!req.file) {
-    throw new InvalidImageException('an image does not come');
-  }
-
-  if (!fileService.isSupportedFileType(req.file.buffer)) {
-    throw new InvalidImageException('Image not supported');
-  }
-
-  const product = await productService.findById(req.params.id);
-
-  if (!product) {
-    throw new ProductNotFoundException();
-  }
-
-  if (product.image.trim() !== '') {
-    // delete previous image
-    await fileService.deleteImage(product.public_id_image);
-  }
-
-  const result = await fileService.uploadImage(req.file);
-
-  productService.updateImage(product.id, result.url, result.public_id);
-
-  res.send(result.url);
+  const newUrl = await productService.updateImage(req.file, req.params.id);
+  res.send(newUrl);
 });
 
 const createProductReview = asyncHandler(async (req, res) => {

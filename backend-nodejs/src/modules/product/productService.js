@@ -1,3 +1,5 @@
+const InvalidImageException = require('../file/errors/InvalidImageException');
+const fileService = require('../file/FileService');
 const ProductNotFoundException = require('./errors/ProductNotFoundException');
 const { productRepository } = require('./productRepository');
 
@@ -12,6 +14,16 @@ class ProductService {
 
   findById(id) {
     return productRepository.findById(id);
+  }
+
+  async updateProduct(productId, newProduct) {
+    const product = await this.findById(productId);
+
+    if (!product) {
+      throw new ProductNotFoundException();
+    }
+
+    return productRepository.update(productId, newProduct);
   }
 
   async deleteById(id) {
@@ -49,11 +61,33 @@ class ProductService {
     }
   }
 
-  async updateImage(productID, image, publicId) {
-    const product = await this.findById(productID);
-    product.image = image;
-    product.public_id_image = publicId;
+  async updateImage(file, productId) {
+    if (!file) {
+      throw new InvalidImageException('An image does not come');
+    }
+
+    const isSupported = await fileService.isSupportedFileType(file.buffer);
+
+    if (!isSupported) {
+      throw new InvalidImageException('Image not supported');
+    }
+
+    const product = await productService.findById(productId);
+
+    if (!product) {
+      throw new ProductNotFoundException();
+    }
+
+    if (product.image.trim() !== '') {
+      // delete previous image
+      await fileService.deleteImage(product.public_id_image);
+    }
+
+    const result = await fileService.uploadImage(file);
+    product.image = result.url;
+    product.public_id_image = result.public_id;
     await product.save();
+    return result.url;
   }
 }
 const productService = new ProductService();

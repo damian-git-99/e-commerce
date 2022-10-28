@@ -18,8 +18,10 @@ router.route('/:id')
   .delete(validateJwt, isAdmin, deleteProduct)
   .put(validateJwt, isAdmin, updateProduct);
 
-router.post('/image/upload/:id', upload.single('image'), updateProductImage);
-// /api/products/image/upload/:id
+router.post('/image/upload/:id',
+  [validateJwt, isAdmin, upload.single('image')],
+  updateProductImage);
+
 module.exports = {
   productRouter: router
 };

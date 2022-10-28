@@ -4,5 +4,10 @@
   },
   "port": 5000,
   "JWT_SECRET": "supersecretpassword",
-  "PAYPAL_CLIENT_ID": "AaIycBSJf3sZfI5cjlHUqFjtOODTBOqReeCD3aPBDSeBjSPVDdkESEfSwOp4mvDaRAS7NoCJMp4JsWSu"
+  "PAYPAL_CLIENT_ID": "AaIycBSJf3sZfI5cjlHUqFjtOODTBOqReeCD3aPBDSeBjSPVDdkESEfSwOp4mvDaRAS7NoCJMp4JsWSu",
+  "cloudinary": {
+    "cloud_name": "",
+    "api_key": "",
+    "api_secret": ""
+  }
 }

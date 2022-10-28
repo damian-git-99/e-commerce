@@ -1,10 +1,14 @@
 const request = require('supertest');
 const { app } = require('../../../app');
+const fileService = require('../../../src/modules/file/FileService');
 const ProductModel = require('../../../src/modules/product/ProductModel');
 const UserModel = require('../../../src/modules/user/UserModel');
 const { encryptPassword } = require('../../../src/utils/encrypt');
 const { clearDatabase, connect, closeDatabase } = require('../../config/db');
+const { loadFile } = require('../utils/Utils');
 const url = '/api/products';
+jest.mock('../../../src/modules/file/FileService');
+const fileServiceMocked = jest.mocked(fileService, true);
 
 beforeAll(async () => {
   await connect();
@@ -18,7 +22,7 @@ afterAll(async () => {
   await closeDatabase();
 });
 
-const createProducts = async (size = 10) => {
+const createProducts = async (size = 10, image = '') => {
   const user = await UserModel.create({
     name: 'damian',
     password: '123',
@@ -30,7 +34,8 @@ const createProducts = async (size = 10) => {
       name: `product${i}`,
       brand: 'mx',
       category: 'category',
-      description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.'
+      description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
+      image
     };
     await ProductModel.create(product);
   }
@@ -94,7 +99,6 @@ describe('find by id tests', () => {
   });
 });
 
-/// todo refactor, move this code to another file
 const validUser = {
   name: 'damian',
   email: 'damian@gmail.com',
@@ -117,7 +121,6 @@ const getToken = async (isAdmin = false) => {
   });
   return response.body.token;
 };
-///
 
 describe('delete product tests', () => {
   test('should return 401 when token is not sent', async () => {
@@ -187,5 +190,143 @@ describe('create produt tests', () => {
       .set('Authorization', `Bearer ${token}`)
       .send();
     expect(response.statusCode).toBe(201);
+  });
+});
+
+describe('Update product', () => {
+  let id = '63276eb6b656271ef476fd1e';
+  test('should return 401 when token is not sent', async () => {
+    const response = await request(app).put(`${url}/${id}`).send();
+    expect(response.statusCode).toBe(401);
+  });
+  test('should return 403 when user is not admin', async () => {
+    const token = await getToken();
+    const response = await request(app).put(`${url}/${id}`)
+      .set('Authorization', `Bearer ${token}`)
+      .send();
+    expect(response.statusCode).toBe(403);
+  });
+  test('should return 404 when product is not found', async () => {
+    const token = await getToken(true);
+    const response = await request(app).put(`${url}/${id}`)
+      .set('Authorization', `Bearer ${token}`)
+      .send();
+    expect(response.statusCode).toBe(404);
+  });
+  test('should return 200 when product is updated', async () => {
+    await createProducts(1);
+    const product = await ProductModel.findOne({ name: 'product1' });
+    id = product.id;
+    const token = await getToken(true);
+    const response = await request(app).put(`${url}/${id}`)
+      .set('Authorization', `Bearer ${token}`)
+      .send({
+        name: 'product1_updated',
+        price: 100.99,
+        description: 'new description',
+        brand: 'Apple',
+        category: 'Cellphone',
+        countInStock: 12
+      });
+    expect(response.statusCode).toBe(200);
+  });
+  test('should update the product in the db when product is updated', async () => {
+    await createProducts(1);
+    const product = await ProductModel.findOne({ name: 'product1' });
+    id = product.id;
+    const token = await getToken(true);
+    await request(app).put(`${url}/${id}`)
+      .set('Authorization', `Bearer ${token}`)
+      .send({
+        name: 'product1_updated',
+        price: 100.99,
+        description: 'new description',
+        brand: 'Apple',
+        category: 'Cellphone',
+        countInStock: 12
+      });
+    const updatedProduct = await ProductModel.findById(id);
+    expect(updatedProduct.name).toBe('product1_updated');
+    expect(updatedProduct.price).toBe(100.99);
+    expect(updatedProduct.description).toBe('new description');
+  });
+});
+
+describe('update Image tests', () => {
+  let id = '63276eb6b656271ef476fd1e';
+  test('should return 401 when token is not sent', async () => {
+    const response = await request(app).post(`${url}/image/upload/${id}`).send();
+    expect(response.statusCode).toBe(401);
+  });
+  test('should return 403 when user is not admin', async () => {
+    const token = await getToken();
+    const response = await request(app).post(`${url}/image/upload/${id}`)
+      .set('Authorization', `Bearer ${token}`)
+      .send();
+    expect(response.statusCode).toBe(403);
+  });
+  test('should return 400 when image is not sent', async () => {
+    await createProducts(1);
+    const product = await ProductModel.findOne({ name: 'product1' });
+    id = product.id;
+    const token = await getToken(true);
+    const response = await request(app).post(`${url}/image/upload/${id}`)
+      .set('Authorization', `Bearer ${token}`)
+      .send();
+    expect(response.statusCode).toBe(400);
+  });
+  test('should return 400 Image not supported when invalid file is sent', async () => {
+    await createProducts(1);
+    const product = await ProductModel.findOne({ name: 'product1' });
+    id = product.id;
+    const token = await getToken(true);
+    const file = await loadFile('invalid_file.txt');
+    const response = await request(app).post(`${url}/image/upload/${id}`)
+      .set('Authorization', `Bearer ${token}`)
+      .attach('image', file);
+    expect(response.statusCode).toBe(400);
+    expect(response.body.message).toBe('Image not supported');
+  });
+  test('should return 404 when product does not exist', async () => {
+    const token = await getToken(true);
+    const file = await loadFile();
+    fileServiceMocked.isSupportedFileType.mockReturnValue(true);
+    const response = await request(app).post(`${url}/image/upload/${id}`)
+      .set('Authorization', `Bearer ${token}`)
+      .attach('image', file);
+    expect(response.statusCode).toBe(404);
+  });
+  test('should call uploadService', async () => {
+    await createProducts(1);
+    const product = await ProductModel.findOne({ name: 'product1' });
+    id = product.id;
+    const token = await getToken(true);
+    const file = await loadFile();
+    fileServiceMocked.isSupportedFileType.mockReturnValue(true);
+    fileServiceMocked.uploadImage.mockReturnValue({
+      url: 'new_image_url',
+      public_id: 'ABC-123'
+    });
+    await request(app).post(`${url}/image/upload/${id}`)
+      .set('Authorization', `Bearer ${token}`)
+      .attach('image', file);
+    expect(fileServiceMocked.deleteImage).toHaveBeenCalledTimes(0);
+    expect(fileServiceMocked.uploadImage).toHaveBeenCalledTimes(1);
+  });
+  test('should call delete image if the product has a previous image', async () => {
+    await createProducts(1, 'http://localhost/imagen');
+    const product = await ProductModel.findOne({ name: 'product1' });
+    id = product.id;
+    const token = await getToken(true);
+    const file = await loadFile();
+    fileServiceMocked.isSupportedFileType.mockReturnValue(true);
+    fileServiceMocked.uploadImage.mockReturnValue({
+      url: 'new_image_url',
+      public_id: 'ABC-123'
+    });
+    await request(app).post(`${url}/image/upload/${id}`)
+      .set('Authorization', `Bearer ${token}`)
+      .attach('image', file);
+    expect(fileServiceMocked.deleteImage).toHaveBeenCalledTimes(1);
   });
 });
