@@ -9,9 +9,10 @@ const { orderRouter } = require('./src/modules/order/orderRoutes');
 const config = require('config');
 const { authRouter } = require('./src/modules/auth/AuthRoutes');
 const PAYPAL_CLIENT_ID = config.get('PAYPAL_CLIENT_ID');
-
-app.use(morgan('combined'));
+// app.use(morgan('combined'));
 app.use(express.json());
+// skip morgan if test
+app.use(morgan('dev', { skip: (req, res) => process.env.NODE_ENV === 'test' }));
 app.use('/api/products', productRouter);
 app.use('/api/users', userRouter);
 app.use('/api/users', authRouter);
