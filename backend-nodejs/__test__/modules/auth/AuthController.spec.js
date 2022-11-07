@@ -19,10 +19,6 @@ afterAll(async () => {
   await closeDatabase();
 });
 
-const requestAuth = (userData) => {
-  return request(app).post(`${url}/login`).send(userData);
-};
-
 const validUser = {
   name: 'damian',
   email: 'damian@gmail.com',
@@ -34,6 +30,11 @@ const createUserInDB = (user = validUser, isAdmin) => {
 };
 
 describe('Auth tests', () => {
+  const requestAuth = (userData) => {
+    return request(app)
+      .post(`${url}/login`)
+      .send(userData);
+  };
   test('should return 400 when email is not sent', async () => {
     const response = await requestAuth({
       password: '1234'
@@ -111,22 +112,30 @@ describe('Auth tests', () => {
 });
 
 describe('Sign up tests', () => {
+  const signupRequest = (authParams) => {
+    const { email, name, password } = authParams;
+    return request(app).post(`${url}/signup`).send({
+      email,
+      name,
+      password
+    });
+  };
   test('should return 400 when email is not sent', async () => {
-    const response = await request(app).post(`${url}/signup`).send({
+    const response = await signupRequest({
       password: '123456',
       name: 'damian'
     });
     expect(response.statusCode).toBe(400);
   });
   test('should return The email is not valid when email is not sent', async () => {
-    const response = await request(app).post(`${url}/signup`).send({
+    const response = await signupRequest({
       password: '123456',
       name: 'damian'
     });
     expect(response.body.message).toBe('The email is not valid');
   });
   test('should return 400 when email is not valid', async () => {
-    const response = await request(app).post(`${url}/signup`).send({
+    const response = await signupRequest({
       password: '1234',
       email: 'damian',
       name: 'myName'
@@ -134,14 +143,14 @@ describe('Sign up tests', () => {
     expect(response.statusCode).toBe(400);
   });
   test('should return 400 when password is not sent', async () => {
-    const response = await request(app).post(`${url}/signup`).send({
+    const response = await signupRequest({
       email: 'damian@gmail.com',
       name: 'damian'
     });
     expect(response.statusCode).toBe(400);
   });
   test('should return The password cannot be emptyd when password is not sent', async () => {
-    const response = await request(app).post(`${url}/signup`).send({
+    const response = await signupRequest({
       email: 'damian@gmail.com',
       name: 'damian'
     });
@@ -149,7 +158,7 @@ describe('Sign up tests', () => {
   });
   test('should return 400 when the email already exists', async () => {
     await createUserInDB();
-    const response = await request(app).post(`${url}/signup`).send({
+    const response = await signupRequest({
       email: 'damian@gmail.com',
       name: 'damian',
       password: '123456'
@@ -158,7 +167,7 @@ describe('Sign up tests', () => {
   });
   test('should return Email is already taken when the email already exists', async () => {
     await createUserInDB();
-    const response = await request(app).post(`${url}/signup`).send({
+    const response = await signupRequest({
       email: 'damian@gmail.com',
       name: 'damian',
       password: '123456'
@@ -166,7 +175,7 @@ describe('Sign up tests', () => {
     expect(response.body.message).toBe('Email is already taken');
   });
   test('should return 201 when all the information sent is valid', async () => {
-    const response = await request(app).post(`${url}/signup`).send({
+    const response = await signupRequest({
       email: 'damian@gmail.com',
       name: 'damian',
       password: '123456'
@@ -174,7 +183,7 @@ describe('Sign up tests', () => {
     expect(response.statusCode).toBe(201);
   });
   test('should hash the password', async () => {
-    await request(app).post(`${url}/signup`).send({
+    await signupRequest({
       email: 'damian@gmail.com',
       name: 'damian',
       password: '123456'
@@ -183,7 +192,7 @@ describe('Sign up tests', () => {
     expect(user.password).not.toBe('123456');
   });
   test('should return the user info when all the information sent is valid', async () => {
-    const response = await request(app).post(`${url}/signup`).send({
+    const response = await signupRequest({
       email: 'damian@gmail.com',
       name: 'damian',
       password: '123456'
