@@ -30,9 +30,8 @@ const deleteProduct = asyncHandler(async (req, res) => {
   res.json({ message: 'Product removed' });
 });
 
-// @desc    Create a product
+// @desc    create a product with sample data.
 // @route   POST /api/products
-// create a product with sample data and then update it
 const createProduct = asyncHandler(async (req, res) => {
   const product = {
     name: 'Sample name',
@@ -57,11 +56,15 @@ const updateProduct = asyncHandler(async (req, res) => {
   res.json(updatedProduct);
 });
 
+// @desc    Update a image of a product
+// @route   PUT /api/products/image/upload/:id
 const updateProductImage = asyncHandler(async (req, res) => {
   const newUrl = await productService.updateImage(req.file, req.params.id);
   res.send(newUrl);
 });
 
+// @desc    Create a product review
+// @route   POST /api/products/:id/reviews
 const createProductReview = asyncHandler(async (req, res) => {
   await productService.addReview(req.params.id, req.body, req.user);
   res.status(201).json({ message: 'Review added' });
