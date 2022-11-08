@@ -1,5 +1,6 @@
 const { request, response } = require('express');
 const asyncHandler = require('express-async-handler');
+const OrderNotFoundException = require('./errors/OrderNotFoundException');
 const { OrderService } = require('./orderService');
 const orderService = new OrderService();
 
@@ -40,8 +41,7 @@ const getOrderById = asyncHandler(async (req = request, res = response) => {
   const order = await orderService.findByIdWithUser(req.params.id);
 
   if (!order) {
-    res.status(404);
-    throw new Error('Order not found');
+    throw new OrderNotFoundException();
   }
 
   res.json(order);

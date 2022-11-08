@@ -1,4 +1,5 @@
 const OrderModel = require('./OrderModel');
+const { orderRepository } = require('./OrderRepository');
 
 class OrderService {
   save(order) {
@@ -12,8 +13,7 @@ class OrderService {
   }
 
   findByIdWithUser(id) {
-    const order = OrderModel.findById(id).populate('user', 'name email');
-    return order;
+    return orderRepository.findOderByIdWithUser(id);
   }
 
   findOrdersByUser(userId) {
