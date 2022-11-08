@@ -87,6 +87,7 @@ class ProductService {
     const result = await fileService.uploadImage(file);
     product.image = result.url;
     product.public_id_image = result.public_id;
+    // todo: move the product.save to the repository layer
     await product.save();
     return result.url;
   }
