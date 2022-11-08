@@ -1,5 +1,6 @@
 const InvalidImageException = require('../file/errors/InvalidImageException');
 const fileService = require('../file/FileService');
+const ProductAlreadyReviewedException = require('./errors/ProductAlreadyReviewedException');
 const ProductNotFoundException = require('./errors/ProductNotFoundException');
 const { productRepository } = require('./productRepository');
 
@@ -35,30 +36,30 @@ class ProductService {
     await product.remove();
   }
 
-  async addReview(productId, review, userId) {
+  async addReview(productId, review, user) {
+    const { rating, comment } = review;
     const product = await productService.findById(productId);
 
-    if (product) {
-      const alreadyReviewed = product.reviews.find(
-        (r) => r.user.toString() === userId.toString()
-      );
-
-      if (alreadyReviewed) {
-        throw new Error('Product already reviewed');
-      }
-
-      product.reviews.push(review);
-
-      product.numReviews = product.reviews.length;
-
-      product.rating =
-        product.reviews.reduce((acc, item) => item.rating + acc, 0) /
-        product.reviews.length;
-
-      await product.save();
-    } else {
-      throw new Error('Product not found');
+    if (!product) {
+      throw new ProductNotFoundException();
     }
+
+    const alreadyReviewed = product.reviews.find(
+      (r) => r.user.toString() === user.id.toString()
+    );
+
+    if (alreadyReviewed) {
+      throw new ProductAlreadyReviewedException();
+    }
+
+    const newReview = {
+      name: user.name,
+      rating: Number(rating),
+      comment,
+      user: user.id
+    };
+
+    await productRepository.AddProductReview(product, newReview);
   }
 
   async updateImage(file, productId) {

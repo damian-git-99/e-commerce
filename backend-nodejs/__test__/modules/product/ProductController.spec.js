@@ -6,7 +6,6 @@ const UserModel = require('../../../src/modules/user/UserModel');
 const { encryptPassword } = require('../../../src/utils/encrypt');
 const { clearDatabase, connect, closeDatabase } = require('../../config/db');
 const { loadFile } = require('../utils/Utils');
-const url = '/api/products';
 jest.mock('../../../src/modules/file/FileService');
 const fileServiceMocked = jest.mocked(fileService, true);
 
@@ -21,6 +20,8 @@ afterEach(async () => {
 afterAll(async () => {
   await closeDatabase();
 });
+
+const url = '/api/products';
 
 const createProducts = async (size = 10, image = '') => {
   const user = await UserModel.create({
@@ -323,5 +324,97 @@ describe('update Image tests', () => {
     });
     await updateImageRequest(id, token, file);
     expect(fileServiceMocked.deleteImage).toHaveBeenCalledTimes(1);
+  });
+});
+
+describe('create Product Review Tests', () => {
+  const id = '63276eb6b656271ef476fd1e';
+  const createProductReviewRequest = (id, token, review) => {
+    return request(app)
+      .post(`${url}/${id}/reviews`)
+      .set('Authorization', `Bearer ${token}`)
+      .send(review);
+  };
+  test('should return 401 when token is not sent', async () => {
+    const response = await createProductReviewRequest(id);
+    expect(response.statusCode).toBe(401);
+  });
+  test('should return 404 when product is not found', async () => {
+    const token = await getToken();
+    const response = await createProductReviewRequest(id, token);
+    expect(response.statusCode).toBe(404);
+  });
+  test('should return 400 when the product has already been reviewed by the authenticated user', async () => {
+    const token = await getToken();
+    const authenticatedUser = await UserModel.findOne({ email: 'damian@gmail.com' });
+    const product = await ProductModel.create({
+      user: authenticatedUser.id,
+      name: 'product1_updated',
+      price: 100.99,
+      description: 'new description',
+      brand: 'Apple',
+      category: 'Cellphone',
+      countInStock: 12
+    });
+    const review = {
+      name: authenticatedUser.name,
+      rating: 5,
+      comment: 'comment about the product',
+      user: authenticatedUser.id
+    };
+    await product.reviews.push(review);
+    await product.save();
+    const newReview = {
+      rating: 4,
+      comment: 'new Review'
+    };
+    const response = await createProductReviewRequest(product.id, token, newReview);
+    expect(response.statusCode).toBe(400);
+  });
+  test('should return Product already reviewed when the product has already been reviewed by the authenticated user', async () => {
+    const token = await getToken();
+    const authenticatedUser = await UserModel.findOne({ email: 'damian@gmail.com' });
+    const product = await ProductModel.create({
+      user: authenticatedUser.id,
+      name: 'product1_updated',
+      price: 100.99,
+      description: 'new description',
+      brand: 'Apple',
+      category: 'Cellphone',
+      countInStock: 12
+    });
+    const review = {
+      name: authenticatedUser.name,
+      rating: 5,
+      comment: 'comment about the product',
+      user: authenticatedUser.id
+    };
+    await product.reviews.push(review);
+    await product.save();
+    const newReview = {
+      rating: 4,
+      comment: 'new Review'
+    };
+    const response = await createProductReviewRequest(product.id, token, newReview);
+    expect(response.body.message).toBe('Product already reviewed');
+  });
+  test('should return 201 when a review is created on a product', async () => {
+    const token = await getToken();
+    const authenticatedUser = await UserModel.findOne({ email: 'damian@gmail.com' });
+    const product = await ProductModel.create({
+      user: authenticatedUser.id,
+      name: 'product1_updated',
+      price: 100.99,
+      description: 'new description',
+      brand: 'Apple',
+      category: 'Cellphone',
+      countInStock: 12
+    });
+    const newReview = {
+      rating: 4,
+      comment: 'new Review'
+    };
+    const response = await createProductReviewRequest(product.id, token, newReview);
+    expect(response.statusCode).toBe(201);
   });
 });
