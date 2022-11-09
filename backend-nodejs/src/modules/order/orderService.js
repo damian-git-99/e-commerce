@@ -50,6 +50,20 @@ class OrderService {
     const updatedOrder = await orderRepository.findByIdAndUpdateOrder(orderId, order);
     return updatedOrder;
   }
+
+  async updateOrderToDelivered(orderId) {
+    const order = await this.findById(orderId);
+
+    if (!order) {
+      throw new OrderNotFoundException();
+    }
+
+    order.isDelivered = true;
+    order.deliveredAt = Date.now();
+
+    const updatedOrder = await orderRepository.findByIdAndUpdateOrder(orderId, order);
+    return updatedOrder;
+  }
 }
 
 module.exports = {
