@@ -53,11 +53,13 @@ const updateOrderToPaid = asyncHandler(async (req, res) => {
   return res.json(updatedOrder);
 });
 
+// @route GET /api/orders/myorders
 const getMyOrders = asyncHandler(async (req, res) => {
   const orders = await orderService.findOrdersByUser(req.user.id);
   res.json(orders);
 });
 
+// @route PUT /api/orders/:id/deliver
 const updateOrderToDelivered = asyncHandler(async (req, res) => {
   const order = await orderService.findById(req.params.id);
 
@@ -74,6 +76,7 @@ const updateOrderToDelivered = asyncHandler(async (req, res) => {
   }
 });
 
+// @route GET /api/orders
 const getOrders = asyncHandler(async (req, res) => {
   const orders = await orderService.findAllWithUser();
   res.json(orders);
