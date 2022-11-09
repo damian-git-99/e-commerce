@@ -109,6 +109,32 @@ describe('Get My Orders Tests', () => {
   });
 });
 
+describe('Get Order By Id tests', () => {
+  const getOrderByIdRequest = (id, token) => {
+    return request(app).get(`${url}/${id}`)
+      .set('Authorization', `Bearer ${token}`)
+      .send();
+  };
+  test('should return 401 when token is not sent', async () => {
+    const id = '63276eb6b656271ef476fd1e';
+    const response = await getOrderByIdRequest(id);
+    expect(response.statusCode).toBe(401);
+  });
+  test('should return 404 when the order is not found', async () => {
+    const id = '63276eb6b656271ef476fd1e';
+    const token = await getToken();
+    const response = await getOrderByIdRequest(id, token);
+    expect(response.statusCode).toBe(404);
+  });
+  test('should return 200 when order is returned correctly', async () => {
+    const token = await getToken();
+    await createOrderToTheAuthenticatedUser();
+    const order = await OrderModel.findOne({});
+    const response = await getOrderByIdRequest(order.id, token);
+    expect(response.statusCode).toBe(200);
+  });
+});
+
 describe('Update Order To Paid Tests', () => {
   const updateOrderToPaidRequest = (id, token, paymentResult) => {
     return request(app).put(`${url}/${id}/pay`)

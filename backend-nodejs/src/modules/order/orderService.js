@@ -13,8 +13,12 @@ class OrderService {
     return order;
   }
 
-  findByIdWithUser(id) {
-    return orderRepository.findOderByIdWithUser(id);
+  async findByIdWithUser(id) {
+    const order = await orderRepository.findOderByIdWithUser(id);
+    if (!order) {
+      throw new OrderNotFoundException();
+    }
+    return order;
   }
 
   findOrdersByUser(userId) {
