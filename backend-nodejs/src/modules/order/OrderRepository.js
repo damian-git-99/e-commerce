@@ -13,6 +13,11 @@ class OrderRepository {
       .populate('user', 'id name');
     return orders;
   }
+
+  findOrdersByUser(userId) {
+    const orders = OrderModel.find({ user: userId });
+    return orders;
+  }
 }
 
 const orderRepository = new OrderRepository();

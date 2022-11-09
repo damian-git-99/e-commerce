@@ -92,6 +92,23 @@ describe('Get Order By Id Tests', () => {
   });
 });
 
+describe('Get My Orders Tests', () => {
+  const getMyOrdersRequest = (token) => {
+    return request(app).get(`${url}/myorders`)
+      .set('Authorization', `Bearer ${token}`)
+      .send();
+  };
+  test('should return 401 when token is not sent', async () => {
+    const response = await getMyOrdersRequest();
+    expect(response.statusCode).toBe(401);
+  });
+  test('should return 200 when token is sent', async () => {
+    const token = await getToken();
+    const response = await getMyOrdersRequest(token);
+    expect(response.statusCode).toBe(200);
+  });
+});
+
 // Admin routes
 describe('Get All Orders Tests', () => {
   const getAllOrderRequest = (token) => {

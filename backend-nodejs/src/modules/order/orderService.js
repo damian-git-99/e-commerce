@@ -17,8 +17,7 @@ class OrderService {
   }
 
   findOrdersByUser(userId) {
-    const orders = OrderModel.find({ user: userId });
-    return orders;
+    return orderRepository.findOrdersByUser(userId);
   }
 
   findAllWithUser() {
