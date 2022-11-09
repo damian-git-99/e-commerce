@@ -41,7 +41,7 @@ const getToken = async (isAdmin = false) => {
   return response.body.token;
 };
 
-const createOrderToTheAuthenticatedUser = async (size = 1) => {
+const createOrderToTheAuthenticatedUser = async () => {
   const user = await UserModel.findOne({ email: 'damian@gmail.com' });
   const shippingAddress = {
     address: 'street #4',
@@ -57,7 +57,7 @@ const createOrderToTheAuthenticatedUser = async (size = 1) => {
     taxPrice: 16,
     shippingPrice: 100,
     totalPrice: 116,
-    isPaid: true,
+    isPaid: false,
     paidAt: new Date(),
     isDelivered: true,
     deliveredAt: new Date()
@@ -102,10 +102,73 @@ describe('Get My Orders Tests', () => {
     const response = await getMyOrdersRequest();
     expect(response.statusCode).toBe(401);
   });
-  test('should return 200 when token is sent', async () => {
+  test('should return 200 when the orders were returned correctly', async () => {
     const token = await getToken();
     const response = await getMyOrdersRequest(token);
     expect(response.statusCode).toBe(200);
+  });
+});
+
+describe('Update Order To Paid Tests', () => {
+  const updateOrderToPaidRequest = (id, token, paymentResult) => {
+    return request(app).put(`${url}/${id}/pay`)
+      .set('Authorization', `Bearer ${token}`)
+      .send(paymentResult);
+  };
+  test('should return 401 when token is not sent', async () => {
+    const id = '63276eb6b656271ef476fd1e';
+    const response = await updateOrderToPaidRequest(id);
+    expect(response.statusCode).toBe(401);
+  });
+  test('should return 404 when order is not found', async () => {
+    const id = '63276eb6b656271ef476fd1e';
+    const token = await getToken();
+    const response = await updateOrderToPaidRequest(id, token);
+    expect(response.statusCode).toBe(404);
+  });
+  test('should return 200 when the order was updated', async () => {
+    const paymentResult = {
+      id: '1',
+      status: 'paid',
+      update_time: new Date(),
+      email_address: 'damian@gmail.com'
+    };
+    const token = await getToken();
+    await createOrderToTheAuthenticatedUser();
+    const order = await OrderModel.findOne({});
+    const response = await updateOrderToPaidRequest(order.id, token, paymentResult);
+    expect(response.statusCode).toBe(200);
+  });
+  test('should update the order in the database', async () => {
+    const paymentResult = {
+      id: '1',
+      status: 'paid',
+      update_time: new Date(),
+      email_address: 'damian@gmail.com'
+    };
+    const token = await getToken();
+    await createOrderToTheAuthenticatedUser();
+    const order = await OrderModel.findOne({});
+    await updateOrderToPaidRequest(order.id, token, paymentResult);
+    const updatedOrder = await OrderModel.findOne({});
+    expect(updatedOrder.isPaid).toBeTruthy();
+    expect(updatedOrder.paymentResult.id).toBe('1');
+    expect(updatedOrder.paymentResult.status).toBe('paid');
+  });
+  test('should return the updated order in the body', async () => {
+    const paymentResult = {
+      id: '1',
+      status: 'paid',
+      update_time: new Date(),
+      email_address: 'damian@gmail.com'
+    };
+    const token = await getToken();
+    await createOrderToTheAuthenticatedUser();
+    const order = await OrderModel.findOne({});
+    const response = await updateOrderToPaidRequest(order.id, token, paymentResult);
+    expect(response.body.isPaid).toBeTruthy();
+    expect(response.body.paymentResult.id).toBe('1');
+    expect(response.body.paymentResult.status).toBe('paid');
   });
 });
 
@@ -125,7 +188,7 @@ describe('Get All Orders Tests', () => {
     const response = await getAllOrderRequest(token);
     expect(response.statusCode).toBe(403);
   });
-  test('should return 200 ok when the authenticated user is admin', async() => {
+  test('should return 200 when the orders were returned correctly', async() => {
     const token = await getToken(true);
     const response = await getAllOrderRequest(token);
     expect(response.statusCode).toBe(200);

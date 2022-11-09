@@ -1,3 +1,4 @@
+const OrderNotFoundException = require('./errors/OrderNotFoundException');
 const OrderModel = require('./OrderModel');
 const { orderRepository } = require('./OrderRepository');
 
@@ -22,6 +23,28 @@ class OrderService {
 
   findAllWithUser() {
     return orderRepository.findAllOrders();
+  }
+
+  async updateOrderToPaid(orderId, paymentResult) {
+    // eslint-disable-next-line camelcase
+    const { id, status, update_time, email_address } = paymentResult;
+    const order = await this.findById(orderId);
+
+    if (!order) {
+      throw new OrderNotFoundException();
+    }
+
+    order.isPaid = true;
+    order.paidAt = Date.now();
+    order.paymentResult = {
+      id,
+      status,
+      update_time,
+      email_address
+    };
+
+    const updatedOrder = await orderRepository.findByIdAndUpdateOrder(orderId, order);
+    return updatedOrder;
   }
 }
 

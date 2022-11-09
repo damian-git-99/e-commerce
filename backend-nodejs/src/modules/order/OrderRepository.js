@@ -18,6 +18,11 @@ class OrderRepository {
     const orders = OrderModel.find({ user: userId });
     return orders;
   }
+
+  findByIdAndUpdateOrder(id, order) {
+    return OrderModel
+      .findByIdAndUpdate(id, order, { new: true });
+  }
 }
 
 const orderRepository = new OrderRepository();
