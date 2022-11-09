@@ -7,6 +7,12 @@ class OrderRepository {
       .populate('user', 'name email');
     return order;
   }
+
+  findAllOrders() {
+    const orders = OrderModel.find({})
+      .populate('user', 'id name');
+    return orders;
+  }
 }
 
 const orderRepository = new OrderRepository();

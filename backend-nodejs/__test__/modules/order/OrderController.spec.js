@@ -91,3 +91,26 @@ describe('Get Order By Id Tests', () => {
     expect(response.statusCode).toBe(200);
   });
 });
+
+// Admin routes
+describe('Get All Orders Tests', () => {
+  const getAllOrderRequest = (token) => {
+    return request(app).get(url)
+      .set('Authorization', `Bearer ${token}`)
+      .send();
+  };
+  test('should return 401 when token is not sent', async () => {
+    const response = await getAllOrderRequest();
+    expect(response.statusCode).toBe(401);
+  });
+  test('should return 403 when the authenticated user is not admin', async () => {
+    const token = await getToken();
+    const response = await getAllOrderRequest(token);
+    expect(response.statusCode).toBe(403);
+  });
+  test('should return 200 ok when the authenticated user is admin', async() => {
+    const token = await getToken(true);
+    const response = await getAllOrderRequest(token);
+    expect(response.statusCode).toBe(200);
+  });
+});

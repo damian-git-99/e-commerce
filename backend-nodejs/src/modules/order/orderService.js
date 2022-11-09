@@ -22,8 +22,7 @@ class OrderService {
   }
 
   findAllWithUser() {
-    const orders = OrderModel.find({}).populate('user', 'id name');
-    return orders;
+    return orderRepository.findAllOrders();
   }
 }
 
