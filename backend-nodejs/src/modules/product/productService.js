@@ -5,20 +5,20 @@ const ProductNotFoundException = require('./errors/ProductNotFoundException');
 const { productRepository } = require('./productRepository');
 
 class ProductService {
-  create(product) {
+  createProduct(product) {
     return productRepository.create(product);
   }
 
-  find(keyword) {
+  findProductsByKeyword(keyword) {
     return productRepository.findAll(keyword);
   }
 
-  findById(id) {
+  findProductById(id) {
     return productRepository.findById(id);
   }
 
   async updateProduct(productId, newProduct) {
-    const product = await this.findById(productId);
+    const product = await this.findProductById(productId);
 
     if (!product) {
       throw new ProductNotFoundException();
@@ -27,8 +27,8 @@ class ProductService {
     return productRepository.update(productId, newProduct);
   }
 
-  async deleteById(id) {
-    const product = await this.findById(id);
+  async deleteProductById(id) {
+    const product = await this.findProductById(id);
     if (!product) {
       throw new ProductNotFoundException();
     }
@@ -36,9 +36,9 @@ class ProductService {
     await product.remove();
   }
 
-  async addReview(productId, review, user) {
+  async addReviewToProduct(productId, review, user) {
     const { rating, comment } = review;
-    const product = await productService.findById(productId);
+    const product = await this.findProductById(productId);
 
     if (!product) {
       throw new ProductNotFoundException();
@@ -62,7 +62,7 @@ class ProductService {
     await productRepository.AddProductReview(product, newReview);
   }
 
-  async updateImage(file, productId) {
+  async updateProductImage(file, productId) {
     if (!file) {
       throw new InvalidImageException('An image does not come');
     }
@@ -73,7 +73,7 @@ class ProductService {
       throw new InvalidImageException('Image not supported');
     }
 
-    const product = await productService.findById(productId);
+    const product = await this.findProductById(productId);
 
     if (!product) {
       throw new ProductNotFoundException();
