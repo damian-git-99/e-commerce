@@ -36,13 +36,7 @@ const getUserById = asyncHandler(async (req, res) => {
 // @desc    Update User
 // @route   PUT /api/users/:id
 const updateUser = asyncHandler(async (req, res) => {
-  const user = await userService.findById(req.params.id);
-
-  if (!user) {
-    throw new UserNotFoundException();
-  }
-
-  const updatedUser = await userService.updateUser(user, { ...req.body });
+  const updatedUser = await userService.updateUser(req.params.id, { ...req.body });
 
   res.json({
     id: updatedUser.id,
