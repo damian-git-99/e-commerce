@@ -8,12 +8,12 @@ class OrderService {
     return newOrder;
   }
 
-  findById(id) {
+  findOrderById(id) {
     const order = OrderModel.findById(id);
     return order;
   }
 
-  async findByIdWithUser(id) {
+  async findOrderByIdWithUser(id) {
     const order = await orderRepository.findOderByIdWithUser(id);
     if (!order) {
       throw new OrderNotFoundException();
@@ -25,14 +25,14 @@ class OrderService {
     return orderRepository.findOrdersByUser(userId);
   }
 
-  findAllWithUser() {
+  findAllOrdersWithUser() {
     return orderRepository.findAllOrders();
   }
 
   async updateOrderToPaid(orderId, paymentResult) {
     // eslint-disable-next-line camelcase
     const { id, status, update_time, email_address } = paymentResult;
-    const order = await this.findById(orderId);
+    const order = await this.findOrderById(orderId);
 
     if (!order) {
       throw new OrderNotFoundException();
@@ -52,7 +52,7 @@ class OrderService {
   }
 
   async updateOrderToDelivered(orderId) {
-    const order = await this.findById(orderId);
+    const order = await this.findOrderById(orderId);
 
     if (!order) {
       throw new OrderNotFoundException();
