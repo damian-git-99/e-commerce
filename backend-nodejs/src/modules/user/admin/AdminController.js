@@ -5,14 +5,14 @@ const { userService } = require('../userService');
 // @desc    Fetch All users
 // @route   GET /api/users/
 const getUsers = asyncHandler(async (req, res) => {
-  const users = await userService.findAll();
+  const users = await userService.findAllUsers();
   res.json(users);
 });
 
 // @desc    Delete user
 // @route   DELETE /api/users/:id
 const deleteUser = asyncHandler(async (req, res) => {
-  const result = await userService.deleteUser(req.params.id);
+  const result = await userService.deleteUserById(req.params.id);
 
   if (!result) {
     throw new UserNotFoundException();
@@ -24,7 +24,7 @@ const deleteUser = asyncHandler(async (req, res) => {
 // @desc    Fetch User
 // @route   GET /api/users/:id
 const getUserById = asyncHandler(async (req, res) => {
-  const user = await userService.findById(req.params.id);
+  const user = await userService.findUserById(req.params.id);
 
   if (!user) {
     throw new UserNotFoundException();

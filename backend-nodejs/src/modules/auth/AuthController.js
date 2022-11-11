@@ -31,7 +31,7 @@ const signUp = asyncHandler(async (req, res) => {
     throw new EmailAlreadyTakenException();
   }
 
-  const newUser = await userService.save({
+  const newUser = await userService.createUser({
     email,
     name,
     password
