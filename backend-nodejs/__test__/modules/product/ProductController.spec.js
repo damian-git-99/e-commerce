@@ -292,7 +292,7 @@ describe('update Image tests', () => {
   test('should return 404 when product does not exist', async () => {
     const token = await getToken(true);
     const file = await loadFile();
-    fileServiceMocked.isSupportedFileType.mockReturnValue(true);
+    fileServiceMocked.isSupportedImageType.mockReturnValue(true);
     const response = await updateImageRequest(id, token, file);
     expect(response.statusCode).toBe(404);
   });
@@ -302,7 +302,7 @@ describe('update Image tests', () => {
     id = product.id;
     const token = await getToken(true);
     const file = await loadFile();
-    fileServiceMocked.isSupportedFileType.mockReturnValue(true);
+    fileServiceMocked.isSupportedImageType.mockReturnValue(true);
     fileServiceMocked.uploadImage.mockReturnValue({
       url: 'new_image_url',
       public_id: 'ABC-123'
@@ -317,7 +317,7 @@ describe('update Image tests', () => {
     id = product.id;
     const token = await getToken(true);
     const file = await loadFile();
-    fileServiceMocked.isSupportedFileType.mockReturnValue(true);
+    fileServiceMocked.isSupportedImageType.mockReturnValue(true);
     fileServiceMocked.uploadImage.mockReturnValue({
       url: 'new_image_url',
       public_id: 'ABC-123'

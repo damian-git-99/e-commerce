@@ -67,7 +67,7 @@ class ProductService {
       throw new InvalidImageException('An image does not come');
     }
 
-    const isSupported = await fileService.isSupportedFileType(file.buffer);
+    const isSupported = await fileService.isSupportedImageType(file.buffer);
 
     if (!isSupported) {
       throw new InvalidImageException('Image not supported');
