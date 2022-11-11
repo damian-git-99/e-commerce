@@ -86,7 +86,6 @@ const ProductSchema = new Schema(
   }
 );
 
-// change _id to id https://stackoverflow.com/questions/7034848/mongodb-output-id-instead-of-id
 ProductSchema.set('toJSON', {
   virtuals: true,
   versionKey: false,

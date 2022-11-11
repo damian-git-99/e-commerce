@@ -3,6 +3,7 @@ const { validateJwt, isAdmin } = require('../../middlewares/validateJWT');
 const { addOrderItems, getOrderById, updateOrderToPaid, getMyOrders, getOrders, updateOrderToDelivered } = require('./orderController.js');
 const router = Router();
 
+// route: /api/orders
 router.route('/')
   .post(validateJwt, addOrderItems)
   .get(validateJwt, isAdmin, getOrders);

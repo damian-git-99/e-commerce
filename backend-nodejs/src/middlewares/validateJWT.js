@@ -18,7 +18,7 @@ const validateJwt = asyncHandler(async (req = request, res = response, next) => 
 
   try {
     const { id } = jwt.verify(token, KEY);
-    const user = await userService.findById(id);
+    const user = await userService.findUserById(id);
 
     if (!user) {
       throw new UserNotFoundException();

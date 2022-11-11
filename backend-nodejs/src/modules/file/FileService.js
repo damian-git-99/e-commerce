@@ -10,7 +10,7 @@ cloudinary.config({
 });
 
 class FileService {
-  async isSupportedFileType(buffer) {
+  async isSupportedImageType(buffer) {
     const type = await FileType.fromBuffer(buffer);
     return !type
       ? false

@@ -7,7 +7,7 @@ const productService = require('./productService');
 // @route   GET /api/products
 const findAll = asyncHandler(async (req = request, res = response) => {
   const keyword = req.query.keyword;
-  const products = await productService.find(keyword);
+  const products = await productService.findProductsByKeyword(keyword);
   res.status(200).json(products);
 });
 
@@ -15,7 +15,7 @@ const findAll = asyncHandler(async (req = request, res = response) => {
 // @route   GET /api/products/:id
 const findById = asyncHandler(async (req, res) => {
   const id = req.params.id;
-  const product = await productService.findById(id);
+  const product = await productService.findProductById(id);
   if (!product) {
     throw new ProductNotFoundException();
   }
@@ -26,13 +26,12 @@ const findById = asyncHandler(async (req, res) => {
 // @desc    Delete a product
 // @route   DELETE /api/products/:id
 const deleteProduct = asyncHandler(async (req, res) => {
-  await productService.deleteById(req.params.id);
+  await productService.deleteProductById(req.params.id);
   res.json({ message: 'Product removed' });
 });
 
-// @desc    Create a product
+// @desc    create a product with sample data.
 // @route   POST /api/products
-// create a product with sample data and then update it
 const createProduct = asyncHandler(async (req, res) => {
   const product = {
     name: 'Sample name',
@@ -46,7 +45,7 @@ const createProduct = asyncHandler(async (req, res) => {
     description: 'Sample description'
   };
 
-  const createdProduct = await productService.create(product);
+  const createdProduct = await productService.createProduct(product);
   res.status(201).json(createdProduct);
 });
 
@@ -57,47 +56,18 @@ const updateProduct = asyncHandler(async (req, res) => {
   res.json(updatedProduct);
 });
 
+// @desc    Update a image of a product
+// @route   PUT /api/products/image/upload/:id
 const updateProductImage = asyncHandler(async (req, res) => {
-  const newUrl = await productService.updateImage(req.file, req.params.id);
+  const newUrl = await productService.updateProductImage(req.file, req.params.id);
   res.send(newUrl);
 });
 
+// @desc    Create a product review
+// @route   POST /api/products/:id/reviews
 const createProductReview = asyncHandler(async (req, res) => {
-  const { rating, comment } = req.body;
-
-  const product = await productService.findById(req.params.id);
-
-  if (product) {
-    const alreadyReviewed = product.reviews.find(
-      (r) => r.user.toString() === req.user.id.toString()
-    );
-
-    if (alreadyReviewed) {
-      res.status(400);
-      throw new Error('Product already reviewed');
-    }
-
-    const review = {
-      name: req.user.name,
-      rating: Number(rating),
-      comment,
-      user: req.user.id
-    };
-
-    product.reviews.push(review);
-
-    product.numReviews = product.reviews.length;
-
-    product.rating =
-      product.reviews.reduce((acc, item) => item.rating + acc, 0) /
-      product.reviews.length;
-
-    await product.save();
-    res.status(201).json({ message: 'Review added' });
-  } else {
-    res.status(404);
-    throw new Error('Product not found');
-  }
+  await productService.addReviewToProduct(req.params.id, req.body, req.user);
+  res.status(201).json({ message: 'Review added' });
 });
 
 module.exports = {

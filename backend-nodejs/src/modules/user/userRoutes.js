@@ -4,7 +4,6 @@ const { deleteUser, getUserById, updateUser, getUsers } = require('./admin/Admin
 const { validateJwt, isAdmin } = require('../../middlewares/validateJWT');
 const router = Router();
 
-// router.get('/profile', [validateJwt], getProfile);
 router
   .route('/profile')
   .get(validateJwt, getProfile)

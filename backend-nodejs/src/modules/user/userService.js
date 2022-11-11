@@ -1,3 +1,4 @@
+const UserNotFoundException = require('../../errors/UserNotFoundException');
 const { encryptPassword } = require('../../utils/encrypt');
 const { userRepository } = require('./UserRepository');
 class UserService {
@@ -5,24 +6,30 @@ class UserService {
     return userRepository.findByEmail(email);
   }
 
-  findById(id) {
+  findUserById(id) {
     return userRepository.findById(id);
   }
 
-  save(user) {
+  createUser(user) {
     user.password = encryptPassword(user.password);
     return userRepository.save(user);
   }
 
-  findAll() {
+  findAllUsers() {
     return userRepository.findAll();
   }
 
-  async deleteUser(userId) {
+  async deleteUserById(userId) {
     return userRepository.deleteUserById(userId);
   }
 
-  async updateUser(user, newUser) {
+  async updateUser(userId, newUser) {
+    const user = await userService.findUserById(userId);
+
+    if (!user) {
+      throw new UserNotFoundException();
+    }
+
     const { name, email, password } = newUser;
     user.name = name || user.name;
     user.email = email || user.email;

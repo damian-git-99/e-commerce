@@ -6,7 +6,7 @@ const { userService } = require('./userService');
 // @desc    Fetch User info
 // @route   GET /api/users/profile
 const getProfile = asyncHandler(async (req = request, res = response) => {
-  const user = await userService.findById(req.user.id);
+  const user = await userService.findUserById(req.user.id);
   return res.status(200).json({
     id: user.id,
     name: user.name,

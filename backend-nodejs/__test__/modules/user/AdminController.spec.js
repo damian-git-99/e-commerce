@@ -43,68 +43,63 @@ const getToken = async (isAdmin = false) => {
 };
 
 describe('Get Users tests', () => {
-  test('should return 401 when token is not sent', async () => {
-    const response = await request(app).get(`${url}/`)
+  const getUsersRequest = (token) => {
+    return request(app).get(`${url}/`)
+      .set('Authorization', `Bearer ${token}`)
       .send();
+  };
+  test('should return 401 when token is not sent', async () => {
+    const response = await getUsersRequest();
     expect(response.statusCode).toBe(401);
   });
   test('should return 403 when user is not admin', async () => {
     const token = await getToken();
-    const response = await request(app).get(`${url}/`)
-      .set('Authorization', `Bearer ${token}`)
-      .send();
+    const response = await getUsersRequest(token);
     expect(response.statusCode).toBe(403);
   });
   test('should return 200 when user is admin', async () => {
     const token = await getToken(true);
-    const response = await request(app).get(`${url}/`)
-      .set('Authorization', `Bearer ${token}`)
-      .send();
+    const response = await getUsersRequest(token);
     expect(response.statusCode).toBe(200);
   });
   test('should return an array when user is admin', async () => {
     const token = await getToken(true);
-    const response = await request(app).get(`${url}/`)
-      .set('Authorization', `Bearer ${token}`)
-      .send();
+    const response = await getUsersRequest(token);
     expect(Array.isArray(response.body)).toBe(true);
   });
 });
 
 describe('Get User By id tests', () => {
-  test('should return 401 when token is not sent', async () => {
-    const response = await request(app).get(`${url}/41224d776a326fb40f000001`)
+  const id = '41224d776a326fb40f000001';
+  const getUserByIdRequest = (id, token) => {
+    return request(app).get(`${url}/${id}`)
+      .set('Authorization', `Bearer ${token}`)
       .send();
+  };
+  test('should return 401 when token is not sent', async () => {
+    const response = await getUserByIdRequest(id);
     expect(response.statusCode).toBe(401);
   });
   test('should return 403 when user is not admin', async () => {
     const token = await getToken();
-    const response = await request(app).get(`${url}/41224d776a326fb40f000001`)
-      .set('Authorization', `Bearer ${token}`)
-      .send();
+    const response = await getUserByIdRequest(id, token);
     expect(response.statusCode).toBe(403);
   });
   test('should return 404 when user does not exist', async () => {
     const token = await getToken(true);
-    const response = await request(app).get(`${url}/41224d776a326fb40f000001`)
-      .set('Authorization', `Bearer ${token}`)
-      .send();
+    const response = await getUserByIdRequest(id, token);
     expect(response.statusCode).toBe(404);
   });
   test('should return 200 when user exist', async () => {
     const token = await getToken(true);
     const user = await UserModel.findOne({ email: validUser.email });
-    const response = await request(app).get(`${url}/${user.id}`)
-      .set('Authorization', `Bearer ${token}`)
-      .send();
+    const response = await getUserByIdRequest(user.id, token);
     expect(response.statusCode).toBe(200);
   });
   test('should return user info when user exist', async () => {
     const token = await getToken(true);
     const user = await UserModel.findOne({ email: validUser.email });
-    const response = await request(app).get(`${url}/${user.id}`)
-      .set('Authorization', `Bearer ${token}`)
-      .send();
+    const response = await getUserByIdRequest(user.id, token);
     expect(response.body).toEqual(
       expect.objectContaining({
         id: expect.any(String),
@@ -119,82 +114,76 @@ describe('Get User By id tests', () => {
 });
 
 describe('Delete user tests', () => {
-  test('should return 401 when token is not sent', async () => {
-    const response = await request(app).delete(`${url}/41224d776a326fb40f000001`)
+  const id = '41224d776a326fb40f000001';
+  const deleteUserByIdRequest = (id, token) => {
+    return request(app).delete(`${url}/${id}`)
+      .set('Authorization', `Bearer ${token}`)
       .send();
+  };
+  test('should return 401 when token is not sent', async () => {
+    const response = await deleteUserByIdRequest(id);
     expect(response.statusCode).toBe(401);
   });
   test('should return 403 when user is not admin', async () => {
     const token = await getToken();
-    const response = await request(app).delete(`${url}/41224d776a326fb40f000001`)
-      .set('Authorization', `Bearer ${token}`)
-      .send();
+    const response = await deleteUserByIdRequest(id, token);
     expect(response.statusCode).toBe(403);
   });
   test('should return 404 when user does not exist', async () => {
     const token = await getToken(true);
-    const response = await request(app).delete(`${url}/41224d776a326fb40f000001`)
-      .set('Authorization', `Bearer ${token}`)
-      .send();
+    const response = await deleteUserByIdRequest(id, token);
     expect(response.statusCode).toBe(404);
   });
   test('should return 200 when user exist and was deleted', async () => {
     const token = await getToken(true);
     const user = await UserModel.findOne({ email: validUser.email });
-    const response = await request(app).delete(`${url}/${user.id}`)
-      .set('Authorization', `Bearer ${token}`)
-      .send();
+    const response = await deleteUserByIdRequest(user.id, token);
     expect(response.statusCode).toBe(200);
   });
   test('should delete the user in the database', async () => {
     const token = await getToken(true);
     const user = await UserModel.findOne({ email: validUser.email });
-    await request(app).delete(`${url}/${user.id}`)
-      .set('Authorization', `Bearer ${token}`)
-      .send();
+    await deleteUserByIdRequest(user.id, token);
     const deletedUser = await UserModel.findOne({ email: validUser.email });
     expect(deletedUser).toBeFalsy();
   });
 });
 
 describe('Update User Tests', () => {
+  const id = '41224d776a326fb40f000001';
   const newUser = {
     name: 'user updated',
     email: 'userUpdated@gmail.com'
   };
+  const updateUserRequest = (id, token, user) => {
+    return request(app).put(`${url}/${id}`)
+      .set('Authorization', `Bearer ${token}`)
+      .send(user);
+  };
   test('should return 401 when token is not sent', async () => {
-    const response = await request(app).put(`${url}/41224d776a326fb40f000001`)
-      .send(newUser);
+    const response = await updateUserRequest(id);
     expect(response.statusCode).toBe(401);
   });
   test('should return 403 when user is not admin', async () => {
     const token = await getToken();
-    const response = await request(app).put(`${url}/41224d776a326fb40f000001`)
-      .set('Authorization', `Bearer ${token}`)
-      .send(newUser);
+    const response = await updateUserRequest(id, token);
     expect(response.statusCode).toBe(403);
   });
   test('should return 404 when user does not exist', async () => {
     const token = await getToken(true);
-    const response = await request(app).delete(`${url}/41224d776a326fb40f000001`)
-      .set('Authorization', `Bearer ${token}`)
-      .send(newUser);
+    const response = await updateUserRequest(id, token, newUser);
     expect(response.statusCode).toBe(404);
   });
   test('should return 200 when user exist and was updated', async () => {
     const token = await getToken(true);
     const user = await UserModel.findOne({ email: validUser.email });
-    const response = await request(app).put(`${url}/${user.id}`)
-      .set('Authorization', `Bearer ${token}`)
-      .send(newUser);
+    const response = await updateUserRequest(user.id, token, newUser);
     expect(response.statusCode).toBe(200);
   });
   test('should update the user in the database', async () => {
     const token = await getToken(true);
     const user = await UserModel.findOne({ email: validUser.email });
-    await request(app).put(`${url}/${user.id}`)
-      .set('Authorization', `Bearer ${token}`)
-      .send(newUser);
+    await updateUserRequest(user.id, token, newUser);
     const updatedUser = await UserModel.findById(user.id);
     expect(updatedUser.name).toBe(newUser.name);
     expect(updatedUser.email).toBe(newUser.email);
@@ -202,9 +191,7 @@ describe('Update User Tests', () => {
   test('should return user info when user exist and was updated', async () => {
     const token = await getToken(true);
     const user = await UserModel.findOne({ email: validUser.email });
-    const response = await request(app).put(`${url}/${user.id}`)
-      .set('Authorization', `Bearer ${token}`)
-      .send(newUser);
+    const response = await updateUserRequest(user.id, token, newUser);
     expect(response.body).toEqual(
       expect.objectContaining({
         id: expect.any(String),

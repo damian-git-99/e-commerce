@@ -5,6 +5,7 @@ const BadCredentialsException = require('../user/errors/BadCredentialsException'
 const EmailAlreadyTakenException = require('../user/errors/EmailAlreadyTakenException');
 const { userService } = require('../user/userService');
 
+// @route POST /api/users/login
 const authUser = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
   const user = await userService.findByEmail(email);
@@ -21,6 +22,7 @@ const authUser = asyncHandler(async (req, res) => {
   });
 });
 
+// @route POST /api/users/signup
 const signUp = asyncHandler(async (req, res) => {
   const { email, name, password } = req.body;
   const user = await userService.findByEmail(email);
@@ -29,7 +31,7 @@ const signUp = asyncHandler(async (req, res) => {
     throw new EmailAlreadyTakenException();
   }
 
-  const newUser = await userService.save({
+  const newUser = await userService.createUser({
     email,
     name,
     password

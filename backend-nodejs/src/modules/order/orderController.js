@@ -37,60 +37,31 @@ const addOrderItems = asyncHandler(async (req = request, res = response) => {
 
 // @route GET /api/orders/:id
 const getOrderById = asyncHandler(async (req = request, res = response) => {
-  const order = await orderService.findByIdWithUser(req.params.id);
-
-  if (!order) {
-    res.status(404);
-    throw new Error('Order not found');
-  }
-
+  const order = await orderService.findOrderByIdWithUser(req.params.id);
   res.json(order);
 });
 
-// @route GET /api/orders/:id/pay
+// @route PUT /api/orders/:id/pay
 const updateOrderToPaid = asyncHandler(async (req, res) => {
-  const order = await orderService.findById(req.params.id);
-  if (!order) {
-    res.status(404);
-    throw new Error('Order not found');
-  }
-
-  order.isPaid = true;
-  order.paidAt = Date.now();
-  order.paymentResult = {
-    id: req.body.id,
-    status: req.body.status,
-    update_time: req.body.update_time,
-    email_address: req.body.email_address
-  };
-
-  const updatedOrder = await order.save();
+  const updatedOrder = await orderService.updateOrderToPaid(req.params.id, req.body);
   return res.json(updatedOrder);
 });
 
+// @route GET /api/orders/myorders
 const getMyOrders = asyncHandler(async (req, res) => {
   const orders = await orderService.findOrdersByUser(req.user.id);
   res.json(orders);
 });
 
+// @route PUT /api/orders/:id/deliver
 const updateOrderToDelivered = asyncHandler(async (req, res) => {
-  const order = await orderService.findById(req.params.id);
-
-  if (order) {
-    order.isDelivered = true;
-    order.deliveredAt = Date.now();
-
-    const updatedOrder = await order.save();
-
-    res.json(updatedOrder);
-  } else {
-    res.status(404);
-    throw new Error('Order not found');
-  }
+  const updatedOrder = await orderService.updateOrderToDelivered(req.params.id);
+  res.json(updatedOrder);
 });
 
+// @route GET /api/orders
 const getOrders = asyncHandler(async (req, res) => {
-  const orders = await orderService.findAllWithUser();
+  const orders = await orderService.findAllOrdersWithUser();
   res.json(orders);
 });
 
