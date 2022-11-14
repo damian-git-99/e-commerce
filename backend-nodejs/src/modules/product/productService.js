@@ -2,19 +2,19 @@ const InvalidImageException = require('../file/errors/InvalidImageException');
 const fileService = require('../file/FileService');
 const ProductAlreadyReviewedException = require('./errors/ProductAlreadyReviewedException');
 const ProductNotFoundException = require('./errors/ProductNotFoundException');
-const { productRepository } = require('./productRepository');
+const { productDao } = require('./productDao');
 
 class ProductService {
   createProduct(product) {
-    return productRepository.create(product);
+    return productDao.create(product);
   }
 
   findProductsByKeyword(keyword) {
-    return productRepository.findAll(keyword);
+    return productDao.findAll(keyword);
   }
 
   findProductById(id) {
-    return productRepository.findById(id);
+    return productDao.findById(id);
   }
 
   async updateProduct(productId, newProduct) {
@@ -24,7 +24,7 @@ class ProductService {
       throw new ProductNotFoundException();
     }
 
-    return productRepository.update(productId, newProduct);
+    return productDao.update(productId, newProduct);
   }
 
   async deleteProductById(id) {
@@ -59,7 +59,7 @@ class ProductService {
       user: user.id
     };
 
-    await productRepository.AddProductReview(product, newReview);
+    await productDao.AddProductReview(product, newReview);
   }
 
   async updateProductImage(file, productId) {
