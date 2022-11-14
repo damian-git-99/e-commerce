@@ -1,26 +1,26 @@
 const UserNotFoundException = require('../../errors/UserNotFoundException');
 const { encryptPassword } = require('../../utils/encrypt');
-const { userRepository } = require('./UserRepository');
+const { userDao } = require('./UserDao');
 class UserService {
   findByEmail(email) {
-    return userRepository.findByEmail(email);
+    return userDao.findByEmail(email);
   }
 
   findUserById(id) {
-    return userRepository.findById(id);
+    return userDao.findById(id);
   }
 
   createUser(user) {
     user.password = encryptPassword(user.password);
-    return userRepository.save(user);
+    return userDao.save(user);
   }
 
   findAllUsers() {
-    return userRepository.findAll();
+    return userDao.findAll();
   }
 
   async deleteUserById(userId) {
-    return userRepository.deleteUserById(userId);
+    return userDao.deleteUserById(userId);
   }
 
   async updateUser(userId, newUser) {
@@ -38,7 +38,7 @@ class UserService {
       user.password = encryptPassword(password);
     }
 
-    return userRepository.update(user.id, user);
+    return userDao.update(user.id, user);
   }
 }
 
