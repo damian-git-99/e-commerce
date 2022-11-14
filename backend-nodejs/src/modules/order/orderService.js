@@ -9,8 +9,7 @@ class OrderService {
   }
 
   findOrderById(id) {
-    const order = OrderModel.findById(id);
-    return order;
+    return orderDao.findOrderById(id);
   }
 
   async findOrderByIdWithUser(id) {

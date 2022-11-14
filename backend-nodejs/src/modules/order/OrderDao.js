@@ -1,6 +1,10 @@
 const OrderModel = require('./OrderModel');
 
 class OrderDao {
+  findOrderById(id) {
+    return OrderModel.findById(id);
+  }
+
   findOderByIdWithUser(id) {
     const order = OrderModel
       .findById(id)
