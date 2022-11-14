@@ -1,6 +1,6 @@
 const OrderModel = require('./OrderModel');
 
-class OrderRepository {
+class OrderDao {
   findOderByIdWithUser(id) {
     const order = OrderModel
       .findById(id)
@@ -25,8 +25,8 @@ class OrderRepository {
   }
 }
 
-const orderRepository = new OrderRepository();
+const orderDao = new OrderDao();
 
 module.exports = {
-  orderRepository
+  orderDao
 };

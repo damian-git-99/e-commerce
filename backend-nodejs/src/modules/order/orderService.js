@@ -1,6 +1,6 @@
 const OrderNotFoundException = require('./errors/OrderNotFoundException');
 const OrderModel = require('./OrderModel');
-const { orderRepository } = require('./OrderRepository');
+const { orderDao } = require('./OrderDao');
 
 class OrderService {
   save(order) {
@@ -14,7 +14,7 @@ class OrderService {
   }
 
   async findOrderByIdWithUser(id) {
-    const order = await orderRepository.findOderByIdWithUser(id);
+    const order = await orderDao.findOderByIdWithUser(id);
     if (!order) {
       throw new OrderNotFoundException();
     }
@@ -22,11 +22,11 @@ class OrderService {
   }
 
   findOrdersByUser(userId) {
-    return orderRepository.findOrdersByUser(userId);
+    return orderDao.findOrdersByUser(userId);
   }
 
   findAllOrdersWithUser() {
-    return orderRepository.findAllOrders();
+    return orderDao.findAllOrders();
   }
 
   async updateOrderToPaid(orderId, paymentResult) {
@@ -47,7 +47,7 @@ class OrderService {
       email_address
     };
 
-    const updatedOrder = await orderRepository.findByIdAndUpdateOrder(orderId, order);
+    const updatedOrder = await orderDao.findByIdAndUpdateOrder(orderId, order);
     return updatedOrder;
   }
 
@@ -61,7 +61,7 @@ class OrderService {
     order.isDelivered = true;
     order.deliveredAt = Date.now();
 
-    const updatedOrder = await orderRepository.findByIdAndUpdateOrder(orderId, order);
+    const updatedOrder = await orderDao.findByIdAndUpdateOrder(orderId, order);
     return updatedOrder;
   }
 }
