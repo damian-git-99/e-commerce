@@ -1,5 +1,5 @@
 const asyncHandler = require('express-async-handler');
-const { OrderService } = require('../order/orderService');
+const { OrderService } = require('../../order/orderService');
 
 const orderService = new OrderService();
 // orders
