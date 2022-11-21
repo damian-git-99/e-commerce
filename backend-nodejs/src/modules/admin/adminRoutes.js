@@ -2,10 +2,6 @@ const { Router } = require('express');
 const multer = require('multer');
 const { validateJwt, isAdmin } = require('../../middlewares/validateJWT');
 const {
-  getUsers,
-  deleteUser,
-  getUserById,
-  updateUser,
   createProduct,
   deleteProduct,
   updateProduct,
@@ -13,9 +9,10 @@ const {
   getOrders,
   updateOrderToDelivered
 } = require('./adminController');
+const { updateUser, deleteUser, getUserById, getUsers } = require('./user/adminUserController');
+
 const router = Router();
 const upload = multer();
-// route /api/admin : de momento /api
 
 // users /api/admin/users
 router.route('/users').get(validateJwt, isAdmin, getUsers);
