@@ -24,7 +24,7 @@ export const ProductEditScreen = () => {
   const [uploading, setUploading] = useState(false);
 
   const dispatch = useDispatch();
-
+  const userInfo = useSelector((state) => state.userLogin.userInfo);
   const productDetails = useSelector((state) => state.productDetails);
   const { loading, error, product } = productDetails;
   const productUpdate = useSelector((state) => state.productUpdate);
@@ -63,7 +63,8 @@ export const ProductEditScreen = () => {
     try {
       const config = {
         headers: {
-          'Content-Type': 'multipart/form-data'
+          'Content-Type': 'multipart/form-data',
+          Authorization: `Bearer ${userInfo.token}`
         }
       };
 
