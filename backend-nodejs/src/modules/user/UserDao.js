@@ -1,6 +1,6 @@
 const UserModel = require('./UserModel');
 
-class UserRepository {
+class UserDao {
   findByEmail(email) {
     const user = UserModel.findOne({ email });
     return user;
@@ -37,7 +37,7 @@ class UserRepository {
   }
 }
 
-const userRepository = new UserRepository();
+const userDao = new UserDao();
 module.exports = {
-  userRepository
+  userDao
 };

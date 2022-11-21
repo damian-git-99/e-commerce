@@ -1,6 +1,6 @@
 const ProductModel = require('./ProductModel');
 
-class ProductRepository {
+class ProductDao {
   findAll(keyword = '') {
     const name = {
       $regex: keyword,
@@ -36,7 +36,7 @@ class ProductRepository {
   }
 }
 
-const productRepository = new ProductRepository();
+const productDao = new ProductDao();
 module.exports = {
-  productRepository
+  productDao
 };

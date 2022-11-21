@@ -1,8 +1,9 @@
 const asyncHandler = require('express-async-handler');
-const UserNotFoundException = require('../../../errors/UserNotFoundException');
-const { userService } = require('../userService');
 
 // @desc    Fetch All users
+const UserNotFoundException = require('../../user/errors/UserNotFoundException');
+const { userService } = require('../../user/userService');
+
 // @route   GET /api/users/
 const getUsers = asyncHandler(async (req, res) => {
   const users = await userService.findAllUsers();
@@ -36,7 +37,9 @@ const getUserById = asyncHandler(async (req, res) => {
 // @desc    Update User
 // @route   PUT /api/users/:id
 const updateUser = asyncHandler(async (req, res) => {
-  const updatedUser = await userService.updateUser(req.params.id, { ...req.body });
+  const updatedUser = await userService.updateUser(req.params.id, {
+    ...req.body
+  });
 
   res.json({
     id: updatedUser.id,

@@ -6,7 +6,7 @@ const validateFields = (req = request, res = response, next) => {
   const errors = validationResult(req);
 
   if (!errors.isEmpty()) {
-    // retornamos el primer error
+    // return the first error
     const firstError = errors.array().map((error) => error.msg)[0];
     return res.status(400).json({ message: firstError });
   }
