@@ -4,10 +4,10 @@ const { validateJwt, isAdmin } = require('../../middlewares/validateJWT');
 const { getOrders, updateOrderToDelivered } = require('./order/adminOrdercontroller');
 const { updateProductImage, createProduct, deleteProduct, updateProduct } = require('./product/adminProductController');
 const { updateUser, deleteUser, getUserById, getUsers } = require('./user/adminUserController');
-
 const router = Router();
 const upload = multer();
 
+// users
 // users /api/admin/users
 router.route('/users').get(validateJwt, isAdmin, getUsers);
 router
@@ -16,6 +16,7 @@ router
   .get(validateJwt, isAdmin, getUserById)
   .put(validateJwt, isAdmin, updateUser);
 
+// products
 // products /api/admin/products
 router.route('/products').post(validateJwt, isAdmin, createProduct);
 router
@@ -28,6 +29,7 @@ router.post(
   updateProductImage
 );
 
+// orders
 // orders /api/orders
 router.route('/orders')
   .get(validateJwt, isAdmin, getOrders);
