@@ -1,4 +1,4 @@
-const connectDB = require('./src/config/config');
+const connectDB = require('./src/config/db-config');
 const config = require('config');
 // eslint-disable-next-line no-unused-vars
 const colors = require('colors');
