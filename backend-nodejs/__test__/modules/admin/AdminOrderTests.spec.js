@@ -65,7 +65,6 @@ const createOrderToTheAuthenticatedUser = async () => {
   await OrderModel.create(order);
 };
 
-// Admin
 describe('Get All Orders Tests', () => {
   const getAllOrderRequest = (token) => {
     return request(app).get(url)
@@ -88,7 +87,6 @@ describe('Get All Orders Tests', () => {
   });
 });
 
-// admin
 describe('Update Order To Delivered Tests', () => {
   const updateOrderToDeliveredRequest = (id, token) => {
     return request(app).put(`${url}/${id}/deliver`)

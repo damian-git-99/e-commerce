@@ -65,7 +65,6 @@ const getToken = async (isAdmin = false) => {
   return response.body.token;
 };
 
-// admin
 describe('delete product tests', () => {
   const deleteProductByIdRequest = (id, token) => {
     return request(app)
@@ -109,7 +108,6 @@ describe('delete product tests', () => {
   });
 });
 
-// admin
 describe('create produt tests', () => {
   const createProductRequest = (token) => {
     return request(app).post(url)
@@ -132,7 +130,6 @@ describe('create produt tests', () => {
   });
 });
 
-// admin
 describe('Update product', () => {
   const updateproductRequest = (id, token, product) => {
     return request(app).put(`${url}/${id}`)
@@ -193,7 +190,6 @@ describe('Update product', () => {
   });
 });
 
-// admin
 describe('update Image tests', () => {
   let id = '63276eb6b656271ef476fd1e';
   const updateImageRequest = (id, token, file) => {
