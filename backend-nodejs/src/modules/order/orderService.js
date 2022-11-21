@@ -65,6 +65,8 @@ class OrderService {
   }
 }
 
+const orderService = new OrderService();
+
 module.exports = {
-  OrderService
+  orderService
 };
