@@ -1,4 +1,4 @@
-const UserNotFoundException = require('../../errors/UserNotFoundException');
+const UserNotFoundException = require('./errors/UserNotFoundException');
 const { encryptPassword } = require('../../utils/encrypt');
 const { userDao } = require('./UserDao');
 class UserService {
