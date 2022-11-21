@@ -8,6 +8,7 @@ const { userRouter } = require('./src/modules/user/userRoutes');
 const { orderRouter } = require('./src/modules/order/orderRoutes');
 const config = require('config');
 const { authRouter } = require('./src/modules/auth/AuthRoutes');
+const { adminRouter } = require('./src/modules/admin/adminRoutes');
 const PAYPAL_CLIENT_ID = config.get('PAYPAL_CLIENT_ID');
 // app.use(morgan('combined'));
 app.use(express.json());
@@ -17,6 +18,7 @@ app.use('/api/products', productRouter);
 app.use('/api/users', userRouter);
 app.use('/api/users', authRouter);
 app.use('/api/orders', orderRouter);
+app.use('/api', adminRouter);
 app.get('/api/config/paypal', (req, res) => {
   res.send(PAYPAL_CLIENT_ID);
 });
