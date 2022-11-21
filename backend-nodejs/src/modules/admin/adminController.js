@@ -1,4 +1,5 @@
 const asyncHandler = require('express-async-handler');
+const { OrderService } = require('../order/orderService');
 const productService = require('../product/productService');
 const UserNotFoundException = require('../user/errors/UserNotFoundException');
 const { userService } = require('../user/userService');
@@ -91,6 +92,20 @@ const updateProductImage = asyncHandler(async (req, res) => {
   res.send(newUrl);
 });
 
+const orderService = new OrderService();
+// orders
+// @route PUT /api/orders/:id/deliver
+const updateOrderToDelivered = asyncHandler(async (req, res) => {
+  const updatedOrder = await orderService.updateOrderToDelivered(req.params.id);
+  res.json(updatedOrder);
+});
+
+// @route GET /api/orders
+const getOrders = asyncHandler(async (req, res) => {
+  const orders = await orderService.findAllOrdersWithUser();
+  res.json(orders);
+});
+
 module.exports = {
   getUsers,
   deleteUser,
@@ -99,5 +114,7 @@ module.exports = {
   createProduct,
   deleteProduct,
   updateProduct,
-  updateProductImage
+  updateProductImage,
+  updateOrderToDelivered,
+  getOrders
 };

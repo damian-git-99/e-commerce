@@ -1,12 +1,11 @@
 const { Router } = require('express');
-const { validateJwt, isAdmin } = require('../../middlewares/validateJWT');
-const { addOrderItems, getOrderById, updateOrderToPaid, getMyOrders, getOrders, updateOrderToDelivered } = require('./orderController.js');
+const { validateJwt } = require('../../middlewares/validateJWT');
+const { addOrderItems, getOrderById, updateOrderToPaid, getMyOrders } = require('./orderController.js');
 const router = Router();
 
 // route: /api/orders
 router.route('/')
-  .post(validateJwt, addOrderItems)
-  .get(validateJwt, isAdmin, getOrders);
+  .post(validateJwt, addOrderItems);
 
 router.route('/myorders')
   .get(validateJwt, getMyOrders);
@@ -16,9 +15,6 @@ router.route('/:id')
 
 router.route('/:id/pay')
   .put(validateJwt, updateOrderToPaid);
-
-router.route('/:id/deliver')
-  .put(validateJwt, isAdmin, updateOrderToDelivered);
 
 module.exports = {
   orderRouter: router
