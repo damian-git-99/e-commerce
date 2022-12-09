@@ -50,14 +50,14 @@ export const OrderScreen = () => {
     };
 
     // eslint-disable-next-line eqeqeq
-    if (!order || successPay || successDeliver || order.id != orderId) {
+    if (!order || successPay || successDeliver || order.id !== orderId) {
       dispatch({ type: ORDER_PAY_TYPES.ORDER_PAY_RESET });
       dispatch(getOrderDetails(orderId));
     } else if (!order.isPaid) {
       if (!window.paypal) addPayPalScript();
       else setSdkReady(true);
     }
-  }, [dispatch, orderId, successPay, successDeliver, order]);
+  }, [orderId, successPay, successDeliver]);
 
   const successPaymentHandler = (paymentResult) => {
     const data = {

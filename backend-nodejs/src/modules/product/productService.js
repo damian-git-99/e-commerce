@@ -91,6 +91,12 @@ class ProductService {
     await product.save();
     return result.url;
   }
+
+  async findByIdAndDiscountFromStock(id, quantity) {
+    const product = await this.findProductById(id);
+    product.countInStock = product.countInStock - quantity;
+    await product.save();
+  }
 }
 const productService = new ProductService();
 module.exports = productService;
