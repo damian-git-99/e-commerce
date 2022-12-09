@@ -1,11 +1,46 @@
 const OrderNotFoundException = require('./errors/OrderNotFoundException');
 const OrderModel = require('./OrderModel');
 const { orderDao } = require('./OrderDao');
+const productService = require('../product/productService');
 
 class OrderService {
+  // todo: rename it to createOrder
   save(order) {
+    // todo: must be in a transaction
+    // todo: check if the product is in stock
+    const { total, shippingPrice, taxPrice } = this.calculateTotal(order.orderItems);
+    order.totalPrice = total;
+    order.shippingPrice = shippingPrice;
+    order.taxPrice = taxPrice;
+    this.discountFromStock(order.orderItems);
     const newOrder = OrderModel.create(order);
     return newOrder;
+  }
+
+  async discountFromStock(orderItems = []) {
+    for (let i = 0; i < orderItems.length; i++) {
+      const orderItem = orderItems[i];
+      const { product, quantity } = orderItem;
+      await productService.findByIdAndDiscountFromStock(product, quantity);
+    }
+  }
+
+  calculateTotal(orderItems = []) {
+    let total = 0;
+    for (let i = 0; i < orderItems.length; i++) {
+      const orderItem = orderItems[i];
+      const { price, quantity } = orderItem;
+      total = total + (price * quantity);
+    }
+
+    const shippingPrice = total > 100 ? 0 : 100;
+    const taxPrice = total * 0.15;
+    total = (total + shippingPrice + taxPrice);
+    return {
+      total,
+      shippingPrice,
+      taxPrice
+    };
   }
 
   findOrderById(id) {

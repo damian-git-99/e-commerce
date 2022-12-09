@@ -7,11 +7,7 @@ const addOrderItems = asyncHandler(async (req = request, res = response) => {
   const {
     orderItems,
     shippingAddress,
-    paymentMethod,
-    itemsPrice,
-    taxPrice,
-    shippingPrice,
-    totalPrice
+    paymentMethod
   } = req.body;
 
   if (orderItems && orderItems.length === 0) {
@@ -23,13 +19,10 @@ const addOrderItems = asyncHandler(async (req = request, res = response) => {
     orderItems,
     user: req.user.id,
     shippingAddress,
-    paymentMethod,
-    itemsPrice,
-    taxPrice,
-    shippingPrice,
-    totalPrice
+    paymentMethod
   };
 
+  console.log(order);
   const createdOrder = await orderService.save(order);
   res.status(201).json(createdOrder);
 });
