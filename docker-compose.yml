@@ -1,0 +1,43 @@
+version: '3.7'
+services:
+  backend-node:
+    container_name: backend-node
+    build: 
+      context: ./backend-nodejs
+      dockerfile: ./Dockerfile
+    environment:
+      - PORT=5000
+      - MONGO_URI=mongodb://damian:password@mongo:27017/mongo_db?authSource=admin
+      - JWT_SECRET=supersecretpassword
+      - PAYPAL_CLIENT_ID=AaIycBSJf3sZfI5cjlHUqFjtOODTBOqReeCD3aPBDSeBjSPVDdkESEfSwOp4mvDaRAS7NoCJMp4JsWSu
+      - cloud_name=diigwvtvl
+      - api_key=111612826251798
+      - api_secret=Q1ibM7UtF4JeX5nTpxpKLi408jg
+    ports:
+      - 5000:5000
+    depends_on:
+      - mongo
+  mongo:
+    image: mongo
+    container_name: mongo-container
+    ports:
+      - 27018:27017
+    volumes:
+      - mongo-data:/data/db
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: damian
+      MONGO_INITDB_ROOT_PASSWORD: password
+      MONGO_INITDB_DATABASE: mongo
+  react-frontend:
+    container_name: react-frontend
+    build: 
+      context: ./frontend
+      dockerfile: ./Dockerfile
+    ports:
+      - 3000:3000
+    depends_on:
+      - backend-node
+
+
+volumes:
+  mongo-data:

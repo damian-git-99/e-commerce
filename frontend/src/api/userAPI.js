@@ -9,7 +9,7 @@ class UserAPI {
     };
 
     const { data } = await axios.post(
-      '/api/users/login',
+      'http://localhost:5000/api/users/login',
       { email, password },
       config
     );
@@ -24,7 +24,7 @@ class UserAPI {
       }
     };
 
-    const { data } = await axios.post('/api/users/signup',
+    const { data } = await axios.post('http://localhost:5000/api/users/signup',
       { name, email, password },
       config
     );
@@ -39,7 +39,7 @@ class UserAPI {
         Authorization: `Bearer ${token}`
       }
     };
-    const { data } = await axios.get('/api/users/profile', config);
+    const { data } = await axios.get('http://localhost:5000/api/users/profile', config);
     return data;
   }
 }

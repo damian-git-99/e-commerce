@@ -19,7 +19,7 @@ export const listUsers = () => {
         }
       };
 
-      const { data } = await axios.get('/api/users', config);
+      const { data } = await axios.get('http://localhost:5000/api/users', config);
 
       dispatch({
         type: USER_LIST_TYPES.USER_LIST_SUCCESS,
@@ -52,7 +52,7 @@ export const getUserDetailsAdmin = (id) => {
         }
       };
 
-      const { data } = await axios.get(`/api/users/${id}`, config);
+      const { data } = await axios.get(`http://localhost:5000/api/users/${id}`, config);
       console.log(data);
 
       dispatch({
@@ -87,7 +87,7 @@ export const deleteUser = (id) => {
         }
       };
 
-      await axios.delete(`/api/users/${id}`, config);
+      await axios.delete(`http://localhost:5000/api/users/${id}`, config);
 
       dispatch({ type: USER_DELETE_TYPES.USER_DELETE_SUCCESS });
     } catch (error) {
@@ -120,7 +120,7 @@ export const updateUser = (user) => {
         }
       };
 
-      await axios.put(`/api/users/${user.id}`, user, config);
+      await axios.put(`http://localhost:5000/api/users/${user.id}`, user, config);
 
       dispatch({ type: USER_ADMIN_UPDATE_TYPES.USER_UPDATE_SUCCESS });
     } catch (error) {

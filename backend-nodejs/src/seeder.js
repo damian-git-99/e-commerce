@@ -1,10 +1,10 @@
 // eslint-disable-next-line no-unused-vars
 const colors = require('colors');
-const products = require('./data/products');
-const users = require('./data/users');
-const OrderModel = require('./src/modules/order/OrderModel');
-const ProductModel = require('./src/modules/product/ProductModel');
-const UserModel = require('./src/modules/user/UserModel');
+const products = require('../data/products');
+const users = require('../data/users');
+const OrderModel = require('./modules/order/OrderModel');
+const ProductModel = require('./modules/product/ProductModel');
+const UserModel = require('./modules/user/UserModel');
 require('dotenv').config();
 const connectDB = require('./src/config/config');
 

@@ -24,7 +24,7 @@ export const createOrder = (order) => {
         }
       };
 
-      const { data } = await axios.post('/api/orders', order, config);
+      const { data } = await axios.post('http://localhost:5000/api/orders', order, config);
 
       dispatch({
         type: ORDER_TYPES.ORDER_CREATE_SUCCESS,
@@ -59,7 +59,7 @@ export const getOrderDetails = (id) => {
         }
       };
 
-      const { data } = await axios.get(`/api/orders/${id}`, config);
+      const { data } = await axios.get(`http://localhost:5000/api/orders/${id}`, config);
       dispatch({
         type: ORDER_DETAILS_TYPES.ORDER_DETAILS_SUCCESS,
         payload: data
@@ -96,7 +96,7 @@ export const payOrder = (orderId, paymentResult) => {
       };
 
       const { data } = await axios.put(
-        `/api/orders/${orderId}/pay`,
+        `http://localhost:5000/api/orders/${orderId}/pay`,
         paymentResult,
         config
       );
@@ -132,7 +132,7 @@ export const listMyOrders = () => {
         }
       };
 
-      const { data } = await axios.get('/api/orders/myorders', config);
+      const { data } = await axios.get('http://localhost:5000/api/orders/myorders', config);
 
       dispatch({
         type: ORDER_LIST_TYPES.ORDER_LIST_MY_SUCCESS,
@@ -168,7 +168,7 @@ export const deliverOrder = (order) => {
       };
 
       const { data } = await axios.put(
-        `/api/orders/${order.id}/deliver`,
+        `http://localhost:5000/api/orders/${order.id}/deliver`,
         {},
         config
       );
@@ -206,7 +206,7 @@ export const listOrders = () => {
         }
       };
 
-      const { data } = await axios.get('/api/orders', config);
+      const { data } = await axios.get('http://localhost:5000/api/orders', config);
 
       dispatch({
         type: ORDER_LIST_ADMIN_TYPES.ORDER_LIST_SUCCESS,

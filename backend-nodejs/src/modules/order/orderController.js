@@ -22,7 +22,6 @@ const addOrderItems = asyncHandler(async (req = request, res = response) => {
     paymentMethod
   };
 
-  console.log(order);
   const createdOrder = await orderService.save(order);
   res.status(201).json(createdOrder);
 });

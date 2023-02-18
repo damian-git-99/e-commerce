@@ -3,7 +3,7 @@ import { CART_TYPES } from '../reducers/cartReducers';
 
 export const addToCart = (id, quantity) => {
   return async (dispatch, getState) => {
-    const { data } = await axios.get(`/api/products/${id}`);
+    const { data } = await axios.get(`http://localhost:5000/api/products/${id}`);
 
     dispatch({
       type: CART_TYPES.CART_ADD_ITEM,
