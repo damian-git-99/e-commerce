@@ -84,12 +84,16 @@ class ProductService {
       await fileService.deleteImage(product.public_id_image);
     }
 
-    const result = await fileService.uploadImage(file);
-    product.image = result.url;
-    product.public_id_image = result.public_id;
-    // todo: move the product.save to the repository layer
-    await product.save();
-    return result.url;
+    try {
+      const result = await fileService.uploadImage(file);
+      product.image = result.url;
+      product.public_id_image = result.public_id;
+      // todo: move the product.save to the repository layer
+      await product.save();
+      return result.url;
+    } catch (err) {
+      throw new Error(err);
+    };
   }
 
   async findByIdAndDiscountFromStock(id, quantity) {

@@ -4,6 +4,7 @@ const errorHandler = (err, req, res, next) => {
   if (err.status) {
     statusCode = err.status;
   }
+  console.error(err);
   res.status(statusCode).json({
     message: err.message
   });
