@@ -1,5 +1,5 @@
 const request = require('supertest');
-const { app } = require('../../../app');
+const { app } = require('../../../src/app');
 const UserModel = require('../../../src/modules/user/UserModel');
 const {
   encryptPassword

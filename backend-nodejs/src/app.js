@@ -1,11 +1,11 @@
 const express = require('express');
 const morgan = require('morgan');
-const { productRouter } = require('./src/modules/product/productRoutes');
-const { errorHandler } = require('./src/middlewares/errorHandlingMiddleware');
-const { userRouter } = require('./src/modules/user/userRoutes');
-const { orderRouter } = require('./src/modules/order/orderRoutes');
-const { authRouter } = require('./src/modules/auth/AuthRoutes');
-const { adminRouter } = require('./src/modules/admin/adminRoutes');
+const { productRouter } = require('./modules/product/productRoutes');
+const { errorHandler } = require('./middlewares/errorHandlingMiddleware');
+const { userRouter } = require('./modules/user/userRoutes');
+const { orderRouter } = require('./modules/order/orderRoutes');
+const { authRouter } = require('./modules/auth/AuthRoutes');
+const { adminRouter } = require('./modules/admin/adminRoutes');
 const config = require('config');
 const app = express();
 const PAYPAL_CLIENT_ID = config.get('PAYPAL_CLIENT_ID');

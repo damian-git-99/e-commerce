@@ -1,5 +1,5 @@
 const request = require('supertest');
-const { app } = require('../../../app');
+const { app } = require('../../../src/app');
 const fileService = require('../../../src/modules/file/FileService');
 const ProductModel = require('../../../src/modules/product/ProductModel');
 const UserModel = require('../../../src/modules/user/UserModel');

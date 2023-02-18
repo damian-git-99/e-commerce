@@ -1,5 +1,5 @@
 const request = require('supertest');
-const { app } = require('../../../app');
+const { app } = require('../../../src/app');
 const {
   encryptPassword
 } = require('../../../src/utils/encrypt');
