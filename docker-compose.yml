@@ -1,0 +1,34 @@
+version: '3.7'
+services:
+  backend-node:
+    container_name: backend-node
+    build: 
+      context: ./backend-nodejs
+      dockerfile: ./Dockerfile
+    environment:
+      - PORT=5000
+      - MONGO_URI=mongodb://mongo:27017/node_backend
+      - JWT_SECRET=supersecretpassword
+      - PAYPAL_CLIENT_ID=1234
+      - cloud_name=name
+      - api_key=key
+      - api_secret=secret
+    ports:
+      - 5000:5000
+    depends_on:
+      - mongo
+  mongo:
+    image: mongo
+    container_name: mongo-container
+    ports:
+      - 27018:27017
+    volumes:
+      - mongo-data:/data/db
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: damian
+      MONGO_INITDB_ROOT_PASSWORD: password
+      MONGO_INITDB_DATABASE: mongo
+    command: mongod --auth
+
+volumes:
+  mongo-data:

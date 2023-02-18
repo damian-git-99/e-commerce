@@ -1,16 +1,11 @@
-# e-commerce
+# E-commerce
+E-commerce using the MERN technology stack, paypal and cloudinary .
 
-### E-commerce usando el stack de tecnologías MERN y también spring-boot.
-
-## Requisitos
-1. java - 11 (spring-boot)
-2. Maven - 3 (spring-boot)
-3. Mysql - 8 (spring-boot)
-4. React - 17
-5. MongoDB - 5
-6. Node - 14.17
-
-**1. Clonar la aplicación **
-```bash
- git clone https://github.com/damian-git-99/e-commerce.git
- ```
+## Run Project with docker
+- clone the project `git clone https://github.com/damian-git-99/e-commerce.git`
+- Install [docker](https://www.docker.com/products/docker-desktop/)
+- Config Environment Variables in docker-compose file
+  - Add PAYPAL_CLIENT_ID: https://developer.paypal.com/
+  - Add cloudinary info: https://cloudinary.com/
+- cd to the root of the project
+- Run the command `docker-compose up -d`
