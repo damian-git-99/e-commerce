@@ -1,5 +1,6 @@
 const express = require('express');
 const morgan = require('morgan');
+const cors = require('cors');
 const { productRouter } = require('./modules/product/productRoutes');
 const { errorHandler } = require('./middlewares/errorHandlingMiddleware');
 const { userRouter } = require('./modules/user/userRoutes');
@@ -10,6 +11,11 @@ const config = require('config');
 const app = express();
 const PAYPAL_CLIENT_ID = config.get('PAYPAL_CLIENT_ID');
 
+const corsOptions = {
+  origin: 'http://localhost:3000',
+  optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
+};
+app.use(cors(corsOptions));
 app.use(express.json());
 // skip morgan if test
 app.use(morgan('dev', { skip: (req, res) => process.env.NODE_ENV === 'test' }));
