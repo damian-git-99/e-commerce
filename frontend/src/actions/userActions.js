@@ -1,6 +1,5 @@
 import { USER_LIST_TYPES } from '../reducers/adminReducers';
 
-const { userAPI } = require('../api/userAPI');
 const { default: axios } = require('axios');
 const { ORDER_LIST_TYPES } = require('../reducers/orderReducers');
 
@@ -10,6 +9,8 @@ const {
   USER_UPDATE_TYPES
 } = require('../reducers/userReducers');
 
+const URL = 'http://localhost:5000/api/users/';
+
 export const login = (email, password) => {
   return async (dispatch) => {
     try {
@@ -17,7 +18,17 @@ export const login = (email, password) => {
         type: USER_LOGIN_TYPES.USER_LOGIN_REQUEST
       });
 
-      const data = await userAPI.login(email, password);
+      const config = {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      };
+
+      const { data } = await axios.post(
+        `${URL}/login`,
+        { email, password },
+        config
+      );
 
       dispatch({
         type: USER_LOGIN_TYPES.USER_LOGIN_SUCCESS,
@@ -52,7 +63,16 @@ export const register = (name, email, password) => {
         type: USER_LOGIN_TYPES.USER_LOGIN_REQUEST
       });
 
-      const data = await userAPI.signup(name, email, password);
+      const config = {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      };
+
+      const { data } = await axios.post(`${URL}/signup`,
+        { name, email, password },
+        config
+      );
 
       dispatch({
         type: USER_LOGIN_TYPES.USER_LOGIN_SUCCESS,
@@ -81,7 +101,14 @@ export const getUserDetails = () => {
 
       const { userLogin: { userInfo } } = getState();
 
-      const data = await userAPI.getUserDetails(userInfo.token);
+      const config = {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${userInfo.token}`
+        }
+      };
+
+      const { data } = await axios.get('http://localhost:5000/api/users/profile', config);
 
       dispatch({
         type: USER_DETAILS_TYPES.USER_DETAILS_SUCCESS,
