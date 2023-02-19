@@ -2,6 +2,8 @@ import { USER_ADMIN_UPDATE_TYPES, USER_DELETE_TYPES, USER_DETAILS_ADMIN_TYPES, U
 
 const { default: axios } = require('axios');
 
+const URL = 'http://localhost:5000/api/users';
+
 export const listUsers = () => {
   return async (dispatch, getState) => {
     try {
@@ -19,7 +21,7 @@ export const listUsers = () => {
         }
       };
 
-      const { data } = await axios.get('http://localhost:5000/api/users', config);
+      const { data } = await axios.get(URL, config);
 
       dispatch({
         type: USER_LIST_TYPES.USER_LIST_SUCCESS,
@@ -52,7 +54,7 @@ export const getUserDetailsAdmin = (id) => {
         }
       };
 
-      const { data } = await axios.get(`http://localhost:5000/api/users/${id}`, config);
+      const { data } = await axios.get(`${URL}/${id}`, config);
       console.log(data);
 
       dispatch({
@@ -87,7 +89,7 @@ export const deleteUser = (id) => {
         }
       };
 
-      await axios.delete(`http://localhost:5000/api/users/${id}`, config);
+      await axios.delete(`${URL}/${id}`, config);
 
       dispatch({ type: USER_DELETE_TYPES.USER_DELETE_SUCCESS });
     } catch (error) {
@@ -120,7 +122,7 @@ export const updateUser = (user) => {
         }
       };
 
-      await axios.put(`http://localhost:5000/api/users/${user.id}`, user, config);
+      await axios.put(`${URL}/${user.id}`, user, config);
 
       dispatch({ type: USER_ADMIN_UPDATE_TYPES.USER_UPDATE_SUCCESS });
     } catch (error) {
