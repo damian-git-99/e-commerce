@@ -6,7 +6,7 @@ import PropTypes from 'prop-types';
 
 export const Product = ({ product }) => {
   return (
-    <Card className="my-3 p-3 rounded">
+    <Card className="my-3 p-3 rounded" data-masonry='{"percentPosition": true }'>
       <Link to={`/product/${product.id}`}>
         <Card.Img src={product.image} variant="top" />
       </Link>

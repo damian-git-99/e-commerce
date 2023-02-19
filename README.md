@@ -25,6 +25,7 @@ E-commerce using the MERN technology stack, paypal and cloudinary .
   - Logout
   - Add product to cart
   - Delete product from cart
+  - Add Review
   - Buy Products
 - Admin
   - Create product
@@ -33,3 +34,7 @@ E-commerce using the MERN technology stack, paypal and cloudinary .
   - Update User info
   - Mark order as paid
   - Mark order as Delivered
+
+![](https://i.ibb.co/WvXrhyy/Captura-de-pantalla-2023-02-19-125522.png)
+
+![](https://i.ibb.co/GH7cSkX/Captura-de-pantalla-2023-02-19-125704.png)
