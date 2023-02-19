@@ -1,55 +1,39 @@
 // eslint-disable-next-line no-unused-vars
-const colors = require('colors');
-const products = require('../data/products');
-const users = require('../data/users');
-const OrderModel = require('./modules/order/OrderModel');
-const ProductModel = require('./modules/product/ProductModel');
-const UserModel = require('./modules/user/UserModel');
+require('colors');
 require('dotenv').config();
-const connectDB = require('./src/config/config');
+const bcrypt = require('bcryptjs');
+const UserModel = require('./modules/user/UserModel');
 
-connectDB();
+const users = [
+  {
+    name: 'Admin User',
+    email: 'admin@example.com',
+    password: bcrypt.hashSync('123456', 10),
+    isAdmin: true
+  },
+  {
+    name: 'Damian galvan',
+    email: 'damian@example.com',
+    password: bcrypt.hashSync('123456', 10)
+  },
+  {
+    name: 'jose torrez',
+    email: 'jose@example.com',
+    password: bcrypt.hashSync('123456', 10)
+  }
+];
 
 const importData = async () => {
   try {
-    await OrderModel.deleteMany();
-    await ProductModel.deleteMany();
     await UserModel.deleteMany();
-
-    const createdUsers = await UserModel.insertMany(users);
-
-    const adminUser = createdUsers[0]._id;
-
-    const sampleProducts = products.map((product) => {
-      return { ...product, user: adminUser };
-    });
-
-    await ProductModel.insertMany(sampleProducts);
-
+    await UserModel.insertMany(users);
     console.log('Data Imported!'.green.inverse);
-    process.exit();
   } catch (error) {
     console.error(`${error}`.red.inverse);
     process.exit(1);
   }
 };
 
-const destroyData = async () => {
-  try {
-    await OrderModel.deleteMany();
-    await ProductModel.deleteMany();
-    await UserModel.deleteMany();
-
-    console.log('Data Destroyed!'.red.inverse);
-    process.exit();
-  } catch (error) {
-    console.error(`${error}`.red.inverse);
-    process.exit(1);
-  }
+module.exports = {
+  importData
 };
-
-if (process.argv[2]?.toLowerCase() === '-d') {
-  destroyData();
-} else {
-  importData();
-}

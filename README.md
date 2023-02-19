@@ -9,3 +9,27 @@ E-commerce using the MERN technology stack, paypal and cloudinary .
   - Add cloudinary info: https://cloudinary.com/
 - cd to the root of the project
 - Run the command `docker-compose up -d`
+
+## Users by default
+- Admin user:
+  - email: admin@example.com
+  - password: 123456
+- Customer user:
+  - name: damian@example.com
+  - email: 123456
+
+## Use Cases
+- Customers 
+  - Signup
+  - Signin
+  - Logout
+  - Add product to cart
+  - Delete product from cart
+  - Buy Products
+- Admin
+  - Create product
+  - Update product
+  - Delete product
+  - Update User info
+  - Mark order as paid
+  - Mark order as Delivered
