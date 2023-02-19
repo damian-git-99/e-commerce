@@ -8,11 +8,13 @@ import {
   PRODUCT_UPDATE_TYPES
 } from '../reducers/productReducers';
 
+const URL = 'http://localhost:5000/api/products';
+
 export const listProducts = (keyword = '') => {
   return async (dispatch) => {
     try {
       dispatch({ type: PRODUCT_TYPES.PRODUCT_LIST_REQUEST });
-      const { data } = await axios.get(`http://localhost:5000/api/products?keyword=${keyword}`);
+      const { data } = await axios.get(`${URL}?keyword=${keyword}`);
       dispatch({
         type: PRODUCT_TYPES.PRODUCT_LIST_SUCCESS,
         payload: data
@@ -33,7 +35,7 @@ export const listProductDetails = (id) => {
   return async (dispatch) => {
     try {
       dispatch({ type: PRODUCT_DETAILS_TYPES.PRODUCT_DETAILS_REQUEST });
-      const { data } = await axios.get(`http://localhost:5000/api/products/${id}`);
+      const { data } = await axios.get(`${URL}/${id}`);
       dispatch({
         type: PRODUCT_DETAILS_TYPES.PRODUCT_DETAILS_SUCCESS,
         payload: data
@@ -67,7 +69,7 @@ export const deleteProduct = (id) => {
         }
       };
 
-      await axios.delete(`http://localhost:5000/api/products/${id}`, config);
+      await axios.delete(`${URL}/${id}`, config);
 
       dispatch({
         type: PRODUCT_DELETE_TYPES.PRODUCT_DELETE_SUCCESS
@@ -101,7 +103,7 @@ export const createProduct = () => {
         }
       };
 
-      const { data } = await axios.post('http://localhost:5000/api/products', {}, config);
+      const { data } = await axios.post(URL, {}, config);
 
       dispatch({
         type: PRODUCT_CREATE_TYPES.PRODUCT_CREATE_SUCCESS,
@@ -138,7 +140,7 @@ export const updateProduct = (product) => {
       };
 
       const { data } = await axios.put(
-        `http://localhost:5000/api/products/${product.id}`,
+        `${URL}/${product.id}`,
         product,
         config
       );
@@ -177,7 +179,7 @@ export const createProductReview = (productId, review) => {
         }
       };
 
-      await axios.post(`http://localhost:5000/api/products/${productId}/reviews`, review, config);
+      await axios.post(`${URL}/${productId}/reviews`, review, config);
 
       dispatch({
         type: PRODUCT_CREATE_REVIEW.PRODUCT_CREATE_REVIEW_SUCCESS
