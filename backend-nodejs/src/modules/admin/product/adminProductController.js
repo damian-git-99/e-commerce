@@ -1,5 +1,5 @@
 const asyncHandler = require('express-async-handler');
-const productService = require('../../product/productService');
+const productService = require('./adminProductService');
 
 // @desc    create a product with sample data.
 // @route   POST /api/products
