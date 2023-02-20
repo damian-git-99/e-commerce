@@ -1,4 +1,4 @@
-const OrderNotFoundException = require('./errors/OrderNotFoundException');
+const OrderNotFoundException = require('../../shared/errors/OrderNotFoundException');
 const OrderModel = require('./OrderModel');
 const orderDao = require('./OrderDao');
 const productService = require('../product/productService');
