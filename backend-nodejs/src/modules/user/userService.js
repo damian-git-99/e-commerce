@@ -2,25 +2,8 @@ const UserNotFoundException = require('./errors/UserNotFoundException');
 const { encryptPassword } = require('../../shared/encrypt');
 const { userDao } = require('./UserDao');
 class UserService {
-  findByEmail(email) {
-    return userDao.findByEmail(email);
-  }
-
   findUserById(id) {
     return userDao.findById(id);
-  }
-
-  createUser(user) {
-    user.password = encryptPassword(user.password);
-    return userDao.save(user);
-  }
-
-  findAllUsers() {
-    return userDao.findAll();
-  }
-
-  async deleteUserById(userId) {
-    return userDao.deleteUserById(userId);
   }
 
   async updateUser(userId, newUser) {
