@@ -6,7 +6,7 @@ const UserModel = require('../../../src/modules/user/UserModel');
 const { encryptPassword } = require('../../../src/shared/encrypt');
 const { clearDatabase, connect, closeDatabase } = require('../../config/db');
 const { loadFile } = require('../utils/Utils');
-jest.mock('../../../src/modules/file/FileService');
+jest.mock('../../../src/modules/file/fileService');
 const fileServiceMocked = jest.mocked(fileService, true);
 
 beforeAll(async () => {
