@@ -1,30 +1,30 @@
-const { orderDao } = require('../../order/OrderDao');
+const orderDao = require('./orderAdminDao');
 const OrderNotFoundException = require('../../order/errors/OrderNotFoundException');
 
-class OrderAdminService {
-  async updateOrderToDelivered(orderId) {
-    const order = await this.findOrderById(orderId);
+const updateOrderToDelivered = async (orderId) => {
+  const order = await findOrderById(orderId);
 
-    if (!order) {
-      throw new OrderNotFoundException();
-    };
+  if (!order) {
+    throw new OrderNotFoundException();
+  };
 
-    order.isDelivered = true;
-    order.deliveredAt = Date.now();
+  order.isDelivered = true;
+  order.deliveredAt = Date.now();
 
-    const updatedOrder = await orderDao.findByIdAndUpdateOrder(orderId, order);
-    return updatedOrder;
-  }
+  const updatedOrder = await orderDao.findByIdAndUpdateOrder(orderId, order);
+  return updatedOrder;
+};
 
-  findAllOrdersWithUser() {
-    return orderDao.findAllOrders();
-  }
+const findAllOrdersWithUser = () => {
+  return orderDao.findAllOrders();
+};
 
-  findOrderById(id) {
-    return orderDao.findOrderById(id);
-  }
-}
+const findOrderById = (id) => {
+  return orderDao.findOrderById(id);
+};
 
 module.exports = {
-  OrderAdminService
+  updateOrderToDelivered,
+  findAllOrdersWithUser,
+  findOrderById
 };
