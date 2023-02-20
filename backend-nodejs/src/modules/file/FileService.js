@@ -9,35 +9,35 @@ cloudinary.config({
   api_secret: cloudinaryConfig.api_secret
 });
 
-class FileService {
-  async isSupportedImageType(buffer) {
-    const type = await FileType.fromBuffer(buffer);
-    return !type
-      ? false
-      : type.mime === 'image/png' || type.mime === 'image/jpeg';
-  }
+const isSupportedImageType = async (buffer) => {
+  const type = await FileType.fromBuffer(buffer);
+  return !type
+    ? false
+    : type.mime === 'image/png' || type.mime === 'image/jpeg';
+};
 
-  uploadImage(file) {
-    return new Promise((resolve, reject) => {
-      cloudinary.uploader
-        .upload_stream({ folder: 'ecommerce' }, function (error, result) {
-          if (error) reject(error);
-          resolve(result);
-        })
-        .end(file.buffer);
+const uploadImage = (file) => {
+  return new Promise((resolve, reject) => {
+    cloudinary.uploader
+      .upload_stream({ folder: 'ecommerce' }, function (error, result) {
+        if (error) reject(error);
+        resolve(result);
+      })
+      .end(file.buffer);
+  });
+};
+
+const deleteImage = (publicId) => {
+  return new Promise((resolve, reject) => {
+    cloudinary.api.delete_resources([publicId], function (error, result) {
+      if (error) reject(error);
+      resolve(result);
     });
-  }
+  });
+};
 
-  deleteImage(publicId) {
-    return new Promise((resolve, reject) => {
-      cloudinary.api.delete_resources([publicId],
-        function(error, result) {
-          if (error) reject(error);
-          resolve(result);
-        });
-    });
-  }
-}
-
-const fileService = new FileService();
-module.exports = fileService;
+module.exports = {
+  isSupportedImageType,
+  uploadImage,
+  deleteImage
+};
