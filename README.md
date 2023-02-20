@@ -9,6 +9,8 @@ E-commerce using the MERN technology stack, paypal and cloudinary .
   - Add cloudinary info: https://cloudinary.com/
 - cd to the root of the project
 - Run the command `docker-compose up -d`
+- Frontend App runs on port 3000
+- Backend App runs on port 5000
 
 ## Users by default
 - Admin user:
@@ -19,7 +21,7 @@ E-commerce using the MERN technology stack, paypal and cloudinary .
   - email: 123456
 
 ## Use Cases
-- Customers 
+- Normal Users 
   - Signup
   - Signin
   - Logout
@@ -27,7 +29,7 @@ E-commerce using the MERN technology stack, paypal and cloudinary .
   - Delete product from cart
   - Add Review
   - Buy Products
-- Admin
+- Admin Users
   - Create product
   - Update product
   - Delete product
