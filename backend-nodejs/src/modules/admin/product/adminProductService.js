@@ -1,4 +1,4 @@
-const fileService = require('../../file/FileService');
+const fileService = require('../../file/fileService');
 const InvalidImageException = require('../../file/errors/InvalidImageException');
 const ProductNotFoundException = require('../../product/errors/ProductNotFoundException');
 const productDao = require('./adminProductDao');
