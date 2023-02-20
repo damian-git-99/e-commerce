@@ -1,13 +1,13 @@
 const UserNotFoundException = require('./errors/UserNotFoundException');
 const { encryptPassword } = require('../../shared/encrypt');
-const { userDao } = require('./UserDao');
+const userDao = require('./UserDao');
 class UserService {
   findUserById(id) {
     return userDao.findById(id);
   }
 
   async updateUser(userId, newUser) {
-    const user = await userService.findUserById(userId);
+    const user = await this.findUserById(userId);
 
     if (!user) {
       throw new UserNotFoundException();
