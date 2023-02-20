@@ -1,11 +1,8 @@
-const { encryptPassword } = require('../../shared/encrypt');
+const { encryptPassword, comparePasswords } = require('../../shared/encrypt');
 const { generateToken } = require('../../shared/generateToken');
 const userDao = require('./authDao');
+const BadCredentialsException = require('./errors/BadCredentialsException');
 const EmailAlreadyTakenException = require('./errors/EmailAlreadyTakenException');
-
-const findByEmail = (email) => {
-  return userDao.findByEmail(email);
-};
 
 const signUp = async (user) => {
   const userExists = await findByEmail(user.email);
@@ -21,7 +18,30 @@ const signUp = async (user) => {
   };
 };
 
+const login = async (user) => {
+  const userExists = await findByEmail(user.email);
+
+  if (!userExists) {
+    throw new BadCredentialsException();
+  }
+
+  if (!comparePasswords(user.password, userExists.password)) {
+    throw new BadCredentialsException();
+  }
+
+  const token = generateToken({ id: userExists.id });
+
+  return {
+    token,
+    user: userExists
+  };
+};
+
+const findByEmail = (email) => {
+  return userDao.findByEmail(email);
+};
+
 module.exports = {
-  findByEmail,
-  signUp
+  signUp,
+  login
 };

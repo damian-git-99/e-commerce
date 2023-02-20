@@ -1,17 +1,10 @@
 const asyncHandler = require('express-async-handler');
-const { comparePasswords } = require('../../shared/encrypt');
-const { generateToken } = require('../../shared/generateToken');
-const BadCredentialsException = require('./errors/BadCredentialsException');
 const authService = require('./authService');
 
 // @route POST /api/users/login
-const authUser = asyncHandler(async (req, res) => {
+const login = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
-  const user = await authService.findByEmail(email);
-  if (!user || !comparePasswords(password, user.password)) {
-    throw new BadCredentialsException();
-  }
-  const token = generateToken({ id: user.id });
+  const { token, user } = await authService.login({ email, password });
   return res.status(200).json({
     id: user.id,
     name: user.name,
@@ -41,6 +34,6 @@ const signUp = asyncHandler(async (req, res) => {
 });
 
 module.exports = {
-  authUser,
+  login,
   signUp
 };
