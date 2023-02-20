@@ -3,7 +3,7 @@ const { app } = require('../../../src/app');
 const fileService = require('../../../src/modules/file/FileService');
 const ProductModel = require('../../../src/modules/product/ProductModel');
 const UserModel = require('../../../src/modules/user/UserModel');
-const { encryptPassword } = require('../../../src/utils/encrypt');
+const { encryptPassword } = require('../../../src/shared/encrypt');
 const { clearDatabase, connect, closeDatabase } = require('../../config/db');
 const { loadFile } = require('../utils/Utils');
 jest.mock('../../../src/modules/file/FileService');

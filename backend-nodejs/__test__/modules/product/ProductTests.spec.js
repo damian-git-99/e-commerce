@@ -2,7 +2,7 @@ const request = require('supertest');
 const { app } = require('../../../src/app');
 const ProductModel = require('../../../src/modules/product/ProductModel');
 const UserModel = require('../../../src/modules/user/UserModel');
-const { encryptPassword } = require('../../../src/utils/encrypt');
+const { encryptPassword } = require('../../../src/shared/encrypt');
 const { clearDatabase, connect, closeDatabase } = require('../../config/db');
 
 beforeAll(async () => {

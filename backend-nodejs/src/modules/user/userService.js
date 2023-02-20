@@ -1,5 +1,5 @@
 const UserNotFoundException = require('./errors/UserNotFoundException');
-const { encryptPassword } = require('../../utils/encrypt');
+const { encryptPassword } = require('../../shared/encrypt');
 const { userDao } = require('./UserDao');
 class UserService {
   findByEmail(email) {

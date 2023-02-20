@@ -1,4 +1,4 @@
-const { encryptPassword } = require('../../utils/encrypt');
+const { encryptPassword } = require('../../shared/encrypt');
 const { userDao } = require('../user/UserDao');
 
 const findByEmail = (email) => {

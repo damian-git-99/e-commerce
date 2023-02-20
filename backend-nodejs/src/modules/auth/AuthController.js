@@ -1,6 +1,6 @@
 const asyncHandler = require('express-async-handler');
-const { comparePasswords } = require('../../utils/encrypt');
-const { generateToken } = require('../../utils/generateToken');
+const { comparePasswords } = require('../../shared/encrypt');
+const { generateToken } = require('../../shared/generateToken');
 const BadCredentialsException = require('../user/errors/BadCredentialsException');
 const EmailAlreadyTakenException = require('../user/errors/EmailAlreadyTakenException');
 const authService = require('./authService');
