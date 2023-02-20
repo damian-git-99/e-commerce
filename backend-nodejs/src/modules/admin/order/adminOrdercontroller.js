@@ -1,5 +1,6 @@
 const asyncHandler = require('express-async-handler');
-const { orderService } = require('../../order/orderService');
+const { OrderAdminService } = require('./orderAdminService');
+const orderService = new OrderAdminService();
 
 // @route PUT /api/orders/:id/deliver
 const updateOrderToDelivered = asyncHandler(async (req, res) => {

@@ -59,10 +59,6 @@ class OrderService {
     return orderDao.findOrdersByUser(userId);
   }
 
-  findAllOrdersWithUser() {
-    return orderDao.findAllOrders();
-  }
-
   async updateOrderToPaid(orderId, paymentResult) {
     // eslint-disable-next-line camelcase
     const { id, status, update_time, email_address } = paymentResult;
@@ -80,20 +76,6 @@ class OrderService {
       update_time,
       email_address
     };
-
-    const updatedOrder = await orderDao.findByIdAndUpdateOrder(orderId, order);
-    return updatedOrder;
-  }
-
-  async updateOrderToDelivered(orderId) {
-    const order = await this.findOrderById(orderId);
-
-    if (!order) {
-      throw new OrderNotFoundException();
-    }
-
-    order.isDelivered = true;
-    order.deliveredAt = Date.now();
 
     const updatedOrder = await orderDao.findByIdAndUpdateOrder(orderId, order);
     return updatedOrder;
