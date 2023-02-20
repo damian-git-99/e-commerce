@@ -2,10 +2,6 @@ const { encryptPassword } = require('../../../utils/encrypt');
 const { userDao } = require('../../user/UserDao');
 const UserNotFoundException = require('../../user/errors/UserNotFoundException');
 
-const findByEmail = (email) => {
-  return userDao.findByEmail(email);
-};
-
 const findUserById = (id) => {
   return userDao.findById(id);
 };
@@ -42,7 +38,6 @@ const updateUser = async (userId, newUser) => {
 };
 
 module.exports = {
-  findByEmail,
   findUserById,
   createUser,
   findAllUsers,
