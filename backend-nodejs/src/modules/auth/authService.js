@@ -7,7 +7,7 @@ const findByEmail = (email) => {
   return userDao.findByEmail(email);
 };
 
-const createUser = async (user) => {
+const signUp = async (user) => {
   const userExists = await findByEmail(user.email);
   if (userExists) {
     throw new EmailAlreadyTakenException();
@@ -23,5 +23,5 @@ const createUser = async (user) => {
 
 module.exports = {
   findByEmail,
-  createUser
+  signUp
 };

@@ -25,7 +25,7 @@ const authUser = asyncHandler(async (req, res) => {
 const signUp = asyncHandler(async (req, res) => {
   const { email, name, password } = req.body;
 
-  const { token, user } = await authService.createUser({
+  const { token, user } = await authService.signUp({
     email,
     name,
     password
