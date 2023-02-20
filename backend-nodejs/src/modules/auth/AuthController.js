@@ -3,12 +3,12 @@ const { comparePasswords } = require('../../utils/encrypt');
 const { generateToken } = require('../../utils/generateToken');
 const BadCredentialsException = require('../user/errors/BadCredentialsException');
 const EmailAlreadyTakenException = require('../user/errors/EmailAlreadyTakenException');
-const { userService } = require('../user/userService');
+const authService = require('./authService');
 
 // @route POST /api/users/login
 const authUser = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
-  const user = await userService.findByEmail(email);
+  const user = await authService.findByEmail(email);
   if (!user || !comparePasswords(password, user.password)) {
     throw new BadCredentialsException();
   }
@@ -25,13 +25,13 @@ const authUser = asyncHandler(async (req, res) => {
 // @route POST /api/users/signup
 const signUp = asyncHandler(async (req, res) => {
   const { email, name, password } = req.body;
-  const user = await userService.findByEmail(email);
+  const user = await authService.findByEmail(email);
 
   if (user) {
     throw new EmailAlreadyTakenException();
   }
 
-  const newUser = await userService.createUser({
+  const newUser = await authService.createUser({
     email,
     name,
     password
