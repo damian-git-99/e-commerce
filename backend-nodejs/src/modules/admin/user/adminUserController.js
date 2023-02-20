@@ -1,9 +1,8 @@
 const asyncHandler = require('express-async-handler');
+const UserNotFoundException = require('../../user/errors/UserNotFoundException');
+const userService = require('./adminUserService');
 
 // @desc    Fetch All users
-const UserNotFoundException = require('../../user/errors/UserNotFoundException');
-const { userService } = require('../../user/userService');
-
 // @route   GET /api/users/
 const getUsers = asyncHandler(async (req, res) => {
   const users = await userService.findAllUsers();
