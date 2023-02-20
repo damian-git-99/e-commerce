@@ -1,7 +1,7 @@
 const fileService = require('../../file/FileService');
 const InvalidImageException = require('../../file/errors/InvalidImageException');
 const ProductNotFoundException = require('../../product/errors/ProductNotFoundException');
-const { productDao } = require('../../product/productDao');
+const productDao = require('./adminProductDao');
 
 const createProduct = (product) => {
   return productDao.create(product);

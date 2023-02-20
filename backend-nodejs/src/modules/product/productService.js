@@ -1,6 +1,6 @@
 const ProductAlreadyReviewedException = require('./errors/ProductAlreadyReviewedException');
 const ProductNotFoundException = require('./errors/ProductNotFoundException');
-const { productDao } = require('./productDao');
+const productDao = require('./productDao');
 
 const findProductsByKeyword = (keyword) => {
   return productDao.findAll(keyword);
