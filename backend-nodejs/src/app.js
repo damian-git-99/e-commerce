@@ -7,9 +7,8 @@ const { userRouter } = require('./modules/user/userRoutes');
 const { orderRouter } = require('./modules/order/orderRoutes');
 const { authRouter } = require('./modules/auth/authRoutes');
 const { adminRouter } = require('./modules/admin/adminRoutes');
-const config = require('config');
+const paypalRoutes = require('./modules/paypal/getToken');
 const app = express();
-const PAYPAL_CLIENT_ID = config.get('PAYPAL_CLIENT_ID');
 
 const corsOptions = {
   origin: 'http://localhost:3000',
@@ -24,12 +23,7 @@ app.use('/api/users', userRouter);
 app.use('/api/users', authRouter);
 app.use('/api/orders', orderRouter);
 app.use('/api', adminRouter);
-app.get('/api/config/paypal', (req, res) => {
-  res.send(PAYPAL_CLIENT_ID);
-});
-app.get('/api/config/veifytoken', (req, res) => {
-
-});
+app.use(paypalRoutes);
 app.use(errorHandler);
 
 module.exports = {
