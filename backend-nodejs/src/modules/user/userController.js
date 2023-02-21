@@ -1,7 +1,7 @@
 const { request, response } = require('express');
 const asyncHandler = require('express-async-handler');
 const { generateToken } = require('../../shared/generateToken');
-const { userService } = require('./userService');
+const userService = require('./userService');
 
 // @desc    Fetch User info
 // @route   GET /api/users/profile

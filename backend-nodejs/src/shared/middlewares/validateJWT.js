@@ -1,4 +1,4 @@
-const { userService } = require('../../modules/user/userService');
+const userService = require('../../modules/user/userService');
 const { request, response } = require('express');
 const config = require('config');
 const KEY = config.get('JWT_SECRET');
