@@ -35,10 +35,11 @@ export const OrderScreen = () => {
       order.orderItems.reduce((acc, item) => acc + item.price * item.quantity, 0)
     );
   }
-
+  console.log('ispaid:', order?.isPaid);
+  console.log('sdk:', sdkReady);
   useEffect(() => {
     const addPayPalScript = async () => {
-      const { data: clientId } = await axios.get('/api/config/paypal');
+      const { data: clientId } = await axios.get('http://localhost:5000/api/config/paypal');
       const script = document.createElement('script');
       script.type = 'text/javascript';
       script.src = `https://www.paypal.com/sdk/js?client-id=${clientId}`;
@@ -53,7 +54,8 @@ export const OrderScreen = () => {
     if (!order || successPay || successDeliver || order.id !== orderId) {
       dispatch({ type: ORDER_PAY_TYPES.ORDER_PAY_RESET });
       dispatch(getOrderDetails(orderId));
-    } else if (!order.isPaid) {
+    }
+    if (!order?.isPaid) {
       if (!window.paypal) addPayPalScript();
       else setSdkReady(true);
     }
