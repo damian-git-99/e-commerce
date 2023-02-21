@@ -35,8 +35,7 @@ export const OrderScreen = () => {
       order.orderItems.reduce((acc, item) => acc + item.price * item.quantity, 0)
     );
   }
-  console.log('ispaid:', order?.isPaid);
-  console.log('sdk:', sdkReady);
+
   useEffect(() => {
     const addPayPalScript = async () => {
       const { data: clientId } = await axios.get('http://localhost:5000/api/config/paypal');
