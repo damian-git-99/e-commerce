@@ -1,12 +1,12 @@
-const { userService } = require('../modules/user/userService');
+const { userService } = require('../../modules/user/userService');
 const { request, response } = require('express');
 const config = require('config');
 const KEY = config.get('JWT_SECRET');
 const jwt = require('jsonwebtoken');
 const asyncHandler = require('express-async-handler');
-const InvalidTokenException = require('../modules/auth/errors/InvalidTokenExceptiion');
-const UserNotFoundException = require('../modules/user/errors/UserNotFoundException');
-const UnauthorizedUserException = require('../modules/auth/errors/UnauthorizedUserException');
+const InvalidTokenException = require('../../modules/auth/errors/InvalidTokenExceptiion');
+const UserNotFoundException = require('../../modules/user/errors/UserNotFoundException');
+const UnauthorizedUserException = require('../../modules/auth/errors/UnauthorizedUserException');
 
 const validateJwt = asyncHandler(async (req = request, res = response, next) => {
   const authorizationHeader = req.header('Authorization');

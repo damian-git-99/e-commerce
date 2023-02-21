@@ -1,5 +1,5 @@
 const { Router } = require('express');
-const { validateJwt } = require('../../middlewares/validateJWT');
+const { validateJwt } = require('../../shared/middlewares/validateJWT');
 const { findAll, findById, createProductReview } = require('./productControllers');
 const router = Router();
 

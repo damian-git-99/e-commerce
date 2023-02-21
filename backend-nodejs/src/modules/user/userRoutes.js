@@ -1,6 +1,6 @@
 const { Router } = require('express');
 const { getProfile, updateUserProfile } = require('./userController');
-const { validateJwt } = require('../../middlewares/validateJWT');
+const { validateJwt } = require('../../shared/middlewares/validateJWT');
 const router = Router();
 
 router

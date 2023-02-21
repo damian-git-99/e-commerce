@@ -1,6 +1,6 @@
 const { Router } = require('express');
 const multer = require('multer');
-const { validateJwt, isAdmin } = require('../../middlewares/validateJWT');
+const { validateJwt, isAdmin } = require('../../shared/middlewares/validateJWT');
 const { getOrders, updateOrderToDelivered } = require('./order/orderAdminController');
 const { updateProductImage, createProduct, deleteProduct, updateProduct } = require('./product/adminProductController');
 const { updateUser, deleteUser, getUserById, getUsers } = require('./user/adminUserController');
