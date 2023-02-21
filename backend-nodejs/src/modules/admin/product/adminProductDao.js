@@ -11,11 +11,7 @@ const create = (product) => {
 };
 
 const update = (productId, product) => {
-  return ProductModel.findOneAndUpdate(
-    { id: productId },
-    { ...product },
-    { new: true }
-  );
+  return ProductModel.findByIdAndUpdate(productId, { ...product }, { new: true });
 };
 
 module.exports = {
