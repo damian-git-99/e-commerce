@@ -1,6 +1,6 @@
 const { request, response } = require('express');
 const asyncHandler = require('express-async-handler');
-const ProductNotFoundException = require('./errors/ProductNotFoundException');
+const ProductNotFoundException = require('../../shared/errors/ProductNotFoundException');
 const productService = require('./productService');
 
 // @desc    Fetch all products
