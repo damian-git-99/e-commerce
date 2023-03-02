@@ -9,7 +9,7 @@ const {
   USER_UPDATE_TYPES
 } = require('../reducers/userReducers');
 
-const URL = `${process.env.REACT_APP_HOST}/api/users/`;
+const URL = `${process.env.REACT_APP_HOST}/api/users`;
 
 export const login = (email, password) => {
   return async (dispatch) => {
@@ -108,7 +108,7 @@ export const getUserDetails = () => {
         }
       };
 
-      const { data } = await axios.get('http://localhost:5000/api/users/profile', config);
+      const { data } = await axios.get(`${URL}/profile`, config);
 
       dispatch({
         type: USER_DETAILS_TYPES.USER_DETAILS_SUCCESS,
@@ -142,7 +142,7 @@ export const updateUserProfile = (user) => {
         }
       };
 
-      const { data } = await axios.put('/api/users/profile', user, config);
+      const { data } = await axios.put(`${URL}/profile`, user, config);
 
       dispatch({
         type: USER_UPDATE_TYPES.USER_UPDATE_PROFILE_SUCCESS,
