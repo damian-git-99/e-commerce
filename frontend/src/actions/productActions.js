@@ -8,7 +8,7 @@ import {
   PRODUCT_UPDATE_TYPES
 } from '../reducers/productReducers';
 
-const URL = 'http://localhost:5000/api/products';
+const URL = `${process.env.REACT_APP_HOST}/api/products`;
 
 export const listProducts = (keyword = '') => {
   return async (dispatch) => {

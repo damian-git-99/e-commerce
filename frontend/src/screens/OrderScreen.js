@@ -44,7 +44,7 @@ export const OrderScreen = () => {
           Authorization: `Bearer ${userInfo.token}`
         }
       };
-      const { data: clientId } = await axios.get('http://localhost:5000/api/config/paypal', config);
+      const { data: clientId } = await axios.get(`${process.env.REACT_APP_HOST}/api/config/paypal`, config);
       const script = document.createElement('script');
       script.type = 'text/javascript';
       script.src = `https://www.paypal.com/sdk/js?client-id=${clientId}`;

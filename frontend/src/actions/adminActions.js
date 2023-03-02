@@ -2,7 +2,7 @@ import { USER_ADMIN_UPDATE_TYPES, USER_DELETE_TYPES, USER_DETAILS_ADMIN_TYPES, U
 
 const { default: axios } = require('axios');
 
-const URL = 'http://localhost:5000/api/users';
+const URL = `${process.env.REACT_APP_HOST}/api/users`;
 
 export const listUsers = () => {
   return async (dispatch, getState) => {

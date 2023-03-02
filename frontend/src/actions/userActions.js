@@ -9,7 +9,7 @@ const {
   USER_UPDATE_TYPES
 } = require('../reducers/userReducers');
 
-const URL = 'http://localhost:5000/api/users/';
+const URL = `${process.env.REACT_APP_HOST}/api/users/`;
 
 export const login = (email, password) => {
   return async (dispatch) => {
