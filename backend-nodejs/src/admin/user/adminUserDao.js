@@ -1,4 +1,4 @@
-const UserModel = require('../../../user/UserModel');
+const UserModel = require('../../user/UserModel');
 
 const findById = (id) => {
   const user = UserModel.findById(id).select('-password');

@@ -6,7 +6,7 @@ const { errorHandler } = require('./shared/middlewares/errorHandlingMiddleware')
 const { userRouter } = require('./user/userRoutes');
 const { orderRouter } = require('./order/orderRoutes');
 const { authRouter } = require('./auth/authRoutes');
-const { adminRouter } = require('./modules/admin/adminRoutes');
+const { adminRouter } = require('./admin/adminRoutes');
 const paypalRoutes = require('./paypal/getToken');
 const app = express();
 
