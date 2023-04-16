@@ -1,18 +1,28 @@
 const OrderNotFoundException = require('../utils/errors/OrderNotFoundException');
 const OrderModel = require('./OrderModel');
 const productService = require('../product/productService');
+const { startSession } = require('mongoose');
 
-// todo: rename it to createOrder
-const save = (order) => {
-  // todo: must be in a transaction
-  // todo: check if the product is in stock
-  const { total, shippingPrice, taxPrice } = calculateTotal(
-    order.orderItems
-  );
-  order.totalPrice = total;
-  order.shippingPrice = shippingPrice;
-  order.taxPrice = taxPrice;
-  discountFromStock(order.orderItems);
+const createOrder = async (order) => {
+  const session = await startSession();
+  session.startTransaction();
+  try {
+    // todo: check if the product is in stock
+    const { total, shippingPrice, taxPrice } = calculateTotal(
+      order.orderItems
+    );
+    order.totalPrice = total;
+    order.shippingPrice = shippingPrice;
+    order.taxPrice = taxPrice;
+    await discountFromStock(order.orderItems);
+
+    await session.commitTransaction();
+    session.endSession();
+  } catch (error) {
+    console.log(error);
+    await session.abortTransaction();
+    session.endSession();
+  }
   return OrderModel.create(order);
 };
 
@@ -80,7 +90,7 @@ const updateOrderToPaid = async (orderId, paymentResult) => {
 };
 
 module.exports = {
-  save,
+  createOrder,
   findOrderById,
   findOrderByIdWithUser,
   findOrdersByUser,

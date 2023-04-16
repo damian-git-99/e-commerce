@@ -48,6 +48,9 @@ const addReviewToProduct = async (productId, review, user) => {
 const findByIdAndDiscountFromStock = async (id, quantity) => {
   const product = await findProductById(id);
   product.countInStock = product.countInStock - quantity;
+  if (product.countInStock < 0) {
+    // todo throw exception
+  }
   await product.save();
 };
 
