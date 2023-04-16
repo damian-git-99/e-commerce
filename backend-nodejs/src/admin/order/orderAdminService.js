@@ -1,5 +1,5 @@
-const orderDao = require('./orderAdminDao');
 const OrderNotFoundException = require('../../utils/errors/OrderNotFoundException');
+const OrderModel = require('../../order/OrderModel');
 
 const updateOrderToDelivered = async (orderId) => {
   const order = await findOrderById(orderId);
@@ -11,16 +11,19 @@ const updateOrderToDelivered = async (orderId) => {
   order.isDelivered = true;
   order.deliveredAt = Date.now();
 
-  const updatedOrder = await orderDao.findByIdAndUpdateOrder(orderId, order);
+  const updatedOrder = await OrderModel
+    .findByIdAndUpdate(orderId, order, { new: true });
+
   return updatedOrder;
 };
 
 const findAllOrdersWithUser = () => {
-  return orderDao.findAllOrders();
+  return OrderModel.find({})
+    .populate('user', 'id name');
 };
 
 const findOrderById = (id) => {
-  return orderDao.findOrderById(id);
+  return OrderModel.findById(id);
 };
 
 module.exports = {
