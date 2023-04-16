@@ -1,22 +1,22 @@
 const { encryptPassword } = require('../../utils/encrypt');
-const userDao = require('./adminUserDao');
 const UserNotFoundException = require('../../user/errors/UserNotFoundException');
+const UserModel = require('../../user/UserModel');
 
 const findUserById = (id) => {
-  return userDao.findById(id);
+  return UserModel.findById(id).select('-password');
 };
 
 const createUser = (user) => {
   user.password = encryptPassword(user.password);
-  return userDao.save(user);
+  return UserModel.create(user);
 };
 
 const findAllUsers = () => {
-  return userDao.findAll();
+  return UserModel.find({}).select('-password');
 };
 
 const deleteUserById = (userId) => {
-  return userDao.deleteUserById(userId);
+  return UserModel.findByIdAndDelete(userId);
 };
 
 const updateUser = async (userId, newUser) => {
@@ -34,7 +34,7 @@ const updateUser = async (userId, newUser) => {
     user.password = encryptPassword(password);
   }
 
-  return userDao.update(user.id, user);
+  return UserModel.findByIdAndUpdate(user.id, user, { new: true });
 };
 
 module.exports = {

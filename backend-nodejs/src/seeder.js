@@ -2,7 +2,7 @@
 require('colors');
 require('dotenv').config();
 const bcrypt = require('bcryptjs');
-const UserModel = require('./modules/user/UserModel');
+const UserModel = require('./user/UserModel');
 
 const users = [
   {

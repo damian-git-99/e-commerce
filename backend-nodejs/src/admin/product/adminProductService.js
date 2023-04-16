@@ -1,14 +1,14 @@
 const fileService = require('../../file/fileService');
 const InvalidImageException = require('../../file/errors/InvalidImageException');
 const ProductNotFoundException = require('../../utils/errors/ProductNotFoundException');
-const productDao = require('./adminProductDao');
+const ProductModel = require('../../product/ProductModel');
 
 const createProduct = (product) => {
-  return productDao.create(product);
+  return ProductModel.create(product);
 };
 
 const findProductById = (id) => {
-  return productDao.findById(id);
+  return ProductModel.findById(id);
 };
 
 const updateProduct = async (productId, newProduct) => {
@@ -17,8 +17,7 @@ const updateProduct = async (productId, newProduct) => {
   if (!product) {
     throw new ProductNotFoundException();
   }
-
-  return productDao.update(productId, newProduct);
+  return ProductModel.findByIdAndUpdate(productId, { ...newProduct }, { new: true });
 };
 
 const deleteProductById = async (id) => {
@@ -56,7 +55,6 @@ const updateProductImage = async (file, productId) => {
     const result = await fileService.uploadImage(file);
     product.image = result.url;
     product.public_id_image = result.public_id;
-    // todo: move the product.save to the repository layer
     await product.save();
     return result.url;
   } catch (err) {

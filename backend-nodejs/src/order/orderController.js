@@ -1,9 +1,8 @@
-const { request, response } = require('express');
 const asyncHandler = require('express-async-handler');
 const orderService = require('./orderService');
 
 // @route POST /api/orders
-const addOrderItems = asyncHandler(async (req = request, res = response) => {
+const addOrderItems = asyncHandler(async (req, res) => {
   const {
     orderItems,
     shippingAddress,
@@ -22,12 +21,12 @@ const addOrderItems = asyncHandler(async (req = request, res = response) => {
     paymentMethod
   };
 
-  const createdOrder = await orderService.save(order);
+  const createdOrder = await orderService.createOrder(order);
   res.status(201).json(createdOrder);
 });
 
 // @route GET /api/orders/:id
-const getOrderById = asyncHandler(async (req = request, res = response) => {
+const getOrderById = asyncHandler(async (req, res) => {
   const order = await orderService.findOrderByIdWithUser(req.params.id);
   res.json(order);
 });

@@ -1,11 +1,10 @@
-const { request, response } = require('express');
 const asyncHandler = require('express-async-handler');
 const { generateToken } = require('../utils/generateToken');
 const userService = require('./userService');
 
 // @desc    Fetch User info
 // @route   GET /api/users/profile
-const getProfile = asyncHandler(async (req = request, res = response) => {
+const getProfile = asyncHandler(async (req, res) => {
   const user = await userService.findUserById(req.user.id);
   return res.status(200).json({
     id: user.id,

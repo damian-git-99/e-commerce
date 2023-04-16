@@ -1,30 +1,28 @@
 const OrderNotFoundException = require('../utils/errors/OrderNotFoundException');
 const OrderModel = require('./OrderModel');
-const orderDao = require('./OrderDao');
 const productService = require('../product/productService');
+const { startSession } = require('mongoose');
 
-// todo: rename it to createOrder
-const save = (order) => {
-  // todo: must be in a transaction
-  // todo: check if the product is in stock
-  const { total, shippingPrice, taxPrice } = calculateTotal(
-    order.orderItems
-  );
-  order.totalPrice = total;
-  order.shippingPrice = shippingPrice;
-  order.taxPrice = taxPrice;
-  discountFromStock(order.orderItems);
-  // todo: move this to dao
-  const newOrder = OrderModel.create(order);
-  return newOrder;
-};
+const createOrder = async (order) => {
+  const session = await startSession();
+  session.startTransaction();
+  try {
+    const { total, shippingPrice, taxPrice } = calculateTotal(
+      order.orderItems
+    );
+    order.totalPrice = total;
+    order.shippingPrice = shippingPrice;
+    order.taxPrice = taxPrice;
+    await discountFromStock(order.orderItems);
 
-const discountFromStock = async (orderItems = []) => {
-  for (let i = 0; i < orderItems.length; i++) {
-    const orderItem = orderItems[i];
-    const { product, quantity } = orderItem;
-    await productService.findByIdAndDiscountFromStock(product, quantity);
+    await session.commitTransaction();
+    session.endSession();
+  } catch (error) {
+    console.log(error);
+    await session.abortTransaction();
+    session.endSession();
   }
+  return OrderModel.create(order);
 };
 
 const calculateTotal = (orderItems = []) => {
@@ -38,6 +36,7 @@ const calculateTotal = (orderItems = []) => {
   const shippingPrice = total > 100 ? 0 : 100;
   const taxPrice = total * 0.15;
   total = total + shippingPrice + taxPrice;
+
   return {
     total,
     shippingPrice,
@@ -45,12 +44,24 @@ const calculateTotal = (orderItems = []) => {
   };
 };
 
+/**
+ * This function discounts the specified quantity of products from stock based on the order items
+ * provided.
+ */
+const discountFromStock = async (orderItems = []) => {
+  for (let i = 0; i < orderItems.length; i++) {
+    const orderItem = orderItems[i];
+    const { product, quantity } = orderItem;
+    await productService.findByIdAndDiscountFromStock(product, quantity);
+  }
+};
+
 const findOrderById = (id) => {
-  return orderDao.findOrderById(id);
+  return OrderModel.findById(id);
 };
 
 const findOrderByIdWithUser = async (id) => {
-  const order = await orderDao.findOderByIdWithUser(id);
+  const order = await OrderModel.findById(id).populate('user', 'name email');
   if (!order) {
     throw new OrderNotFoundException();
   }
@@ -58,7 +69,7 @@ const findOrderByIdWithUser = async (id) => {
 };
 
 const findOrdersByUser = (userId) => {
-  return orderDao.findOrdersByUser(userId);
+  return OrderModel.find({ user: userId });
 };
 
 const updateOrderToPaid = async (orderId, paymentResult) => {
@@ -79,12 +90,11 @@ const updateOrderToPaid = async (orderId, paymentResult) => {
     email_address
   };
 
-  const updatedOrder = await orderDao.findByIdAndUpdateOrder(orderId, order);
-  return updatedOrder;
+  return await OrderModel.findByIdAndUpdate(orderId, order, { new: true });
 };
 
 module.exports = {
-  save,
+  createOrder,
   findOrderById,
   findOrderByIdWithUser,
   findOrdersByUser,
