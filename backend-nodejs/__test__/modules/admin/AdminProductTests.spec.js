@@ -1,12 +1,12 @@
 const request = require('supertest');
 const { app } = require('../../../src/app');
-const fileService = require('../../../src/modules/file/fileService');
+const fileService = require('../../../src/file/fileService');
 const ProductModel = require('../../../src/product/ProductModel');
 const UserModel = require('../../../src/user/UserModel');
 const { encryptPassword } = require('../../../src/shared/encrypt');
 const { clearDatabase, connect, closeDatabase } = require('../../config/db');
 const { loadFile } = require('../utils/Utils');
-jest.mock('../../../src/modules/file/fileService');
+jest.mock('../../../src/file/fileService');
 const fileServiceMocked = jest.mocked(fileService, true);
 
 beforeAll(async () => {
