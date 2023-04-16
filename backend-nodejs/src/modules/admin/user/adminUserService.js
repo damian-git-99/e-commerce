@@ -1,6 +1,6 @@
 const { encryptPassword } = require('../../../shared/encrypt');
 const userDao = require('./adminUserDao');
-const UserNotFoundException = require('../../user/errors/UserNotFoundException');
+const UserNotFoundException = require('../../../user/errors/UserNotFoundException');
 
 const findUserById = (id) => {
   return userDao.findById(id);

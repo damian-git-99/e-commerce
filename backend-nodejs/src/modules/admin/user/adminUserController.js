@@ -1,5 +1,5 @@
 const asyncHandler = require('express-async-handler');
-const UserNotFoundException = require('../../user/errors/UserNotFoundException');
+const UserNotFoundException = require('../../../user/errors/UserNotFoundException');
 const userService = require('./adminUserService');
 
 // @desc    Fetch All users

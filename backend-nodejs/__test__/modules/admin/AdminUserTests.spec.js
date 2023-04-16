@@ -3,7 +3,7 @@ const { app } = require('../../../src/app');
 const {
   encryptPassword
 } = require('../../../src/shared/encrypt');
-const UserModel = require('../../../src/modules/user/UserModel');
+const UserModel = require('../../../src/user/UserModel');
 const { clearDatabase, connect, closeDatabase } = require('../../config/db');
 const url = '/api/users';
 
