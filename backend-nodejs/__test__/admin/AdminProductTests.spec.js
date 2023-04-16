@@ -5,7 +5,7 @@ const ProductModel = require('../../src/product/ProductModel');
 const UserModel = require('../../src/user/UserModel');
 const { encryptPassword } = require('../../src/utils/encrypt');
 const { clearDatabase, connect, closeDatabase } = require('../config/db');
-const { loadFile } = require('../modules/utils/Utils');
+const { loadFile } = require('../utils/Utils');
 jest.mock('../../src/file/fileService');
 const fileServiceMocked = jest.mocked(fileService, true);
 
