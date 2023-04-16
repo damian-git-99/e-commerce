@@ -5,9 +5,9 @@ require('colors');
 const { app } = require('./app');
 const { importData } = require('./seeder');
 const PORT = config.get('port');
-connectDB();
 
 app.listen(PORT, async () => {
   console.log(`Server running on port: ${PORT}`.blue.underline.bold);
+  await connectDB();
   await importData();
 });
