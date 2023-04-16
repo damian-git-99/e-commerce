@@ -1,5 +1,5 @@
-const { encryptPassword, comparePasswords } = require('../shared/encrypt');
-const { generateToken } = require('../shared/generateToken');
+const { encryptPassword, comparePasswords } = require('../utils/encrypt');
+const { generateToken } = require('../utils/generateToken');
 const userDao = require('./authDao');
 const BadCredentialsException = require('./errors/BadCredentialsException');
 const EmailAlreadyTakenException = require('./errors/EmailAlreadyTakenException');

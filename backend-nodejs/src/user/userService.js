@@ -1,5 +1,5 @@
 const UserNotFoundException = require('./errors/UserNotFoundException');
-const { encryptPassword } = require('../shared/encrypt');
+const { encryptPassword } = require('../utils/encrypt');
 const userDao = require('./UserDao');
 
 const findUserById = (id) => {

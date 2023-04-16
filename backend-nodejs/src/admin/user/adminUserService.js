@@ -1,4 +1,4 @@
-const { encryptPassword } = require('../../shared/encrypt');
+const { encryptPassword } = require('../../utils/encrypt');
 const userDao = require('./adminUserDao');
 const UserNotFoundException = require('../../user/errors/UserNotFoundException');
 

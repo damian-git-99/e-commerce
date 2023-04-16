@@ -1,6 +1,6 @@
 const fileService = require('../../file/fileService');
 const InvalidImageException = require('../../file/errors/InvalidImageException');
-const ProductNotFoundException = require('../../shared/errors/ProductNotFoundException');
+const ProductNotFoundException = require('../../utils/errors/ProductNotFoundException');
 const productDao = require('./adminProductDao');
 
 const createProduct = (product) => {

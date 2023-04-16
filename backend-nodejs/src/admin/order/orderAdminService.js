@@ -1,5 +1,5 @@
 const orderDao = require('./orderAdminDao');
-const OrderNotFoundException = require('../../shared/errors/OrderNotFoundException');
+const OrderNotFoundException = require('../../utils/errors/OrderNotFoundException');
 
 const updateOrderToDelivered = async (orderId) => {
   const order = await findOrderById(orderId);

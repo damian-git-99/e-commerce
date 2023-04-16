@@ -1,6 +1,6 @@
 const { Router } = require('express');
 const config = require('config');
-const { validateJwt } = require('../shared/middlewares/validateJWT');
+const { validateJwt } = require('../utils/middlewares/validateJWT');
 const PAYPAL_CLIENT_ID = config.get('PAYPAL_CLIENT_ID');
 const app = Router();
 
