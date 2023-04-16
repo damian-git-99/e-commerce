@@ -1,6 +1,7 @@
 const ProductModel = require('./ProductModel');
 const ProductAlreadyReviewedException = require('./errors/ProductAlreadyReviewedException');
 const ProductNotFoundException = require('../utils/errors/ProductNotFoundException');
+const ProductOutOfStockException = require('./errors/ProductOutOfStockException');
 
 const findProductsByKeyword = (keyword = '') => {
   const name = {
@@ -45,11 +46,17 @@ const addReviewToProduct = async (productId, review, user) => {
   await product.save();
 };
 
+/**
+ * This function finds a product by its ID, reduces its count in stock by a given quantity, and saves
+ * the updated product. If the new countInStock value is negative,
+ * meaning there is not enough stock to fulfill the order,
+ * an exception is thrown."
+ */
 const findByIdAndDiscountFromStock = async (id, quantity) => {
   const product = await findProductById(id);
   product.countInStock = product.countInStock - quantity;
   if (product.countInStock < 0) {
-    // todo throw exception
+    throw new ProductOutOfStockException(product.name);
   }
   await product.save();
 };
