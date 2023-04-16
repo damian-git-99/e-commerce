@@ -1,6 +1,6 @@
+const UserModel = require('../user/UserModel');
 const { encryptPassword, comparePasswords } = require('../utils/encrypt');
 const { generateToken } = require('../utils/generateToken');
-const userDao = require('./authDao');
 const BadCredentialsException = require('./errors/BadCredentialsException');
 const EmailAlreadyTakenException = require('./errors/EmailAlreadyTakenException');
 
@@ -10,7 +10,7 @@ const signUp = async (user) => {
     throw new EmailAlreadyTakenException();
   }
   user.password = encryptPassword(user.password);
-  user = await userDao.save(user);
+  user = await UserModel.create(user);
   const token = generateToken({ id: user.id });
   return {
     token,
@@ -38,7 +38,7 @@ const login = async (user) => {
 };
 
 const findByEmail = (email) => {
-  return userDao.findByEmail(email);
+  return UserModel.findOne({ email });
 };
 
 module.exports = {
