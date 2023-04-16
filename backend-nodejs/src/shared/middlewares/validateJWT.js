@@ -4,9 +4,9 @@ const config = require('config');
 const KEY = config.get('JWT_SECRET');
 const jwt = require('jsonwebtoken');
 const asyncHandler = require('express-async-handler');
-const InvalidTokenException = require('../../modules/auth/errors/InvalidTokenExceptiion');
+const InvalidTokenException = require('../../auth/errors/InvalidTokenExceptiion');
 const UserNotFoundException = require('../../user/errors/UserNotFoundException');
-const UnauthorizedUserException = require('../../modules/auth/errors/UnauthorizedUserException');
+const UnauthorizedUserException = require('../../auth/errors/UnauthorizedUserException');
 
 const validateJwt = asyncHandler(async (req = request, res = response, next) => {
   const authorizationHeader = req.header('Authorization');
