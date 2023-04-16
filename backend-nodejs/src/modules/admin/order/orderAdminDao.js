@@ -1,4 +1,4 @@
-const OrderModel = require('../../order/OrderModel');
+const OrderModel = require('../../../order/OrderModel');
 
 const findOrderById = (id) => {
   return OrderModel.findById(id);

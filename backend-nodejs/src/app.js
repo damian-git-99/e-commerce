@@ -4,10 +4,10 @@ const cors = require('cors');
 const { productRouter } = require('./modules/product/productRoutes');
 const { errorHandler } = require('./shared/middlewares/errorHandlingMiddleware');
 const { userRouter } = require('./modules/user/userRoutes');
-const { orderRouter } = require('./modules/order/orderRoutes');
+const { orderRouter } = require('./order/orderRoutes');
 const { authRouter } = require('./modules/auth/authRoutes');
 const { adminRouter } = require('./modules/admin/adminRoutes');
-const paypalRoutes = require('./modules/paypal/getToken');
+const paypalRoutes = require('./paypal/getToken');
 const app = express();
 
 const corsOptions = {

@@ -1,7 +1,7 @@
-const OrderNotFoundException = require('../../shared/errors/OrderNotFoundException');
+const OrderNotFoundException = require('../shared/errors/OrderNotFoundException');
 const OrderModel = require('./OrderModel');
 const orderDao = require('./OrderDao');
-const productService = require('../product/productService');
+const productService = require('../modules/product/productService');
 
 // todo: rename it to createOrder
 const save = (order) => {
