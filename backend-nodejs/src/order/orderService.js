@@ -1,6 +1,5 @@
 const OrderNotFoundException = require('../utils/errors/OrderNotFoundException');
 const OrderModel = require('./OrderModel');
-const orderDao = require('./OrderDao');
 const productService = require('../product/productService');
 
 // todo: rename it to createOrder
@@ -14,9 +13,7 @@ const save = (order) => {
   order.shippingPrice = shippingPrice;
   order.taxPrice = taxPrice;
   discountFromStock(order.orderItems);
-  // todo: move this to dao
-  const newOrder = OrderModel.create(order);
-  return newOrder;
+  return OrderModel.create(order);
 };
 
 const discountFromStock = async (orderItems = []) => {
@@ -46,11 +43,11 @@ const calculateTotal = (orderItems = []) => {
 };
 
 const findOrderById = (id) => {
-  return orderDao.findOrderById(id);
+  return OrderModel.findById(id);
 };
 
 const findOrderByIdWithUser = async (id) => {
-  const order = await orderDao.findOderByIdWithUser(id);
+  const order = await OrderModel.findById(id).populate('user', 'name email');
   if (!order) {
     throw new OrderNotFoundException();
   }
@@ -58,7 +55,7 @@ const findOrderByIdWithUser = async (id) => {
 };
 
 const findOrdersByUser = (userId) => {
-  return orderDao.findOrdersByUser(userId);
+  return OrderModel.find({ user: userId });
 };
 
 const updateOrderToPaid = async (orderId, paymentResult) => {
@@ -79,8 +76,7 @@ const updateOrderToPaid = async (orderId, paymentResult) => {
     email_address
   };
 
-  const updatedOrder = await orderDao.findByIdAndUpdateOrder(orderId, order);
-  return updatedOrder;
+  return await OrderModel.findByIdAndUpdate(orderId, order, { new: true });
 };
 
 module.exports = {
