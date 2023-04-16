@@ -27,7 +27,7 @@ const UserSchema = new Schema(
   }
 );
 
-// change _id to id https://stackoverflow.com/questions/7034848/mongodb-output-id-instead-of-id
+// change _id to id
 UserSchema.set('toJSON', {
   virtuals: true,
   versionKey: false,
