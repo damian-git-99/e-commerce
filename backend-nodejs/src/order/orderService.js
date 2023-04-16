@@ -7,7 +7,6 @@ const createOrder = async (order) => {
   const session = await startSession();
   session.startTransaction();
   try {
-    // todo: check if the product is in stock
     const { total, shippingPrice, taxPrice } = calculateTotal(
       order.orderItems
     );
@@ -26,14 +25,6 @@ const createOrder = async (order) => {
   return OrderModel.create(order);
 };
 
-const discountFromStock = async (orderItems = []) => {
-  for (let i = 0; i < orderItems.length; i++) {
-    const orderItem = orderItems[i];
-    const { product, quantity } = orderItem;
-    await productService.findByIdAndDiscountFromStock(product, quantity);
-  }
-};
-
 const calculateTotal = (orderItems = []) => {
   let total = 0;
   for (let i = 0; i < orderItems.length; i++) {
@@ -45,11 +36,24 @@ const calculateTotal = (orderItems = []) => {
   const shippingPrice = total > 100 ? 0 : 100;
   const taxPrice = total * 0.15;
   total = total + shippingPrice + taxPrice;
+
   return {
     total,
     shippingPrice,
     taxPrice
   };
+};
+
+/**
+ * This function discounts the specified quantity of products from stock based on the order items
+ * provided.
+ */
+const discountFromStock = async (orderItems = []) => {
+  for (let i = 0; i < orderItems.length; i++) {
+    const orderItem = orderItems[i];
+    const { product, quantity } = orderItem;
+    await productService.findByIdAndDiscountFromStock(product, quantity);
+  }
 };
 
 const findOrderById = (id) => {
