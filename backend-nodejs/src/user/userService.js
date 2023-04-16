@@ -1,9 +1,9 @@
+const UserModel = require('./UserModel');
 const UserNotFoundException = require('./errors/UserNotFoundException');
 const { encryptPassword } = require('../utils/encrypt');
-const userDao = require('./UserDao');
 
 const findUserById = (id) => {
-  return userDao.findById(id);
+  return UserModel.findById(id);
 };
 
 const updateUser = async (userId, newUser) => {
@@ -21,7 +21,7 @@ const updateUser = async (userId, newUser) => {
     user.password = encryptPassword(password);
   }
 
-  return userDao.update(user.id, user);
+  return UserModel.findByIdAndUpdate(user.id, user, { new: true });
 };
 
 module.exports = {
