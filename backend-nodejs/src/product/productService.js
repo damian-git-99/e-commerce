@@ -1,13 +1,17 @@
+const ProductModel = require('./ProductModel');
 const ProductAlreadyReviewedException = require('./errors/ProductAlreadyReviewedException');
 const ProductNotFoundException = require('../utils/errors/ProductNotFoundException');
-const productDao = require('./productDao');
 
-const findProductsByKeyword = (keyword) => {
-  return productDao.findAll(keyword);
+const findProductsByKeyword = (keyword = '') => {
+  const name = {
+    $regex: keyword,
+    $options: 'i' // case insensitive
+  };
+  return ProductModel.find({ name });
 };
 
 const findProductById = (id) => {
-  return productDao.findById(id);
+  return ProductModel.findById(id);
 };
 
 const addReviewToProduct = async (productId, review, user) => {
@@ -33,13 +37,17 @@ const addReviewToProduct = async (productId, review, user) => {
     user: user.id
   };
 
-  await productDao.AddProductReview(product, newReview);
+  product.reviews.push(newReview);
+  product.numReviews = product.reviews.length;
+  product.rating =
+    product.reviews.reduce((acc, item) => item.rating + acc, 0) /
+    product.reviews.length;
+  await product.save();
 };
 
 const findByIdAndDiscountFromStock = async (id, quantity) => {
   const product = await findProductById(id);
   product.countInStock = product.countInStock - quantity;
-  // todo use dao layer for save this
   await product.save();
 };
 
