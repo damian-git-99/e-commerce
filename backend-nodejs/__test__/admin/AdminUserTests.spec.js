@@ -1,10 +1,10 @@
 const request = require('supertest');
-const { app } = require('../../../src/app');
+const { app } = require('../../src/app');
 const {
   encryptPassword
-} = require('../../../src/utils/encrypt');
-const UserModel = require('../../../src/user/UserModel');
-const { clearDatabase, connect, closeDatabase } = require('../../config/db');
+} = require('../../src/utils/encrypt');
+const UserModel = require('../../src/user/UserModel');
+const { clearDatabase, connect, closeDatabase } = require('../config/db');
 const url = '/api/users';
 
 beforeAll(async () => {

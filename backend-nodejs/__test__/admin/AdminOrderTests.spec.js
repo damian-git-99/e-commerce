@@ -1,9 +1,9 @@
 const request = require('supertest');
-const { app } = require('../../../src/app');
-const OrderModel = require('../../../src/order/OrderModel');
-const UserModel = require('../../../src/user/UserModel');
-const { encryptPassword } = require('../../../src/utils/encrypt');
-const { clearDatabase, connect, closeDatabase } = require('../../config/db');
+const { app } = require('../../src/app');
+const OrderModel = require('../../src/order/OrderModel');
+const UserModel = require('../../src/user/UserModel');
+const { encryptPassword } = require('../../src/utils/encrypt');
+const { clearDatabase, connect, closeDatabase } = require('../config/db');
 const url = '/api/orders';
 
 beforeAll(async () => {
