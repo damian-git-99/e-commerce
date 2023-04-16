@@ -1,7 +1,7 @@
 const express = require('express');
 const morgan = require('morgan');
 const cors = require('cors');
-const { productRouter } = require('./modules/product/productRoutes');
+const { productRouter } = require('./product/productRoutes');
 const { errorHandler } = require('./shared/middlewares/errorHandlingMiddleware');
 const { userRouter } = require('./modules/user/userRoutes');
 const { orderRouter } = require('./order/orderRoutes');

@@ -1,6 +1,6 @@
 const { Router } = require('express');
-const { validateJwt } = require('../../shared/middlewares/validateJWT');
 const { findAll, findById, createProductReview } = require('./productControllers');
+const { validateJwt } = require('../shared/middlewares/validateJWT');
 const router = Router();
 
 // @route /api/products

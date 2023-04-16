@@ -1,7 +1,7 @@
 const request = require('supertest');
 const { app } = require('../../../src/app');
 const fileService = require('../../../src/modules/file/fileService');
-const ProductModel = require('../../../src/modules/product/ProductModel');
+const ProductModel = require('../../../src/product/ProductModel');
 const UserModel = require('../../../src/modules/user/UserModel');
 const { encryptPassword } = require('../../../src/shared/encrypt');
 const { clearDatabase, connect, closeDatabase } = require('../../config/db');
