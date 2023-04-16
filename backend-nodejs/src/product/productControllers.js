@@ -1,11 +1,10 @@
-const { request, response } = require('express');
 const asyncHandler = require('express-async-handler');
 const productService = require('./productService');
 const ProductNotFoundException = require('../utils/errors/ProductNotFoundException');
 
 // @desc    Fetch all products
 // @route   GET /api/products
-const findAll = asyncHandler(async (req = request, res = response) => {
+const findAll = asyncHandler(async (req, res) => {
   const keyword = req.query.keyword;
   const products = await productService.findProductsByKeyword(keyword);
   res.status(200).json(products);
