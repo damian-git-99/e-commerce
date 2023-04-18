@@ -1,5 +1,31 @@
 # E-commerce
-E-commerce using the MERN technology stack, paypal and cloudinary .
+E-commerce website using the MERN technology stack, with the addition of PayPal integration and Cloudinary for products image.
+
+The website will feature a user-friendly interface for customers to browse products, add items to their cart, and complete purchases securely through PayPal's payment gateway. Customers will also be able to leave reviews and ratings for products they have purchased, and view their order history.
+
+As an admin user, you will have access to a dashboard where you can manage the website's inventory, including creating, updating, and deleting products. You will also be able to view and manage customer orders, mark orders as paid or delivered, and update customer information as needed.
+
+Additionally, we will be utilizing Cloudinary for efficient image management.
+
+
+![](https://i.ibb.co/WvXrhyy/Captura-de-pantalla-2023-02-19-125522.png)
+![](https://i.ibb.co/GH7cSkX/Captura-de-pantalla-2023-02-19-125704.png)
+## User Stories
+- Customers 
+  - Signup: As a new user, I want to be able to sign up for an account so that I can access the features of the website.
+  - Signin: As a registered user, I want to be able to sign in to my account so that I can view my previous purchases and access my cart.
+  - Logout: As a user, I want to be able to log out of my account when I am done using the website.
+  - Add product to cart: As a user, I want to be able to add products to my cart so that I can purchase them later.
+  - Delete product from cart: As a user, I want to be able to remove products from my cart in case I change my mind about purchasing them.
+  - Add Review: As a user, I want to be able to add reviews for products that I have purchased so that other users can read about my experience.
+  - Buy Products: As a user, I want to be able to purchase the products in my cart so that I can receive them and use them.
+- Admin Users
+  - Create product: As an admin user, I want to be able to create new products to add to the website's inventory.
+  - Update product: As an admin user, I want to be able to update existing products in case any information needs to be changed.
+  - Delete product: As an admin user, I want to be able to remove products from the website's inventory if they are no longer available or needed.
+  - Update User info: As an admin user, I want to be able to update user information, such as their email or shipping address, in case there are any changes.
+  - Mark order as paid: As an admin user, I want to be able to mark orders as paid once payment has been received.
+  - Mark order as Delivered: As an admin user, I want to be able to mark orders as delivered once the user has received their products.
 
 ## Run Project with docker
 
@@ -34,24 +60,3 @@ To use Cloudinary in your application, you'll need to create an account and obta
 - Customer user:
   - name: damian@example.com
   - email: 123456
-
-## Use Cases
-- Normal Users 
-  - Signup
-  - Signin
-  - Logout
-  - Add product to cart
-  - Delete product from cart
-  - Add Review
-  - Buy Products
-- Admin Users
-  - Create product
-  - Update product
-  - Delete product
-  - Update User info
-  - Mark order as paid
-  - Mark order as Delivered
-
-![](https://i.ibb.co/WvXrhyy/Captura-de-pantalla-2023-02-19-125522.png)
-
-![](https://i.ibb.co/GH7cSkX/Captura-de-pantalla-2023-02-19-125704.png)
