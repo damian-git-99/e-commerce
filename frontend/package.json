@@ -1,6 +1,7 @@
 {
   "name": "frontend",
   "version": "0.1.0",
+  "type": "module",
   "private": true,
   "dependencies": {
     "@testing-library/jest-dom": "^5.15.1",
@@ -22,7 +23,8 @@
   },
   "scripts": {
     "start": "react-scripts --openssl-legacy-provider start",
-    "build": "react-scripts build",
+    "build": "vite build",
+    "dev": "vite serve",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "lint": "npx eslint --fix --ext .js,.jsx ."
@@ -46,11 +48,14 @@
     ]
   },
   "devDependencies": {
+    "@vitejs/plugin-react": "^4.0.0",
     "eslint": "^7.32.0",
     "eslint-config-standard": "^16.0.3",
     "eslint-plugin-import": "^2.25.3",
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "^5.2.0",
-    "eslint-plugin-react": "^7.27.1"
+    "eslint-plugin-react": "^7.27.1",
+    "vite": "^4.3.5",
+    "vite-plugin-html": "^3.2.0"
   }
 }
