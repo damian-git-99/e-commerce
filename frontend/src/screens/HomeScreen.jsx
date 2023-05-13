@@ -1,22 +1,31 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Row, Col } from 'react-bootstrap';
-import { useDispatch, useSelector } from 'react-redux';
 import { useRouteMatch } from 'react-router-dom';
-import { listProducts } from '../actions/productActions';
 import { Loader } from '../components/Loader';
 import { Message } from '../components/Message';
 import { Product } from '../components/Product';
 
 export const HomeScreen = () => {
   const match = useRouteMatch();
-  const keyword = match.params.keyword;
-  const dispatch = useDispatch();
-  const productList = useSelector((state) => state.productList);
-  const { loading, products, error } = productList;
+  const keyword = match.params.keyword || '';
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(false);
 
   useEffect(() => {
-    dispatch(listProducts(keyword));
-  }, [dispatch, keyword]);
+    async function listProducts (keyword) {
+      try {
+        setLoading(true);
+        const response = await fetch(`http://localhost:5000/api/products?keyword=${keyword}`);
+        const data = await response.json();
+        setProducts(data);
+        setLoading(false);
+      } catch (error) {
+        setError(error.message);
+      }
+    }
+    listProducts(keyword);
+  }, [keyword]);
 
   return (
     <>

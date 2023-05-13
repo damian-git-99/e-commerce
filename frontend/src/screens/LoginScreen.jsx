@@ -15,7 +15,6 @@ export const LoginScreen = () => {
   };
   const [form, setform] = useState(initialState);
   const { email, password } = form;
-
   const { loading, error, userInfo: loggedUser } = userLogin;
 
   useEffect(() => {
@@ -34,7 +33,6 @@ export const LoginScreen = () => {
 
   const submitHandler = (e) => {
     e.preventDefault();
-    // dispatch(login(email, password));
     login(email, password);
   };
 
