@@ -1,8 +1,7 @@
 import { USER_ADMIN_UPDATE_TYPES, USER_DELETE_TYPES, USER_DETAILS_ADMIN_TYPES, USER_LIST_TYPES } from '../reducers/adminReducers';
+import axios from 'axios';
 
-const { default: axios } = require('axios');
-
-const URL = `${process.env.REACT_APP_HOST}/api/users`;
+const URL = 'http://localhost:5000/api/users';
 
 export const listUsers = () => {
   return async (dispatch, getState) => {

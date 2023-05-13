@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { CART_TYPES } from '../reducers/cartReducers';
 
-const URL = `${process.env.REACT_APP_HOST}/api/products`;
+const URL = 'http://localhost:5000/api/products';
 
 export const addToCart = (id, quantity) => {
   return async (dispatch, getState) => {

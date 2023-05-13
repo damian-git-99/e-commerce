@@ -8,7 +8,7 @@ import {
   ORDER_TYPES
 } from '../reducers/orderReducers';
 
-const URL = `${process.env.REACT_APP_HOST}/api/orders`;
+const URL = 'http://localhost:5000/api/orders';
 
 export const createOrder = (order) => {
   return async (dispatch, getState) => {

@@ -1,15 +1,14 @@
 import { USER_LIST_TYPES } from '../reducers/adminReducers';
+import axios from 'axios';
+import { ORDER_LIST_TYPES } from '../reducers/orderReducers';
 
-const { default: axios } = require('axios');
-const { ORDER_LIST_TYPES } = require('../reducers/orderReducers');
-
-const {
+import {
   USER_LOGIN_TYPES,
   USER_DETAILS_TYPES,
   USER_UPDATE_TYPES
-} = require('../reducers/userReducers');
+} from '../reducers/userReducers';
 
-const URL = `${process.env.REACT_APP_HOST}/api/users`;
+const URL = 'http://localhost:5000/api/users';
 
 export const login = (email, password) => {
   return async (dispatch) => {
