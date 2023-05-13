@@ -4,9 +4,6 @@
   "type": "module",
   "private": true,
   "dependencies": {
-    "@testing-library/jest-dom": "^5.15.1",
-    "@testing-library/react": "^11.2.7",
-    "@testing-library/user-event": "^12.8.3",
     "axios": "^0.24.0",
     "prop-types": "^15.7.2",
     "react": "^17.0.2",
@@ -22,30 +19,8 @@
     "web-vitals": "^1.1.2"
   },
   "scripts": {
-    "start": "react-scripts --openssl-legacy-provider start",
     "build": "vite build",
-    "dev": "vite serve",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject",
-    "lint": "npx eslint --fix --ext .js,.jsx ."
-  },
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
-    ]
-  },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
+    "dev": "vite serve"
   },
   "devDependencies": {
     "@vitejs/plugin-react": "^4.0.0",
