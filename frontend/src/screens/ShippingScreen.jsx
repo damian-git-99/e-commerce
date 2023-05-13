@@ -1,17 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import { Form, Button } from 'react-bootstrap';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { FormContainer } from '../components/FormContainer';
 import { saveShippingAddress } from '../actions/cartActions';
 import { useHistory } from 'react-router-dom';
 import { CheckoutSteps } from '../components/CheckoutSteps';
 import { useUserInfo } from '../hooks/useUserInfo';
+import { useCart } from '../hooks/useCart';
 
 export const ShippingScreen = () => {
+  const { cart } = useCart();
   const { userLogin } = useUserInfo();
   const history = useHistory();
   const dispatch = useDispatch();
-  const cart = useSelector((state) => state.cart);
   const { shippingAddress } = cart;
 
   const [address, setAddress] = useState(shippingAddress.address);

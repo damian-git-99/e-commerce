@@ -5,16 +5,14 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Loader } from '../../components/Loader';
 import { Message } from '../../components/Message';
 import { deleteUser, listUsers } from '../../actions/adminActions';
+import { useUserInfo } from '../../hooks/useUserInfo';
 
 export const UserListScreen = () => {
+  const userLogin = useUserInfo();
   const dispatch = useDispatch();
-
   const userList = useSelector((state) => state.userList);
   const { loading, error, users } = userList;
-
-  const userLogin = useSelector((state) => state.userLogin);
   const { userInfo } = userLogin;
-
   const userDelete = useSelector((state) => state.userDelete);
   const { success: successDelete } = userDelete;
 

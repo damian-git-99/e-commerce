@@ -5,11 +5,12 @@ import { useSelector, useDispatch } from 'react-redux';
 import { CheckoutSteps } from '../components/CheckoutSteps';
 import { Message } from '../components/Message';
 import { createOrder } from '../actions/orderActions';
+import { useCart } from '../hooks/useCart';
 
 export const PlaceOrderScreen = () => {
+  const { cart } = useCart();
   const history = useHistory();
   const dispatch = useDispatch();
-  const cart = useSelector((state) => state.cart);
 
   // Calculate prices
   const addDecimals = (num) => {

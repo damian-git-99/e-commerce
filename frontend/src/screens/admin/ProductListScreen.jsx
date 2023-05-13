@@ -7,9 +7,11 @@ import { createProduct, deleteProduct, listProducts } from '../../actions/produc
 import { Loader } from '../../components/Loader';
 import { Message } from '../../components/Message';
 import { PRODUCT_CREATE_TYPES } from '../../reducers/productReducers';
+import { useUserInfo } from '../../hooks/useUserInfo';
 
 export const ProductListScreen = () => {
   const history = useHistory();
+  const userLogin = useUserInfo();
   // const match = useRouteMatch();
   const dispatch = useDispatch();
 
@@ -31,7 +33,6 @@ export const ProductListScreen = () => {
     product: createdProduct
   } = productCreate;
 
-  const userLogin = useSelector((state) => state.userLogin);
   const { userInfo } = userLogin;
 
   useEffect(() => {

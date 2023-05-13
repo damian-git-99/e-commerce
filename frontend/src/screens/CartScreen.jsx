@@ -1,29 +1,26 @@
 import React, { useEffect } from 'react';
 import { Link, useRouteMatch, useHistory, useLocation } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
 import { Row, Col, ListGroup, Image, Form, Button, Card } from 'react-bootstrap';
-import { addToCart, removeFromCart } from '../actions/cartActions';
 import { Message } from '../components/Message';
+import { useCart } from '../hooks/useCart';
 
 export const CartScreen = () => {
+  const { cart, addToCart, removeFromCart } = useCart();
   const location = useLocation();
   const history = useHistory();
   const match = useRouteMatch();
-  const dispatch = useDispatch();
   const productId = match.params.id;
   const quantity = location.search ? Number(location.search.split('=')[1]) : 1;
-
-  const cart = useSelector((state) => state.cart);
   const { cartItems } = cart;
 
   useEffect(() => {
     if (productId) {
-      dispatch(addToCart(productId, quantity));
+      addToCart(productId, quantity);
     }
-  }, [dispatch, productId, quantity]);
+  }, [addToCart, productId, quantity]);
 
   const removeFromCartHandler = (id) => {
-    dispatch(removeFromCart(id));
+    removeFromCart(id);
   };
 
   const checkoutHandler = () => {
@@ -57,9 +54,7 @@ export const CartScreen = () => {
                       as="select"
                       value={item.quantity}
                       onChange={(e) =>
-                        dispatch(
-                          addToCart(item.product, Number(e.target.value))
-                        )
+                        addToCart(item.product, Number(e.target.value))
                       }
                     >
                       {[...Array(item.countInStock).keys()].map((x) => (
