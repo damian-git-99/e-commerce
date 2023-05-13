@@ -17,7 +17,7 @@ export const CartScreen = () => {
     if (productId) {
       addToCart(productId, quantity);
     }
-  }, [addToCart, productId, quantity]);
+  }, [productId, quantity]);
 
   const removeFromCartHandler = (id) => {
     removeFromCart(id);

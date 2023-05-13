@@ -6,7 +6,6 @@ const URL = 'http://localhost:5000/api/products';
 export const addToCart = (id, quantity) => {
   return async (dispatch, getState) => {
     const { data } = await axios.get(`${URL}/${id}`);
-
     dispatch({
       type: CART_TYPES.CART_ADD_ITEM,
       payload: {
