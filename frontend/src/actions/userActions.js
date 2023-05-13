@@ -13,6 +13,7 @@ const URL = 'http://localhost:5000/api/users';
 export const login = (email, password) => {
   return async (dispatch) => {
     try {
+      console.log(axios);
       dispatch({
         type: USER_LOGIN_TYPES.USER_LOGIN_REQUEST
       });
