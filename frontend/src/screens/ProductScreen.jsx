@@ -163,6 +163,7 @@ export const ProductScreen = () => {
                   {errorProductReview && (
                     <Message variant='danger'>{errorProductReview}</Message>
                   )}
+                  {/* todo: move to another component */}
                   {userInfo
                     ? (
                     <Form onSubmit={submitHandler}>
