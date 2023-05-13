@@ -1,13 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { useHistory, Link } from 'react-router-dom';
 import { Form, Button, Row, Col } from 'react-bootstrap';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { Message } from '../components/Message';
 import { Loader } from '../components/Loader';
 import { register } from '../actions/userActions';
 import { FormContainer } from '../components/FormContainer';
+import { useUserInfo } from '../hooks/useUserInfo';
 
 export const RegisterScreen = () => {
+  const { userLogin } = useUserInfo();
   const history = useHistory();
   const dispatch = useDispatch();
   const [message, setMessage] = useState(null);
@@ -20,8 +22,6 @@ export const RegisterScreen = () => {
   };
   const [form, setform] = useState(initialState);
   const { email, password, name, confirmPassword } = form;
-
-  const userLogin = useSelector((state) => state.userLogin);
   const { loading, error, userInfo: loggedUser } = userLogin;
 
   useEffect(() => {

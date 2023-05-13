@@ -8,9 +8,11 @@ import { Message } from '../components/Message';
 import { FormContainer } from '../components/FormContainer';
 import { PRODUCT_UPDATE_TYPES } from '../reducers/productReducers';
 import axios from 'axios';
+import { useUserInfo } from '../hooks/useUserInfo';
 
 export const ProductEditScreen = () => {
   const history = useHistory();
+  const { userLogin } = useUserInfo();
   const match = useRouteMatch();
   const productId = match.params.id;
 
@@ -22,9 +24,7 @@ export const ProductEditScreen = () => {
   const [countInStock, setCountInStock] = useState(0);
   const [description, setDescription] = useState('');
   const [uploading, setUploading] = useState(false);
-
   const dispatch = useDispatch();
-  const userInfo = useSelector((state) => state.userLogin.userInfo);
   const productDetails = useSelector((state) => state.productDetails);
   const { loading, error, product } = productDetails;
   const productUpdate = useSelector((state) => state.productUpdate);
@@ -33,6 +33,7 @@ export const ProductEditScreen = () => {
     error: errorUpdate,
     success: successUpdate
   } = productUpdate;
+  const { userInfo } = userLogin;
 
   useEffect(() => {
     if (successUpdate) {

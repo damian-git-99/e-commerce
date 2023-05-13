@@ -8,6 +8,7 @@ import { Loader } from '../components/Loader';
 import { Message } from '../components/Message';
 import { PayPalButton } from 'react-paypal-button-v2';
 import { ORDER_PAY_TYPES } from '../reducers/orderReducers';
+import { useUserInfo } from '../hooks/useUserInfo';
 
 export const OrderScreen = () => {
   const match = useRouteMatch();
@@ -18,11 +19,9 @@ export const OrderScreen = () => {
   const { order, loading, error } = orderDetails;
   const orderPay = useSelector((state) => state.orderPay);
   const { loading: loadingPay, success: successPay } = orderPay;
-
+  const { userLogin } = useUserInfo();
   const orderDeliver = useSelector((state) => state.orderDeliver);
   const { loading: loadingDeliver, success: successDeliver } = orderDeliver;
-
-  const userLogin = useSelector((state) => state.userLogin);
   const { userInfo } = userLogin;
 
   if (!loading) {

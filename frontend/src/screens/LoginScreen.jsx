@@ -1,23 +1,21 @@
 import React, { useState, useEffect } from 'react';
 import { Form, Button, Row, Col } from 'react-bootstrap';
 import { useHistory, Link } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
-import { login } from '../actions/userActions';
 import { FormContainer } from '../components/FormContainer';
 import { Message } from '../components/Message';
 import { Loader } from '../components/Loader';
+import { useUserInfo } from '../hooks/useUserInfo';
 
 export const LoginScreen = () => {
   const history = useHistory();
+  const { userLogin, login } = useUserInfo();
   const initialState = {
     email: '',
     password: ''
   };
   const [form, setform] = useState(initialState);
   const { email, password } = form;
-  const dispatch = useDispatch();
 
-  const userLogin = useSelector((state) => state.userLogin);
   const { loading, error, userInfo: loggedUser } = userLogin;
 
   useEffect(() => {
@@ -36,7 +34,8 @@ export const LoginScreen = () => {
 
   const submitHandler = (e) => {
     e.preventDefault();
-    dispatch(login(email, password));
+    // dispatch(login(email, password));
+    login(email, password);
   };
 
   return (

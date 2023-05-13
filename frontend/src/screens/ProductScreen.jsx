@@ -7,8 +7,10 @@ import { createProductReview, listProductDetails } from '../actions/productActio
 import { Loader } from '../components/Loader';
 import { Message } from '../components/Message';
 import { PRODUCT_CREATE_REVIEW } from '../reducers/productReducers';
+import { useUserInfo } from '../hooks/useUserInfo';
 
 export const ProductScreen = () => {
+  const { userLogin } = useUserInfo();
   const history = useHistory();
   const match = useRouteMatch();
   const dispatch = useDispatch();
@@ -19,7 +21,6 @@ export const ProductScreen = () => {
 
   const productDetails = useSelector((state) => state.productDetails);
   const { loading, error, product } = productDetails;
-  const userLogin = useSelector((state) => state.userLogin);
   const { userInfo } = userLogin;
   const productReviewCreate = useSelector((state) => state.productReviewCreate);
   const {

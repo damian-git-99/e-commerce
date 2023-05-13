@@ -5,15 +5,14 @@ import { useDispatch, useSelector } from 'react-redux';
 import { listOrders } from '../actions/orderActions';
 import { Message } from '../components/Message';
 import { Loader } from '../components/Loader';
+import { useUserInfo } from '../hooks/useUserInfo';
 
 // eslint-disable-next-line react/prop-types
 export const OrderListScreen = ({ history }) => {
   const dispatch = useDispatch();
-
+  const { userLogin } = useUserInfo();
   const orderList = useSelector((state) => state.orderList);
   const { loading, error, orders } = orderList;
-
-  const userLogin = useSelector((state) => state.userLogin);
   const { userInfo } = userLogin;
 
   useEffect(() => {

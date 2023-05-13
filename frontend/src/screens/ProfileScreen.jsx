@@ -7,6 +7,7 @@ import { Loader } from '../components/Loader';
 import { Message } from '../components/Message';
 import { listMyOrders } from '../actions/orderActions';
 import { useHistory } from 'react-router-dom';
+import { useUserInfo } from '../hooks/useUserInfo';
 
 export const ProfileScreen = () => {
   const initialState = {
@@ -17,12 +18,12 @@ export const ProfileScreen = () => {
   };
 
   const history = useHistory();
+  const { userLogin } = useUserInfo();
   const dispatch = useDispatch();
   const [message, setMessage] = useState(null);
   const [form, setform] = useState(initialState);
 
   const userDetails = useSelector((state) => state.userDetails);
-  const userLogin = useSelector((state) => state.userLogin);
   const userUpdateProfile = useSelector((state) => state.userUpdateProfile);
   const orderListMy = useSelector((state) => state.orderListMy);
 

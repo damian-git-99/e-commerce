@@ -5,8 +5,10 @@ import { FormContainer } from '../components/FormContainer';
 import { saveShippingAddress } from '../actions/cartActions';
 import { useHistory } from 'react-router-dom';
 import { CheckoutSteps } from '../components/CheckoutSteps';
+import { useUserInfo } from '../hooks/useUserInfo';
 
 export const ShippingScreen = () => {
+  const { userLogin } = useUserInfo();
   const history = useHistory();
   const dispatch = useDispatch();
   const cart = useSelector((state) => state.cart);
@@ -16,7 +18,6 @@ export const ShippingScreen = () => {
   const [city, setCity] = useState(shippingAddress.city);
   const [postalCode, setPostalCode] = useState(shippingAddress.postalCode);
   const [country, setCountry] = useState(shippingAddress.country);
-  const userLogin = useSelector((state) => state.userLogin);
   const { userInfo: loggedUser } = userLogin;
 
   useEffect(() => {
