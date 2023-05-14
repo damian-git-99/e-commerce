@@ -229,9 +229,7 @@ export const MyOrders = () => {
                 </tr>
               ))}
             </tbody>
-          </Table>
-              )}
-
+          </Table>)}
     </>
   );
 };
