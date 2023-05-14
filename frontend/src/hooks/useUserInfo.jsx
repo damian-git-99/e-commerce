@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from 'react-redux';
-import { login } from '../actions/userActions';
+import { login, updateUserProfile } from '../actions/userActions';
 
 export const useUserInfo = () => {
   const userLogin = useSelector((state) => state.userLogin);
@@ -9,7 +9,13 @@ export const useUserInfo = () => {
     dispatch(login(email, password));
   };
 
+  const updateUserProfileHandle = (user) => {
+    dispatch(updateUserProfile(user));
+  };
+
   return {
-    userLogin, login: loginHandle
+    userLogin,
+    login: loginHandle,
+    updateUserProfile: updateUserProfileHandle
   };
 };

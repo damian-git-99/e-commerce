@@ -1,55 +1,65 @@
 import React, { useState, useEffect } from 'react';
 import { Table, Form, Button, Row, Col } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
-import { useDispatch, useSelector } from 'react-redux';
-import { getUserDetails, updateUserProfile } from '../actions/userActions';
 import { Loader } from '../components/Loader';
 import { Message } from '../components/Message';
-import { listMyOrders } from '../actions/orderActions';
 import { useHistory } from 'react-router-dom';
 import { useUserInfo } from '../hooks/useUserInfo';
+import axios from 'axios';
 
 export const ProfileScreen = () => {
+  return (
+    <Row>
+      <Col md={4}>
+        <EditProfile />
+      </Col>
+      <Col md={8} className="mt-5 mt-md-0">
+        <MyOrders />
+      </Col>
+    </Row>
+  );
+};
+
+export const EditProfile = () => {
   const initialState = {
     email: '',
     password: '',
     name: '',
     confirmPassword: ''
   };
-
-  const history = useHistory();
-  const { userLogin } = useUserInfo();
-  const dispatch = useDispatch();
-  const [message, setMessage] = useState(null);
   const [form, setform] = useState(initialState);
-
-  const userDetails = useSelector((state) => state.userDetails);
-  const userUpdateProfile = useSelector((state) => state.userUpdateProfile);
-  const orderListMy = useSelector((state) => state.orderListMy);
-
-  const { email, password, name, confirmPassword } = form;
-  const { loading, error, user } = userDetails;
+  const [error, setError] = useState(undefined);
+  const [loading, setLoading] = useState(false);
+  const [success] = useState(undefined); // todo: show success message when profile updated
+  const [message, setMessage] = useState(null);
+  const { userLogin, updateUserProfile } = useUserInfo();
   const { userInfo: loggedUser } = userLogin;
-  const { success } = userUpdateProfile;
-  const { loading: loadingOrders, error: errorOrders, orders } = orderListMy;
-
-  if (!loggedUser) {
-    history.push('/login');
-  }
+  const { email, password, name, confirmPassword } = form;
 
   useEffect(() => {
-    if (!user.name) {
-      dispatch(getUserDetails());
+    async function getUserDetails () {
+      try {
+        setError(undefined);
+        setLoading(true);
+        const config = {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${loggedUser.token}`
+          }
+        };
+        const { data } = await axios.get('http://localhost:5000/api/users/profile', config);
+        const { email, name } = data;
+        setform({
+          name,
+          email
+        });
+      } catch (error) {
+        setError(error.message);
+      } finally {
+        setLoading(false);
+      }
     }
-
-    setform({
-      name: user.name,
-      email: user.email
-    });
-  }, [dispatch, history, loggedUser, user]);
-
-  useEffect(() => {
-    dispatch(listMyOrders());
+    getUserDetails();
   }, []);
 
   const handleChange = (e) => {
@@ -64,13 +74,13 @@ export const ProfileScreen = () => {
     if (password !== confirmPassword) {
       setMessage('Passwords do not match');
     } else {
-      dispatch(updateUserProfile({ name, email, password }));
+      updateUserProfile({ name, email, password });
     }
   };
+
   return (
-    <Row>
-      <Col md={4}>
-        <h2>User Profile</h2>
+    <>
+      <h2>User Profile</h2>
         {message && <Message variant='danger'>{message}</Message>}
         {error && <Message variant='danger'>{error}</Message>}
         {success && <Message variant='success'>Profile Updated</Message>}
@@ -124,16 +134,54 @@ export const ProfileScreen = () => {
             Update
           </Button>
         </Form>
-      </Col>
-      <Col md={8} className="mt-5 mt-md-0">
-        <h2>My Orders</h2>
-        {loadingOrders
+    </>
+  );
+};
+
+export const MyOrders = () => {
+  const history = useHistory();
+  const [orders, setOrders] = useState([]);
+  const [error, setError] = useState(undefined);
+  const [loading, setLoading] = useState(false);
+  const { userLogin } = useUserInfo();
+  const { userInfo: loggedUser } = userLogin;
+
+  if (!loggedUser) {
+    history.push('/login');
+  }
+
+  useEffect(() => {
+    async function getUserOrders () {
+      setError(undefined);
+      setLoading(true);
+      try {
+        const config = {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${loggedUser.token}`
+          }
+        };
+        const { data } = await axios.get('http://localhost:5000/api/orders/myorders', config);
+        setOrders(data);
+      } catch (error) {
+        setError(error.message);
+      } finally {
+        setLoading(false);
+      }
+    }
+    getUserOrders();
+  }, []);
+
+  return (
+    <>
+       <h2>My Orders</h2>
+        {loading
           ? (
           <Loader />
             )
-          : errorOrders
+          : error
             ? (
-          <Message variant='danger'>{errorOrders}</Message>
+          <Message variant='danger'>{error}</Message>
               )
             : (
           <Table striped bordered hover responsive className='table-sm'>
@@ -183,7 +231,7 @@ export const ProfileScreen = () => {
             </tbody>
           </Table>
               )}
-      </Col>
-    </Row>
+
+    </>
   );
 };
