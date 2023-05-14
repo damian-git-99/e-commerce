@@ -51,6 +51,28 @@ export async function deleteProduct (productId, token) {
   }
 }
 
+export async function updateProduct (product, token) {
+  try {
+    const config = {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`
+      }
+    };
+
+    const { data } = await axios.put(
+      `${URL}/${product.id}`,
+      product,
+      config
+    );
+
+    return data;
+  } catch (error) {
+    const message = getErrorMessage(error);
+    throw new Error(message);
+  }
+}
+
 function getErrorMessage (error) {
   const message = error.response && error.response.data.message
     ? error.response.data.message
