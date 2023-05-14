@@ -9,20 +9,31 @@ import { Loader } from '../components/Loader';
 import { Message } from '../components/Message';
 import { PRODUCT_CREATE_REVIEW } from '../reducers/productReducers';
 import { useUserInfo } from '../hooks/useUserInfo';
+import axios from 'axios';
 
 export const ProductScreen = () => {
   const history = useHistory();
   const match = useRouteMatch();
-  const dispatch = useDispatch();
-
   const [quantity, setQuantity] = useState(1);
-
-  const productDetails = useSelector((state) => state.productDetails);
-  const { loading, error, product } = productDetails;
+  const [product, setProduct] = useState({});
+  const [error, setError] = useState(undefined);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    dispatch(listProductDetails(match.params.id));
-  }, [dispatch, match]);
+    async function getProductDetails (id) {
+      try {
+        setLoading(true);
+        setError(undefined);
+        const { data } = await axios.get(`http://localhost:5000/api/products/${id}`);
+        setProduct(data);
+      } catch (error) {
+        setError(error.message);
+      } finally {
+        setLoading(false);
+      }
+    }
+    getProductDetails(match.params.id);
+  }, [match]);
 
   const addToCartHandler = () => {
     history.push(`/cart/${match.params.id}?qty=${quantity}`);
@@ -43,7 +54,8 @@ export const ProductScreen = () => {
             )
           : (
         <>
-          <Row>
+          { product && (
+            <Row>
             <Col md={6}>
               <Image src={product.image} alt={product.name} fluid />
             </Col>
@@ -122,6 +134,7 @@ export const ProductScreen = () => {
               </Card>
             </Col>
           </Row>
+          )}
           <Row>
             <Col md={6}>
                 <Reviews product={product} />
@@ -168,9 +181,9 @@ export const Reviews = ({ product }) => {
   return (
     <>
       <h2>Reviews</h2>
-              {product.reviews.length === 0 && <Message>No Reviews</Message>}
+            {product && product.reviews && product.reviews.length === 0 && <Message>No Reviews</Message>}
               <ListGroup variant='flush'>
-                {product.reviews.map((review) => (
+                {product && product.reviews && product.reviews.map((review) => (
                   <ListGroup.Item key={review.id}>
                     <strong>{review.name}</strong>
                     <Rating value={review.rating} />
