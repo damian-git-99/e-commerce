@@ -6,7 +6,7 @@ import { Rating } from '../components/Rating';
 import { Loader } from '../components/Loader';
 import { Message } from '../components/Message';
 import { useUserInfo } from '../hooks/useUserInfo';
-import axios from 'axios';
+import { addProductReview, getProductDetails } from '../api/productsAPI';
 
 export const ProductScreen = () => {
   const history = useHistory();
@@ -18,19 +18,14 @@ export const ProductScreen = () => {
   const [addSuccessReview, setAddSuccessReview] = useState();
 
   useEffect(() => {
-    async function getProductDetails (id) {
-      try {
-        setLoading(true);
-        setError(undefined);
-        const { data } = await axios.get(`http://localhost:5000/api/products/${id}`);
+    setLoading(true);
+    setError(undefined);
+    getProductDetails(match.params.id)
+      .then((data) => {
         setProduct(data);
-      } catch (error) {
-        setError(error.message);
-      } finally {
-        setLoading(false);
-      }
-    }
-    getProductDetails(match.params.id);
+      })
+      .catch(error => setError(error.message))
+      .finally(() => setLoading(false));
   }, [match, addSuccessReview]);
 
   const addToCartHandler = () => {
@@ -152,27 +147,17 @@ export const Reviews = ({ product, setAddReview }) => {
   const [error, setError] = useState(undefined);
   const match = useRouteMatch();
 
-  async function addProductReview (productId, review) {
-    try {
-      setError(undefined);
-      const config = {
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${userInfo.token}`
-        }
-      };
-      await axios.post(`http://localhost:5000/api/products/${productId}/reviews`, review, config);
-      setAddReview(true);
-      setRating(0);
-      setComment('');
-    } catch (error) {
-      setError(error.response.data.message);
-    }
-  }
-
   const submitHandler = (e) => {
     e.preventDefault();
-    addProductReview(match.params.id, { rating, comment });
+    addProductReview(match.params.id, { rating, comment }, userInfo.token)
+      .then(_ => {
+        setAddReview(true);
+        setRating(0);
+        setComment('');
+      })
+      .catch(error => {
+        setError(error.message);
+      });
   };
 
   return (
