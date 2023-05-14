@@ -1,29 +1,21 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import LinkContainer from 'react-router-bootstrap/lib/LinkContainer';
 import { Table, Button, Row, Col } from 'react-bootstrap';
 import { useHistory } from 'react-router-dom';
-import { createProduct, deleteProduct, listProducts } from '../../actions/productActions';
+import { createProduct } from '../../actions/productActions';
 import { Loader } from '../../components/Loader';
 import { Message } from '../../components/Message';
-import { PRODUCT_CREATE_TYPES } from '../../reducers/productReducers';
 import { useUserInfo } from '../../hooks/useUserInfo';
+import { getProducts, deleteProduct } from '../../api/productsAPI';
 
 export const ProductListScreen = () => {
   const history = useHistory();
-  const userLogin = useUserInfo();
-  // const match = useRouteMatch();
+  const { userLogin } = useUserInfo();
   const dispatch = useDispatch();
-
-  const productList = useSelector((state) => state.productList);
-  const { loading, error, products } = productList;
-
-  const productDelete = useSelector((state) => state.productDelete);
-  const {
-    loading: loadingDelete,
-    error: errorDelete,
-    success: successDelete
-  } = productDelete;
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(false);
 
   const productCreate = useSelector((state) => state.productCreate);
   const {
@@ -36,8 +28,6 @@ export const ProductListScreen = () => {
   const { userInfo } = userLogin;
 
   useEffect(() => {
-    dispatch({ type: PRODUCT_CREATE_TYPES.PRODUCT_CREATE_RESET });
-
     if (userInfo && !userInfo.isAdmin) {
       history.push('/login');
     }
@@ -45,24 +35,34 @@ export const ProductListScreen = () => {
     if (successCreate) {
       history.push(`/admin/product/${createdProduct.id}/edit`);
     } else {
-      dispatch(listProducts());
+      setLoading(true);
+      setError(false);
+      getProducts()
+        .then(data => {
+          setProducts(data);
+        })
+        .catch(error => setError(error.message))
+        .finally(() => setLoading(false));
     }
   }, [
-    dispatch,
     history,
     userInfo,
-    successDelete,
-    successCreate,
-    createdProduct
+    successCreate
   ]);
 
   const deleteHandler = (id) => {
     if (window.confirm('Are you sure')) {
-      dispatch(deleteProduct(id));
+      setError(false);
+      deleteProduct(id, userInfo.token)
+        .then(_ => {
+          const newProducts = products.filter(product => product.id !== id);
+          setProducts(newProducts);
+        })
+        .catch(error => setError(error.message));
     }
   };
 
-  const createProductHandler = (product) => {
+  const createProductHandler = () => {
     dispatch(createProduct());
   };
 
@@ -78,8 +78,6 @@ export const ProductListScreen = () => {
           </Button>
         </Col>
       </Row>
-      {loadingDelete && <Loader />}
-      {errorDelete && <Message variant='danger'>{errorDelete}</Message>}
       {loadingCreate && <Loader />}
       {errorCreate && <Message variant='danger'>{errorCreate}</Message>}
       {loading

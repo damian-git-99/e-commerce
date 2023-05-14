@@ -1,5 +1,5 @@
 import axios from 'axios';
-const URL = 'http://localhost:5000/api/products/';
+const URL = 'http://localhost:5000/api/products';
 
 export async function getProductDetails (id) {
   try {
@@ -20,6 +20,31 @@ export async function addProductReview (productId, review, token) {
       }
     };
     await axios.post(`${URL}/${productId}/reviews`, review, config);
+  } catch (error) {
+    const message = getErrorMessage(error);
+    throw new Error(message);
+  }
+}
+
+export async function getProducts (keyword = '') {
+  try {
+    const { data } = await axios.get(`${URL}?keyword=${keyword}`);
+    return data;
+  } catch (error) {
+    const message = getErrorMessage(error);
+    throw new Error(message);
+  }
+}
+
+export async function deleteProduct (productId, token) {
+  try {
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    };
+
+    await axios.delete(`${URL}/${productId}`, config);
   } catch (error) {
     const message = getErrorMessage(error);
     throw new Error(message);
