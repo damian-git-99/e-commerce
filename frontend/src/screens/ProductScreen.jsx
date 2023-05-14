@@ -3,11 +3,8 @@ import React, { useEffect, useState } from 'react';
 import { Link, useRouteMatch, useHistory } from 'react-router-dom';
 import { Row, Col, Image, ListGroup, Card, Button, Form } from 'react-bootstrap';
 import { Rating } from '../components/Rating';
-import { useDispatch, useSelector } from 'react-redux';
-import { createProductReview, listProductDetails } from '../actions/productActions';
 import { Loader } from '../components/Loader';
 import { Message } from '../components/Message';
-import { PRODUCT_CREATE_REVIEW } from '../reducers/productReducers';
 import { useUserInfo } from '../hooks/useUserInfo';
 import axios from 'axios';
 
@@ -18,6 +15,7 @@ export const ProductScreen = () => {
   const [product, setProduct] = useState({});
   const [error, setError] = useState(undefined);
   const [loading, setLoading] = useState(false);
+  const [addSuccessReview, setAddSuccessReview] = useState();
 
   useEffect(() => {
     async function getProductDetails (id) {
@@ -33,7 +31,7 @@ export const ProductScreen = () => {
       }
     }
     getProductDetails(match.params.id);
-  }, [match]);
+  }, [match, addSuccessReview]);
 
   const addToCartHandler = () => {
     history.push(`/cart/${match.params.id}?qty=${quantity}`);
@@ -137,7 +135,7 @@ export const ProductScreen = () => {
           )}
           <Row>
             <Col md={6}>
-                <Reviews product={product} />
+                <Reviews product={product} setAddReview={setAddSuccessReview} />
             </Col>
           </Row>
         </>
@@ -146,36 +144,35 @@ export const ProductScreen = () => {
   );
 };
 
-export const Reviews = ({ product }) => {
+export const Reviews = ({ product, setAddReview }) => {
   const { userLogin } = useUserInfo();
   const { userInfo } = userLogin;
   const [rating, setRating] = useState(0);
   const [comment, setComment] = useState('');
-  const dispatch = useDispatch();
+  const [error, setError] = useState(undefined);
   const match = useRouteMatch();
-  const productReviewCreate = useSelector((state) => state.productReviewCreate);
-  const {
-    success: successProductReview,
-    error: errorProductReview
-  } = productReviewCreate;
 
-  useEffect(() => {
-    if (successProductReview) {
+  async function addProductReview (productId, review) {
+    try {
+      setError(undefined);
+      const config = {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${userInfo.token}`
+        }
+      };
+      await axios.post(`http://localhost:5000/api/products/${productId}/reviews`, review, config);
+      setAddReview(true);
       setRating(0);
       setComment('');
-      dispatch({ type: PRODUCT_CREATE_REVIEW.PRODUCT_CREATE_REVIEW_RESET });
+    } catch (error) {
+      setError(error.response.data.message);
     }
-    dispatch(listProductDetails(match.params.id));
-  }, [dispatch, match, successProductReview]);
+  }
 
   const submitHandler = (e) => {
     e.preventDefault();
-    dispatch(
-      createProductReview(match.params.id, {
-        rating,
-        comment
-      })
-    );
+    addProductReview(match.params.id, { rating, comment });
   };
 
   return (
@@ -193,8 +190,8 @@ export const Reviews = ({ product }) => {
                 ))}
                 <ListGroup.Item>
                   <h2>Write a Customer Review</h2>
-                  {errorProductReview && (
-                    <Message variant='danger'>{errorProductReview}</Message>
+                  {error && (
+                    <Message variant='danger'>{error}</Message>
                   )}
                   {/* todo: move to another component */}
                   {userInfo
