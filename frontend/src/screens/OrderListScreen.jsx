@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import React, { useEffect } from 'react';
 import { LinkContainer } from 'react-router-bootstrap';
 import { Table, Button } from 'react-bootstrap';
@@ -7,7 +8,6 @@ import { Message } from '../components/Message';
 import { Loader } from '../components/Loader';
 import { useUserInfo } from '../hooks/useUserInfo';
 
-// eslint-disable-next-line react/prop-types
 export const OrderListScreen = ({ history }) => {
   const dispatch = useDispatch();
   const { userLogin } = useUserInfo();
@@ -19,7 +19,6 @@ export const OrderListScreen = ({ history }) => {
     if (userInfo && userInfo.isAdmin) {
       dispatch(listOrders());
     } else {
-      // eslint-disable-next-line react/prop-types
       history.push('/login');
     }
   }, [dispatch, history, userInfo]);
