@@ -1,17 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { useHistory, Link } from 'react-router-dom';
 import { Form, Button, Row, Col } from 'react-bootstrap';
-import { useDispatch } from 'react-redux';
 import { Message } from '../components/Message';
 import { Loader } from '../components/Loader';
-import { register } from '../actions/userActions';
 import { FormContainer } from '../components/FormContainer';
 import { useUserInfo } from '../hooks/useUserInfo';
 
 export const RegisterScreen = () => {
-  const { userLogin } = useUserInfo();
+  const { userLogin, register } = useUserInfo();
   const history = useHistory();
-  const dispatch = useDispatch();
   const [message, setMessage] = useState(null);
 
   const initialState = {
@@ -42,7 +39,7 @@ export const RegisterScreen = () => {
     if (password !== confirmPassword) {
       setMessage('Passwords do not match');
     } else {
-      dispatch(register(name, email, password));
+      register(name, email, password);
     }
   };
 
