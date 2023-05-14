@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import React, { useEffect, useState } from 'react';
 import { Link, useRouteMatch, useHistory } from 'react-router-dom';
 import { Row, Col, Image, ListGroup, Card, Button, Form } from 'react-bootstrap';
@@ -10,45 +11,21 @@ import { PRODUCT_CREATE_REVIEW } from '../reducers/productReducers';
 import { useUserInfo } from '../hooks/useUserInfo';
 
 export const ProductScreen = () => {
-  const { userLogin } = useUserInfo();
   const history = useHistory();
   const match = useRouteMatch();
   const dispatch = useDispatch();
 
   const [quantity, setQuantity] = useState(1);
-  const [rating, setRating] = useState(0);
-  const [comment, setComment] = useState('');
 
   const productDetails = useSelector((state) => state.productDetails);
   const { loading, error, product } = productDetails;
-  const { userInfo } = userLogin;
-  const productReviewCreate = useSelector((state) => state.productReviewCreate);
-  const {
-    success: successProductReview,
-    error: errorProductReview
-  } = productReviewCreate;
 
   useEffect(() => {
-    if (successProductReview) {
-      setRating(0);
-      setComment('');
-      dispatch({ type: PRODUCT_CREATE_REVIEW.PRODUCT_CREATE_REVIEW_RESET });
-    }
     dispatch(listProductDetails(match.params.id));
-  }, [dispatch, match, successProductReview]);
+  }, [dispatch, match]);
 
   const addToCartHandler = () => {
     history.push(`/cart/${match.params.id}?qty=${quantity}`);
-  };
-
-  const submitHandler = (e) => {
-    e.preventDefault();
-    dispatch(
-      createProductReview(match.params.id, {
-        rating,
-        comment
-      })
-    );
   };
 
   return (
@@ -147,7 +124,50 @@ export const ProductScreen = () => {
           </Row>
           <Row>
             <Col md={6}>
-              <h2>Reviews</h2>
+                <Reviews product={product} />
+            </Col>
+          </Row>
+        </>
+            )}
+    </>
+  );
+};
+
+export const Reviews = ({ product }) => {
+  const { userLogin } = useUserInfo();
+  const { userInfo } = userLogin;
+  const [rating, setRating] = useState(0);
+  const [comment, setComment] = useState('');
+  const dispatch = useDispatch();
+  const match = useRouteMatch();
+  const productReviewCreate = useSelector((state) => state.productReviewCreate);
+  const {
+    success: successProductReview,
+    error: errorProductReview
+  } = productReviewCreate;
+
+  useEffect(() => {
+    if (successProductReview) {
+      setRating(0);
+      setComment('');
+      dispatch({ type: PRODUCT_CREATE_REVIEW.PRODUCT_CREATE_REVIEW_RESET });
+    }
+    dispatch(listProductDetails(match.params.id));
+  }, [dispatch, match, successProductReview]);
+
+  const submitHandler = (e) => {
+    e.preventDefault();
+    dispatch(
+      createProductReview(match.params.id, {
+        rating,
+        comment
+      })
+    );
+  };
+
+  return (
+    <>
+      <h2>Reviews</h2>
               {product.reviews.length === 0 && <Message>No Reviews</Message>}
               <ListGroup variant='flush'>
                 {product.reviews.map((review) => (
@@ -203,10 +223,6 @@ export const ProductScreen = () => {
                       )}
                 </ListGroup.Item>
               </ListGroup>
-            </Col>
-          </Row>
-        </>
-            )}
     </>
   );
 };
