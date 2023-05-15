@@ -1,9 +1,5 @@
 import { createStore, combineReducers, applyMiddleware, compose } from 'redux';
 import thunk from 'redux-thunk';
-import {
-  userDetailsAdminReducer,
-  userUpdateReducer
-} from './reducers/adminReducers';
 import { cartReducer } from './reducers/cartReducers';
 import {
   orderCreateReducer,
@@ -29,8 +25,6 @@ const reducer = combineReducers({
   userLogin: userLoginReducer,
   userDetails: userDetailsReducer,
   userUpdateProfile: userUpdateProfileReducer,
-  userDetailsAdminReducer,
-  userUpdate: userUpdateReducer,
   orderCreate: orderCreateReducer,
   orderDetails: orderDetailsReducer,
   orderPay: orderPayReducer,
