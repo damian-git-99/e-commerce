@@ -3,7 +3,7 @@ const URL = 'http://localhost:5000/api/products';
 
 export async function getProductDetails (id) {
   try {
-    const { data } = await axios.get(`http://localhost:5000/api/products/${id}`);
+    const { data } = await axios.get(`${URL}/${id}`);
     return data;
   } catch (error) {
     const message = getErrorMessage(error);
@@ -82,7 +82,7 @@ export async function updateProductImage (productId, formData, token) {
       }
     };
 
-    const { data } = await axios.post(`http://localhost:5000/api/products/image/upload/${productId}`, formData, config);
+    const { data } = await axios.post(`${URL}/image/upload/${productId}`, formData, config);
     return data;
   } catch (error) {
     const message = getErrorMessage(error);
