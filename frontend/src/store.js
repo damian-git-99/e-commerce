@@ -15,14 +15,7 @@ import {
   orderListReducer,
   orderPayReducer
 } from './reducers/orderReducers';
-import {
-  productCreateReducer,
-  productDeleteReducer,
-  productDetailsReducer,
-  productListReducer,
-  productReviewCreateReducer,
-  productUpdateReducer
-} from './reducers/productReducers';
+import { productCreateReducer } from './reducers/productReducers';
 import {
   userDetailsReducer,
   userLoginReducer,
@@ -35,12 +28,7 @@ const composeEnhancers =
   compose;
 
 const reducer = combineReducers({
-  productList: productListReducer,
-  productDetails: productDetailsReducer,
-  productDelete: productDeleteReducer,
   productCreate: productCreateReducer,
-  productUpdate: productUpdateReducer,
-  productReviewCreate: productReviewCreateReducer,
   cart: cartReducer,
   userLogin: userLoginReducer,
   userDetails: userDetailsReducer,
