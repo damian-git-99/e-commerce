@@ -1,29 +1,18 @@
 import React, { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 import LinkContainer from 'react-router-bootstrap/lib/LinkContainer';
 import { Table, Button, Row, Col } from 'react-bootstrap';
 import { useHistory } from 'react-router-dom';
-import { createProduct } from '../../actions/productActions';
 import { Loader } from '../../components/Loader';
 import { Message } from '../../components/Message';
 import { useUserInfo } from '../../hooks/useUserInfo';
-import { getProducts, deleteProduct } from '../../api/productsAPI';
+import { getProducts, deleteProduct, createProduct } from '../../api/productsAPI';
 
 export const ProductListScreen = () => {
   const history = useHistory();
   const { userLogin } = useUserInfo();
-  const dispatch = useDispatch();
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
-
-  const productCreate = useSelector((state) => state.productCreate);
-  const {
-    loading: loadingCreate,
-    error: errorCreate,
-    success: successCreate,
-    product: createdProduct
-  } = productCreate;
 
   const { userInfo } = userLogin;
 
@@ -34,20 +23,15 @@ export const ProductListScreen = () => {
       history.push('/login');
     }
 
-    if (successCreate) {
-      history.push(`/admin/product/${createdProduct.id}/edit`);
-    } else {
-      getProducts()
-        .then(data => {
-          setProducts(data);
-        })
-        .catch(error => setError(error.message))
-        .finally(() => setLoading(false));
-    }
+    getProducts()
+      .then(data => {
+        setProducts(data);
+      })
+      .catch(error => setError(error.message))
+      .finally(() => setLoading(false));
   }, [
     history,
-    userInfo,
-    successCreate
+    userInfo
   ]);
 
   const deleteHandler = (id) => {
@@ -63,7 +47,12 @@ export const ProductListScreen = () => {
   };
 
   const createProductHandler = () => {
-    dispatch(createProduct());
+    setError(false);
+    createProduct(userInfo.token)
+      .then(createdProduct => {
+        history.push(`/admin/product/${createdProduct.id}/edit`);
+      })
+      .catch(error => setError(error.message));
   };
 
   return (
@@ -78,8 +67,6 @@ export const ProductListScreen = () => {
           </Button>
         </Col>
       </Row>
-      {loadingCreate && <Loader />}
-      {errorCreate && <Message variant='danger'>{errorCreate}</Message>}
       {loading
         ? (
         <Loader />

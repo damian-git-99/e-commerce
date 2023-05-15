@@ -90,6 +90,21 @@ export async function updateProductImage (productId, formData, token) {
   }
 }
 
+export async function createProduct (token) {
+  try {
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    };
+    const { data } = await axios.post(URL, {}, config);
+    return data;
+  } catch (error) {
+    const message = getErrorMessage(error);
+    throw new Error(message);
+  }
+}
+
 function getErrorMessage (error) {
   const message = error.response && error.response.data.message
     ? error.response.data.message
