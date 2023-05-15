@@ -105,7 +105,7 @@ export async function createProduct (token) {
   }
 }
 
-function getErrorMessage (error) {
+export function getErrorMessage (error) {
   const message = error.response && error.response.data.message
     ? error.response.data.message
     : error.message;

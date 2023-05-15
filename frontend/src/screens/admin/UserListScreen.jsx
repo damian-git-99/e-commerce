@@ -1,31 +1,42 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { LinkContainer } from 'react-router-bootstrap';
 import { Table, Button } from 'react-bootstrap';
-import { useDispatch, useSelector } from 'react-redux';
 import { Loader } from '../../components/Loader';
 import { Message } from '../../components/Message';
-import { deleteUser, listUsers } from '../../actions/adminActions';
 import { useUserInfo } from '../../hooks/useUserInfo';
 import { useHistory } from 'react-router-dom/cjs/react-router-dom.min';
+import { deleteUser, getUsers } from '../../api/adminAPI';
 
 export const UserListScreen = () => {
+  const [users, setUsers] = useState([]);
+  const [error, setError] = useState(false);
+  const [loading, setLoading] = useState(false);
   const history = useHistory();
   const { userLogin } = useUserInfo();
-  const dispatch = useDispatch();
-  const userList = useSelector((state) => state.userList);
-  const { loading, error, users } = userList;
   const { userInfo } = userLogin;
-  const userDelete = useSelector((state) => state.userDelete);
-  const { success: successDelete } = userDelete;
 
   useEffect(() => {
-    if (userInfo && userInfo.isAdmin) dispatch(listUsers());
-    else history.push('/login');
-  }, [dispatch, history, successDelete]);
+    if (!userInfo && !userInfo.isAdmin) {
+      history.push('/login');
+      return;
+    }
+    setLoading(true);
+    setError(false);
+    getUsers(userInfo.token)
+      .then(data => {
+        setUsers(data);
+      })
+      .catch(error => setError(error.message))
+      .finally(() => setLoading(false));
+  }, []);
 
   const deleteHandler = (id) => {
     if (window.confirm('Are you sure?')) {
-      dispatch(deleteUser(id));
+      deleteUser(id, userInfo.token)
+        .then(_ => {
+          const newUsers = users.filter(user => user.id !== id);
+          setUsers(newUsers);
+        });
     }
   };
 

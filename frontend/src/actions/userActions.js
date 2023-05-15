@@ -1,4 +1,3 @@
-import { USER_LIST_TYPES } from '../reducers/adminReducers';
 import axios from 'axios';
 
 import {
@@ -50,7 +49,6 @@ export const logout = () => (dispatch) => {
   localStorage.removeItem('userInfo');
   dispatch({ type: USER_LOGIN_TYPES.USER_LOGOUT });
   dispatch({ type: USER_DETAILS_TYPES.USER_DETAILS_RESET });
-  dispatch({ type: USER_LIST_TYPES.USER_LIST_RESET });
 };
 
 export const register = (name, email, password) => {
