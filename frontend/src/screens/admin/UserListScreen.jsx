@@ -6,9 +6,11 @@ import { Loader } from '../../components/Loader';
 import { Message } from '../../components/Message';
 import { deleteUser, listUsers } from '../../actions/adminActions';
 import { useUserInfo } from '../../hooks/useUserInfo';
+import { useHistory } from 'react-router-dom/cjs/react-router-dom.min';
 
 export const UserListScreen = () => {
-  const userLogin = useUserInfo();
+  const history = useHistory();
+  const { userLogin } = useUserInfo();
   const dispatch = useDispatch();
   const userList = useSelector((state) => state.userList);
   const { loading, error, users } = userList;
