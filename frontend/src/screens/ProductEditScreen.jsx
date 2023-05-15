@@ -39,7 +39,6 @@ export const ProductEditScreen = () => {
           countInStock: data.countInStock,
           brand: data.brand
         });
-        console.log(data);
       });
   }, [productId]);
 
