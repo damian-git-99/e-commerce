@@ -73,6 +73,23 @@ export async function updateProduct (productId, product, token) {
   }
 }
 
+export async function updateProductImage (productId, formData, token) {
+  try {
+    const config = {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+        Authorization: `Bearer ${token}`
+      }
+    };
+
+    const { data } = await axios.post(`http://localhost:5000/api/products/image/upload/${productId}`, formData, config);
+    return data;
+  } catch (error) {
+    const message = getErrorMessage(error);
+    throw new Error(message);
+  }
+}
+
 function getErrorMessage (error) {
   const message = error.response && error.response.data.message
     ? error.response.data.message

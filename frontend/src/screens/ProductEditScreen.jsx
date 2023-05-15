@@ -1,9 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Form, Button, Alert } from 'react-bootstrap';
 import { useHistory, Link, useRouteMatch } from 'react-router-dom';
-import { Loader } from '../components/Loader';
 import { FormContainer } from '../components/FormContainer';
-import axios from 'axios';
 import { useUserInfo } from '../hooks/useUserInfo';
 import { getProductDetails, updateProduct } from '../api/productsAPI';
 
@@ -21,9 +19,7 @@ export const ProductEditScreen = () => {
   const match = useRouteMatch();
   const productId = match.params.id;
   const [form, setForm] = useState(initialState);
-  const [image, setImage] = useState('');
   const [error, setError] = useState(false);
-  const [uploading, setUploading] = useState(false);
   const { userInfo } = userLogin;
   const { name, price, description, category, countInStock, brand } = form;
 
@@ -41,28 +37,6 @@ export const ProductEditScreen = () => {
         });
       });
   }, [productId]);
-
-  const uploadFileHandler = async (e) => {
-    const file = e.target.files[0];
-    const formData = new FormData();
-    formData.append('image', file);
-    setUploading(true);
-    try {
-      const config = {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-          Authorization: `Bearer ${userInfo.token}`
-        }
-      };
-
-      const { data } = await axios.post(`http://localhost:5000/api/products/image/upload/${productId}`, formData, config);
-      setImage(data);
-      setUploading(false);
-    } catch (error) {
-      console.error(error);
-      setUploading(false);
-    }
-  };
 
   const handleChange = (e) => {
     setForm({
@@ -82,9 +56,10 @@ export const ProductEditScreen = () => {
 
   return (
     <>
-      <Link to="/admin/productlist" className="btn btn-light my-3">
+      <Link to="/admin/productlist" className="btn btn-success my-3 mx-3">
         Go Back
       </Link>
+      <Link className='btn btn-dark' to={`/admin/product/${productId}/image/edit`}>Edit Image</Link>
       {error && (
         <Alert variant='danger'>{error}</Alert>
       )}
@@ -109,21 +84,6 @@ export const ProductEditScreen = () => {
               onChange={handleChange}
             ></Form.Control>
           </Form.Group>
-
-          <Form.Group controlId="image">
-            <Form.Label>Image</Form.Label>
-            <Form.Control
-              type="text"
-              placeholder="Enter image url"
-              value={image}
-              onChange={(e) => setImage(e.target.value)}
-            ></Form.Control>
-          </Form.Group>
-            {uploading && <Loader />}
-            <Form.Group controlId="formFileDisabled" className="mb-3">
-              <Form.Label>choose image</Form.Label>
-              <Form.Control type="file" id='image-file' onChange={uploadFileHandler} />
-            </Form.Group>
 
           <Form.Group controlId="brand">
             <Form.Label>Brand</Form.Label>
