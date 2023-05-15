@@ -18,7 +18,7 @@ export async function getUsers (token) {
   }
 }
 
-export async function getUserDetails (userId, token) {
+export async function getUserDetailsAdmin (userId, token) {
   try {
     const config = {
       headers: {

@@ -2,50 +2,54 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useRouteMatch, useHistory } from 'react-router-dom';
 import { Form, Button } from 'react-bootstrap';
-import { useDispatch, useSelector } from 'react-redux';
 import { Loader } from '../../components/Loader';
 import { Message } from '../../components/Message';
 import { FormContainer } from '../../components/FormContainer';
-import { getUserDetailsAdmin, updateUser } from '../../actions/adminActions';
-import { USER_ADMIN_UPDATE_TYPES } from '../../reducers/adminReducers';
+import { getUserDetailsAdmin, updateUser } from '../../api/adminAPI';
+import { useUserInfo } from '../../hooks/useUserInfo';
 
 export const UserEditScreen = () => {
-  const dispatch = useDispatch();
+  const [user, setUser] = useState({});
+  const [error, setError] = useState(false);
+  const [loading, setLoading] = useState(false);
   const history = useHistory();
   const match = useRouteMatch();
   const userId = match.params.id;
+  const { userLogin } = useUserInfo();
+  const { userInfo } = userLogin;
 
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [isAdmin, setIsAdmin] = useState(false);
 
-  const userDetails = useSelector((state) => state.userDetailsAdminReducer);
-  const { loading, error, user } = userDetails;
-  const userUpdate = useSelector((state) => state.userUpdate);
-  const {
-    loading: loadingUpdate,
-    error: errorUpdate,
-    success: successUpdate
-  } = userUpdate;
-
   useEffect(() => {
-    if (successUpdate) {
-      dispatch({ type: USER_ADMIN_UPDATE_TYPES.USER_UPDATE_RESET });
-      history.push('/admin/userlist');
+    if (!user.name || user.id != userId) {
+      setError(false);
+      setLoading(true);
+      getUserDetailsAdmin(userId, userInfo.token)
+        .then(data => {
+          setUser(data);
+        })
+        .catch(error => setError(error.message))
+        .finally(() => setLoading(false));
     } else {
-      if (!user.name || user.id != userId) {
-        dispatch(getUserDetailsAdmin(userId));
-      } else {
-        setName(user.name);
-        setEmail(user.email);
-        setIsAdmin(user.isAdmin);
-      }
+      setName(user.name);
+      setEmail(user.email);
+      setIsAdmin(user.isAdmin);
     }
-  }, [userId, user, successUpdate]);
+  }, [userId]);
 
   const submitHandler = (e) => {
     e.preventDefault();
-    dispatch(updateUser({ id: userId, name, email, isAdmin }));
+    setError(false);
+    setLoading(true);
+    updateUser(userId, { name, email, isAdmin }, userInfo.token)
+      .then(_ => {
+        history.push('/admin/userlist');
+        // todo update global state if authenticated user is modified
+      })
+      .catch(error => setError(error.message))
+      .finally(() => setLoading(false));
   };
 
   return (
@@ -55,17 +59,8 @@ export const UserEditScreen = () => {
       </Link>
       <FormContainer>
         <h1>Edit User</h1>
-        {loadingUpdate && <Loader />}
-        {errorUpdate && <Message variant='danger'>{errorUpdate}</Message>}
-        {loading
-          ? (
-          <Loader />
-            )
-          : error
-            ? (
-          <Message variant='danger'>{error}</Message>
-              )
-            : (
+        {loading && <Loader />}
+        {error && <Message variant='danger'>{error}</Message>}
           <Form onSubmit={submitHandler}>
             <Form.Group controlId='name'>
               <Form.Label>Name</Form.Label>
@@ -100,7 +95,6 @@ export const UserEditScreen = () => {
               Update
             </Button>
           </Form>
-              )}
       </FormContainer>
     </>
   );

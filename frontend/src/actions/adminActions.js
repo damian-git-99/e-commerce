@@ -19,7 +19,6 @@ export const getUserDetailsAdmin = (id) => {
       };
 
       const { data } = await axios.get(`${URL}/${id}`, config);
-      console.log(data);
 
       dispatch({
         type: USER_DETAILS_ADMIN_TYPES.USER_DETAILS_ADMIN_SUCCESS,
