@@ -17,27 +17,25 @@ export const UserEditScreen = () => {
   const userId = match.params.id;
   const { userLogin } = useUserInfo();
   const { userInfo } = userLogin;
-
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [isAdmin, setIsAdmin] = useState(false);
+  const { name, email, isAdmin } = user;
 
   useEffect(() => {
-    if (!user.name || user.id != userId) {
-      setError(false);
-      setLoading(true);
-      getUserDetailsAdmin(userId, userInfo.token)
-        .then(data => {
-          setUser(data);
-        })
-        .catch(error => setError(error.message))
-        .finally(() => setLoading(false));
-    } else {
-      setName(user.name);
-      setEmail(user.email);
-      setIsAdmin(user.isAdmin);
-    }
+    setError(false);
+    setLoading(true);
+    getUserDetailsAdmin(userId, userInfo.token)
+      .then(data => {
+        setUser(data);
+      })
+      .catch(error => setError(error.message))
+      .finally(() => setLoading(false));
   }, [userId]);
+
+  const handleChange = (e) => {
+    setUser({
+      ...user,
+      [e.target.name]: e.target.value
+    });
+  };
 
   const submitHandler = (e) => {
     e.preventDefault();
@@ -66,9 +64,10 @@ export const UserEditScreen = () => {
               <Form.Label>Name</Form.Label>
               <Form.Control
                 type='name'
+                name='name'
                 placeholder='Enter name'
                 value={name}
-                onChange={(e) => setName(e.target.value)}
+                onChange={handleChange}
               ></Form.Control>
             </Form.Group>
 
@@ -76,9 +75,10 @@ export const UserEditScreen = () => {
               <Form.Label>Email Address</Form.Label>
               <Form.Control
                 type='email'
+                name='email'
                 placeholder='Enter email'
                 value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                onChange={handleChange}
               ></Form.Control>
             </Form.Group>
 
@@ -86,8 +86,9 @@ export const UserEditScreen = () => {
               <Form.Check
                 type='checkbox'
                 label='Is Admin'
+                name='isAdmin'
                 checked={isAdmin}
-                onChange={(e) => setIsAdmin(e.target.checked)}
+                onChange={() => setUser({ ...user, isAdmin: !isAdmin })}
               ></Form.Check>
             </Form.Group>
 
