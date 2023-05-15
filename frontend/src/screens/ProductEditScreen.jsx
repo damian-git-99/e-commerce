@@ -28,9 +28,17 @@ export const ProductEditScreen = () => {
   const { name, price, description, category, countInStock, brand } = form;
 
   useEffect(() => {
+    setError(false);
     getProductDetails(productId)
       .then(data => {
-        setForm({ ...data });
+        setForm({
+          name: data.name,
+          price: data.price,
+          description: data.description,
+          category: data.category,
+          countInStock: data.countInStock,
+          brand: data.brand
+        });
         console.log(data);
       });
   }, [productId]);
@@ -40,7 +48,6 @@ export const ProductEditScreen = () => {
     const formData = new FormData();
     formData.append('image', file);
     setUploading(true);
-    console.log('entro');
     try {
       const config = {
         headers: {
@@ -50,7 +57,6 @@ export const ProductEditScreen = () => {
       };
 
       const { data } = await axios.post(`http://localhost:5000/api/products/image/upload/${productId}`, formData, config);
-      console.log(data);
       setImage(data);
       setUploading(false);
     } catch (error) {
@@ -68,7 +74,7 @@ export const ProductEditScreen = () => {
 
   const submitHandler = (e) => {
     e.preventDefault();
-    updateProduct({ ...form }, userInfo.token)
+    updateProduct(productId, { ...form }, userInfo.token)
       .then(_ => {
         history.push('/admin/productlist');
       })

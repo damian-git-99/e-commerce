@@ -51,7 +51,7 @@ export async function deleteProduct (productId, token) {
   }
 }
 
-export async function updateProduct (product, token) {
+export async function updateProduct (productId, product, token) {
   try {
     const config = {
       headers: {
@@ -61,7 +61,7 @@ export async function updateProduct (product, token) {
     };
 
     const { data } = await axios.put(
-      `${URL}/${product.id}`,
+      `${URL}/${productId}`,
       product,
       config
     );

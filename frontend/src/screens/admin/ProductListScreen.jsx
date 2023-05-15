@@ -28,6 +28,8 @@ export const ProductListScreen = () => {
   const { userInfo } = userLogin;
 
   useEffect(() => {
+    setLoading(true);
+    setError(false);
     if (userInfo && !userInfo.isAdmin) {
       history.push('/login');
     }
@@ -35,8 +37,6 @@ export const ProductListScreen = () => {
     if (successCreate) {
       history.push(`/admin/product/${createdProduct.id}/edit`);
     } else {
-      setLoading(true);
-      setError(false);
       getProducts()
         .then(data => {
           setProducts(data);
