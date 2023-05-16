@@ -1,30 +1,29 @@
+/* eslint-disable react/prop-types */
+/* eslint-disable no-undef */
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Row, Col, ListGroup, Image, Card, Button } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import { useRouteMatch, Link } from 'react-router-dom';
-import { deliverOrder, getOrderDetails, payOrder } from '../actions/orderActions';
+import { payOrder } from '../actions/orderActions';
 import { Loader } from '../components/Loader';
 import { Message } from '../components/Message';
 import { PayPalButton } from 'react-paypal-button-v2';
-import { ORDER_PAY_TYPES } from '../reducers/orderReducers';
 import { useUserInfo } from '../hooks/useUserInfo';
+import { deliverOrder, getOrderDetails } from '../api/orderAPI';
 
 export const OrderScreen = () => {
+  const [order, setOrder] = useState();
   const match = useRouteMatch();
   const orderId = match.params.id;
   const [sdkReady, setSdkReady] = useState(false);
   const dispatch = useDispatch();
-  const orderDetails = useSelector((state) => state.orderDetails);
-  const { order, loading, error } = orderDetails;
   const orderPay = useSelector((state) => state.orderPay);
   const { loading: loadingPay, success: successPay } = orderPay;
   const { userLogin } = useUserInfo();
-  const orderDeliver = useSelector((state) => state.orderDeliver);
-  const { loading: loadingDeliver, success: successDeliver } = orderDeliver;
   const { userInfo } = userLogin;
 
-  if (!loading) {
+  if (order) {
     //   Calculate prices
     const addDecimals = (num) => {
       return (Math.round(num * 100) / 100).toFixed(2);
@@ -53,17 +52,16 @@ export const OrderScreen = () => {
       };
       document.body.appendChild(script);
     };
+    getOrderDetails(orderId, userInfo.token)
+      .then(data => {
+        setOrder(data);
+      });
 
-    // eslint-disable-next-line eqeqeq
-    if (!order || successPay || successDeliver || order.id !== orderId) {
-      dispatch({ type: ORDER_PAY_TYPES.ORDER_PAY_RESET });
-      dispatch(getOrderDetails(orderId));
-    }
     if (!order?.isPaid) {
       if (!window.paypal) addPayPalScript();
       else setSdkReady(true);
     }
-  }, [orderId, successPay, successDeliver]);
+  }, [orderId, successPay]);
 
   const successPaymentHandler = (paymentResult) => {
     const data = {
@@ -75,22 +73,11 @@ export const OrderScreen = () => {
     dispatch(payOrder(orderId, data));
   };
 
-  const deliverHandler = () => {
-    dispatch(deliverOrder(order));
-  };
-
-  return loading
-    ? (
-    <Loader />
-      )
-    : error
-      ? (
-    <Message variant="danger">{error}</Message>
-        )
-      : (
+  return (
     <>
-      <h1>Order {order.id}</h1>
-      <Row>
+      <h1>Order {order?.id}</h1>
+      {order && (
+        <Row>
         <Col md={8}>
           <ListGroup variant="flush">
             <ListGroup.Item>
@@ -100,7 +87,7 @@ export const OrderScreen = () => {
               </p>
               <p>
                 <strong>Email: </strong>{' '}
-                <a href={`mailto:${order?.user?.email}`}>{order?.user?.email}</a>
+                <a href={`mail to:${order?.user?.email}`}>{order?.user?.email}</a>
               </p>
               <p>
                 <strong>Address:</strong>
@@ -214,22 +201,44 @@ export const OrderScreen = () => {
                       )}
                 </ListGroup.Item>
               )}
-              {loadingDeliver && <Loader />}
-              {userInfo.isAdmin && order.isPaid && !order.isDelivered && (
-                <ListGroup.Item>
-                  <Button
-                    type='button'
-                    className='btn btn-block'
-                    onClick={deliverHandler}
-                  >
-                    Mark As Delivered
-                  </Button>
-                </ListGroup.Item>
-              )}
+              <DeliverOrder order={order} userInfo={userInfo} setOrder={setOrder} />
             </ListGroup>
           </Card>
         </Col>
       </Row>
+      )}
     </>
-        );
+  );
+};
+
+export const DeliverOrder = ({ order, userInfo, setOrder }) => {
+  const [error, setError] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const deliverHandler = () => {
+    setError(false);
+    setLoading(true);
+    deliverOrder(order, userInfo.token)
+      .then((data) => {
+        setOrder({ ...order, isDelivered: true, deliveredAt: data.deliveredAt });
+      })
+      .catch(error => setError(error.message))
+      .finally(() => setLoading(false));
+  };
+  return (
+    <div>
+      {loading && <Loader />}
+      {error && <Message variant="danger">{error}</Message>}
+      {userInfo.isAdmin && order.isPaid && !order.isDelivered && (
+        <ListGroup.Item>
+          <Button
+            type='button'
+            className='btn btn-block'
+            onClick={deliverHandler}
+            >
+              Mark As Delivered
+            </Button>
+        </ListGroup.Item>
+      )}
+    </div>
+  );
 };
