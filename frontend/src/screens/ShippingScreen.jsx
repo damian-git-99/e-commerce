@@ -22,7 +22,6 @@ export const ShippingScreen = () => {
   const { userInfo: loggedUser } = userLogin;
 
   useEffect(() => {
-    /* Checking if the user is logged in. If not, it will redirect to the home page. */
     if (!loggedUser) {
       history.push('/');
     }
