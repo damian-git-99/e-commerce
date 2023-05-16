@@ -91,3 +91,19 @@ export async function getOrders (token) {
     throw new Error(message);
   }
 }
+
+export async function getUserOrders (token) {
+  try {
+    const config = {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`
+      }
+    };
+    const { data } = await axios.get('http://localhost:5000/api/orders/myorders', config);
+    return data;
+  } catch (error) {
+    const message = getErrorMessage(error);
+    throw new Error(message);
+  }
+}

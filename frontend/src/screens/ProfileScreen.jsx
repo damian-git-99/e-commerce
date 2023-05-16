@@ -6,6 +6,7 @@ import { Message } from '../components/Message';
 import { useHistory } from 'react-router-dom';
 import { useUserInfo } from '../hooks/useUserInfo';
 import axios from 'axios';
+import { getUserOrders } from '../api/orderAPI';
 
 export const ProfileScreen = () => {
   return (
@@ -151,25 +152,14 @@ export const MyOrders = () => {
   }
 
   useEffect(() => {
-    async function getUserOrders () {
-      setError(undefined);
-      setLoading(true);
-      try {
-        const config = {
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${loggedUser.token}`
-          }
-        };
-        const { data } = await axios.get('http://localhost:5000/api/orders/myorders', config);
+    setError(undefined);
+    setLoading(true);
+    getUserOrders(loggedUser.token)
+      .then(data => {
         setOrders(data);
-      } catch (error) {
-        setError(error.message);
-      } finally {
-        setLoading(false);
-      }
-    }
-    getUserOrders();
+      })
+      .catch(error => setError(error.message))
+      .finally(() => setLoading(false));
   }, []);
 
   return (
