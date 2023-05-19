@@ -7,15 +7,17 @@ import { Loader } from '../components/Loader';
 import { useUserInfo } from '../hooks/useUserInfo';
 
 export const LoginScreen = () => {
-  const history = useHistory();
-  const { userLogin, login } = useUserInfo();
   const initialState = {
     email: '',
     password: ''
   };
+  const history = useHistory();
+  const { userLogin, login } = useUserInfo();
   const [form, setform] = useState(initialState);
   const { email, password } = form;
-  const { loading, error, userInfo: loggedUser } = userLogin;
+  const { userInfo: loggedUser } = userLogin;
+  const [error, setError] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     /* Redirecting the user to the home page if the user is logged in. */
@@ -33,7 +35,11 @@ export const LoginScreen = () => {
 
   const submitHandler = (e) => {
     e.preventDefault();
-    login(email, password);
+    setError(false);
+    setLoading(true);
+    login(email, password)
+      .catch(error => setError(error.message))
+      .finally(() => setLoading(false));
   };
 
   return (
