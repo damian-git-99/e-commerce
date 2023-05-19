@@ -1,18 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import { Form, Button } from 'react-bootstrap';
-import { useDispatch } from 'react-redux';
 import { FormContainer } from '../components/FormContainer';
-import { saveShippingAddress } from '../redux/actions/cartActions';
 import { useHistory } from 'react-router-dom';
 import { CheckoutSteps } from '../components/CheckoutSteps';
 import { useUserInfo } from '../hooks/useUserInfo';
 import { useCart } from '../hooks/useCart';
 
 export const ShippingScreen = () => {
-  const { cart } = useCart();
+  const { cart, saveShippingAddress } = useCart();
   const { userLogin } = useUserInfo();
   const history = useHistory();
-  const dispatch = useDispatch();
   const { shippingAddress } = cart;
 
   const [address, setAddress] = useState(shippingAddress.address);
@@ -29,7 +26,7 @@ export const ShippingScreen = () => {
 
   const submitHandler = (e) => {
     e.preventDefault();
-    dispatch(saveShippingAddress({ address, city, postalCode, country }));
+    saveShippingAddress({ address, city, postalCode, country });
     history.push('/payment');
   };
 
