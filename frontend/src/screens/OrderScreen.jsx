@@ -1,25 +1,21 @@
 /* eslint-disable react/prop-types */
-/* eslint-disable no-undef */
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { Row, Col, ListGroup, Image, Card, Button } from 'react-bootstrap';
-import { useDispatch, useSelector } from 'react-redux';
+import { Row, Col, ListGroup, Image, Card, Button, Alert } from 'react-bootstrap';
 import { useRouteMatch, Link } from 'react-router-dom';
-import { payOrder } from '../actions/orderActions';
 import { Loader } from '../components/Loader';
 import { Message } from '../components/Message';
 import { PayPalButton } from 'react-paypal-button-v2';
 import { useUserInfo } from '../hooks/useUserInfo';
-import { deliverOrder, getOrderDetails } from '../api/orderAPI';
+import { deliverOrder, getOrderDetails, payOrder } from '../api/orderAPI';
 
 export const OrderScreen = () => {
-  const [order, setOrder] = useState();
   const match = useRouteMatch();
   const orderId = match.params.id;
   const [sdkReady, setSdkReady] = useState(false);
-  const dispatch = useDispatch();
-  const orderPay = useSelector((state) => state.orderPay);
-  const { loading: loadingPay, success: successPay } = orderPay;
+  const [order, setOrder] = useState();
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(false);
   const { userLogin } = useUserInfo();
   const { userInfo } = userLogin;
 
@@ -61,7 +57,7 @@ export const OrderScreen = () => {
       if (!window.paypal) addPayPalScript();
       else setSdkReady(true);
     }
-  }, [orderId, successPay]);
+  }, [orderId]);
 
   const successPaymentHandler = (paymentResult) => {
     const data = {
@@ -70,12 +66,25 @@ export const OrderScreen = () => {
       update_time: paymentResult.update_time,
       email_address: paymentResult.payer.email_address
     };
-    dispatch(payOrder(orderId, data));
+    setLoading(true);
+    setError(false);
+    payOrder(orderId, data, userInfo.token)
+      .then(data => {
+        setOrder({
+          ...order,
+          isPaid: true
+        });
+      })
+      .catch(err => {
+        setError(err.message);
+      })
+      .finally(() => setLoading(false));
   };
 
   return (
     <>
       <h1>Order {order?.id}</h1>
+      {error && <Alert variant="danger">{error}</Alert>}
       {order && (
         <Row>
         <Col md={8}>
@@ -188,7 +197,7 @@ export const OrderScreen = () => {
               </ListGroup.Item>
               {!order.isPaid && (
                 <ListGroup.Item>
-                  {loadingPay && <Loader />}
+                  {loading && <Loader />}
                   {!sdkReady
                     ? (
                     <Loader />
@@ -227,7 +236,7 @@ export const DeliverOrder = ({ order, userInfo, setOrder }) => {
   return (
     <div>
       {loading && <Loader />}
-      {error && <Message variant="danger">{error}</Message>}
+      {error && <Alert variant="danger">{error}</Alert>}
       {userInfo.isAdmin && order.isPaid && !order.isDelivered && (
         <ListGroup.Item>
           <Button
