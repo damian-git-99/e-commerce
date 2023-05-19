@@ -1,16 +1,20 @@
-import React, { useEffect } from 'react';
+import React, { useState } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import { Button, Row, Col, ListGroup, Image, Card } from 'react-bootstrap';
-import { useSelector, useDispatch } from 'react-redux';
 import { CheckoutSteps } from '../components/CheckoutSteps';
 import { Message } from '../components/Message';
-import { createOrder } from '../actions/orderActions';
 import { useCart } from '../hooks/useCart';
+import { createOrder } from '../api/orderAPI';
+import { useUserInfo } from '../hooks/useUserInfo';
+import { Loader } from '../components/Loader';
 
 export const PlaceOrderScreen = () => {
   const { cart } = useCart();
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(false);
   const history = useHistory();
-  const dispatch = useDispatch();
+  const { userLogin } = useUserInfo();
+  const { userInfo } = userLogin;
 
   // Calculate prices
   const addDecimals = (num) => {
@@ -29,29 +33,27 @@ export const PlaceOrderScreen = () => {
     Number(cart.taxPrice)
   ).toFixed(2);
 
-  const orderCreate = useSelector((state) => state.orderCreate);
-  const { order, success, error } = orderCreate;
-
-  useEffect(() => {
-    if (success) {
-      history.push(`/order/${order.id}`);
-    }
-    // eslint-disable-next-line
-  }, [history, success]);
-
   const placeOrderHandler = () => {
-    console.log(cart);
-    dispatch(
-      createOrder({
-        orderItems: cart.cartItems,
-        shippingAddress: cart.shippingAddress,
-        paymentMethod: cart.paymentMethod
+    const order = {
+      orderItems: cart.cartItems,
+      shippingAddress: cart.shippingAddress,
+      paymentMethod: cart.paymentMethod
+    };
+    setError(false);
+    setLoading(true);
+    createOrder(order, userInfo.token)
+      .then(order => {
+        history.push(`/order/${order.id}`);
       })
-    );
+      .catch(error => {
+        setError(error.message);
+      })
+      .finally(() => setLoading(false));
   };
 
   return (
     <>
+      {loading && <Loader />}
       <CheckoutSteps step1 step2 step3 step4 />
       <Row>
         <Col md={8}>
