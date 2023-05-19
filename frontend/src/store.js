@@ -1,11 +1,11 @@
 import { createStore, combineReducers, applyMiddleware, compose } from 'redux';
 import thunk from 'redux-thunk';
-import { cartReducer } from './reducers/cartReducers';
+import { cartReducer } from './redux/reducers/cartReducers';
 import {
   userDetailsReducer,
   userLoginReducer,
   userUpdateProfileReducer
-} from './reducers/userReducers';
+} from './redux/reducers/userReducers';
 
 const composeEnhancers =
   (typeof window !== 'undefined' &&

@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from 'react-redux';
-import { login, register, updateUserProfile } from '../actions/userActions';
+import { login, register, updateUserProfile } from '../redux/actions/userActions';
 
 export const useUserInfo = () => {
   const userLogin = useSelector((state) => state.userLogin);

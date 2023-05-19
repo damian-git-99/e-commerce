@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Form, Button } from 'react-bootstrap';
 import { useDispatch } from 'react-redux';
 import { FormContainer } from '../components/FormContainer';
-import { saveShippingAddress } from '../actions/cartActions';
+import { saveShippingAddress } from '../redux/actions/cartActions';
 import { useHistory } from 'react-router-dom';
 import { CheckoutSteps } from '../components/CheckoutSteps';
 import { useUserInfo } from '../hooks/useUserInfo';
