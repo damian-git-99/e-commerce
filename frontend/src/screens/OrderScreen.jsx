@@ -8,8 +8,10 @@ import { Message } from '../components/Message';
 import { PayPalButton } from 'react-paypal-button-v2';
 import { useUserInfo } from '../hooks/useUserInfo';
 import { deliverOrder, getOrderDetails, payOrder } from '../api/orderAPI';
+import { useHistory } from 'react-router-dom/cjs/react-router-dom.min';
 
 export const OrderScreen = () => {
+  const history = useHistory();
   const match = useRouteMatch();
   const orderId = match.params.id;
   const [sdkReady, setSdkReady] = useState(false);
@@ -31,6 +33,9 @@ export const OrderScreen = () => {
   }
 
   useEffect(() => {
+    if (!userInfo) {
+      history.push('/login');
+    }
     const addPayPalScript = async () => {
       const config = {
         headers: {
@@ -237,7 +242,7 @@ export const DeliverOrder = ({ order, userInfo, setOrder }) => {
     <div>
       {loading && <Loader />}
       {error && <Alert variant="danger">{error}</Alert>}
-      {userInfo.isAdmin && order.isPaid && !order.isDelivered && (
+      {userInfo?.isAdmin && order.isPaid && !order.isDelivered && (
         <ListGroup.Item>
           <Button
             type='button'

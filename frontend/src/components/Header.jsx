@@ -1,19 +1,16 @@
 import React from 'react';
 import { Route } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
 import { Container, Nav, Navbar, NavDropdown } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
-import { logout } from '../redux/actions/userActions';
 import { SearchBox } from './SearchBox';
 import { useUserInfo } from '../hooks/useUserInfo';
 
 export const Header = () => {
-  const dispatch = useDispatch();
-  const { userLogin } = useUserInfo();
+  const { userLogin, logout } = useUserInfo();
   const { userInfo } = userLogin;
 
   const logoutHandler = () => {
-    dispatch(logout());
+    logout();
   };
 
   return (
