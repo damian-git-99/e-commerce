@@ -19,6 +19,7 @@ const reducer = combineReducers({
   userUpdateProfile: userUpdateProfileReducer
 });
 
+// loading data from local storage
 const cartItemsFromStorage = localStorage.getItem('cartItems')
   ? JSON.parse(localStorage.getItem('cartItems'))
   : [];
