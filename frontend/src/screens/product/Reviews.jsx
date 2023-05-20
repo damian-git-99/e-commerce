@@ -44,7 +44,7 @@ export const Reviews = ({ product, setAddReview }) => {
               <p>{review.comment}</p>
             </ListGroup.Item>
           ))}
-        <ListGroup.Item>
+        <ListGroup.Item className='p-0'>
           <h2>Write a Customer Review</h2>
           {error && <Alert variant="danger">{error}</Alert>}
           {/* todo: move to another component */}

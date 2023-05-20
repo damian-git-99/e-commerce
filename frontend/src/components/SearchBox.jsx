@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Form, Button } from 'react-bootstrap';
+import { Form } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 
 export const SearchBox = () => {
@@ -24,7 +24,6 @@ export const SearchBox = () => {
           aria-label="Search"
           onChange={(e) => setKeyword(e.target.value)}
         />
-        <Button variant="outline-secondary" type='submit'>Search</Button>
       </Form>
   );
 };

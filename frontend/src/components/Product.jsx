@@ -8,7 +8,7 @@ export const Product = ({ product }) => {
   return (
     <Card className="my-3 p-3 rounded" data-masonry='{"percentPosition": true }'>
       <Link to={`/product/${product.id}`}>
-        <Card.Img src={product.image} variant="top" />
+        <Card.Img src={product.image} variant="top" className='product-img'/>
       </Link>
 
       <Card.Body>
