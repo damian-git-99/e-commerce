@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link, useHistory } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Button, Row, Col, ListGroup, Image, Card } from 'react-bootstrap';
 import { CheckoutSteps } from '../components/CheckoutSteps';
 import { Message } from '../components/Message';
@@ -12,7 +12,7 @@ export const PlaceOrderScreen = () => {
   const { cart } = useCart();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
-  const history = useHistory();
+  const navigate = useNavigate();
   const { userLogin } = useUserInfo();
   const { userInfo } = userLogin;
 
@@ -43,7 +43,7 @@ export const PlaceOrderScreen = () => {
     setLoading(true);
     createOrder(order, userInfo.token)
       .then(order => {
-        history.push(`/order/${order.id}`);
+        navigate(`/order/${order.id}`);
       })
       .catch(error => {
         setError(error.message);

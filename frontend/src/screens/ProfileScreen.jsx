@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Table, Form, Button, Row, Col } from 'react-bootstrap';
-import { LinkContainer } from 'react-router-bootstrap';
 import { Loader } from '../components/Loader';
 import { Message } from '../components/Message';
-import { useHistory } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useUserInfo } from '../hooks/useUserInfo';
 import axios from 'axios';
 import { getUserOrders } from '../api/orderAPI';
@@ -140,7 +139,7 @@ export const EditProfile = () => {
 };
 
 export const MyOrders = () => {
-  const history = useHistory();
+  const navigate = useNavigate();
   const [orders, setOrders] = useState([]);
   const [error, setError] = useState(undefined);
   const [loading, setLoading] = useState(false);
@@ -148,7 +147,7 @@ export const MyOrders = () => {
   const { userInfo: loggedUser } = userLogin;
 
   if (!loggedUser) {
-    history.push('/login');
+    navigate('/login');
   }
 
   useEffect(() => {
@@ -210,11 +209,11 @@ export const MyOrders = () => {
                         )}
                   </td>
                   <td>
-                    <LinkContainer to={`/order/${order.id}`}>
+                    <Link to={`/order/${order.id}`}>
                       <Button className='btn-sm' variant='light'>
                         Details
                       </Button>
-                    </LinkContainer>
+                    </Link>
                   </td>
                 </tr>
               ))}

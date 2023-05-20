@@ -1,14 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import { LinkContainer } from 'react-router-bootstrap';
+import { Link, useNavigate } from 'react-router-dom';
 import { Table, Button } from 'react-bootstrap';
 import { Message } from '../components/Message';
 import { Loader } from '../components/Loader';
 import { useUserInfo } from '../hooks/useUserInfo';
 import { getOrders } from '../api/orderAPI';
-import { useHistory } from 'react-router-dom/cjs/react-router-dom.min';
 
 export const OrderListScreen = () => {
-  const history = useHistory();
+  const navigate = useNavigate();
   const [orders, setOrders] = useState([]);
   const [error, setError] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -26,9 +25,9 @@ export const OrderListScreen = () => {
         .catch(error => setError(error.message))
         .finally(() => setLoading(false));
     } else {
-      history.push('/login');
+      navigate('/login');
     }
-  }, [history, userInfo]);
+  }, [navigate, userInfo]);
 
   return (
     <>
@@ -73,11 +72,11 @@ export const OrderListScreen = () => {
                     )}
               </td>
               <td>
-                <LinkContainer to={`/order/${order.id}`}>
+                <Link to={`/order/${order.id}`}>
                   <Button variant="light" className="btn-sm">
                     Details
                   </Button>
-                </LinkContainer>
+                </Link>
               </td>
             </tr>
           ))}

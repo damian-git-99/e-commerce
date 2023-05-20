@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { Form, Button, Row, Col } from 'react-bootstrap';
-import { useHistory, Link } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { FormContainer } from '../components/FormContainer';
 import { Message } from '../components/Message';
 import { Loader } from '../components/Loader';
 import { useUserInfo } from '../hooks/useUserInfo';
 
 export const LoginScreen = () => {
-  const history = useHistory();
+  const navigate = useNavigate();
   const { userLogin, login } = useUserInfo();
   const initialState = {
     email: '',
@@ -19,9 +19,9 @@ export const LoginScreen = () => {
 
   useEffect(() => {
     if (loggedUser) {
-      history.push('/');
+      navigate('/');
     }
-  }, [history, loggedUser]);
+  }, [navigate, loggedUser]);
 
   const handleChange = (e) => {
     setform({

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Form, Button } from 'react-bootstrap';
 import { FormContainer } from '../components/FormContainer';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { CheckoutSteps } from '../components/CheckoutSteps';
 import { useUserInfo } from '../hooks/useUserInfo';
 import { useCart } from '../hooks/useCart';
@@ -9,7 +9,7 @@ import { useCart } from '../hooks/useCart';
 export const ShippingScreen = () => {
   const { cart, saveShippingAddress } = useCart();
   const { userLogin } = useUserInfo();
-  const history = useHistory();
+  const navigate = useNavigate();
   const { shippingAddress } = cart;
 
   const [address, setAddress] = useState(shippingAddress.address);
@@ -20,14 +20,14 @@ export const ShippingScreen = () => {
 
   useEffect(() => {
     if (!loggedUser) {
-      history.push('/');
+      navigate('/');
     }
-  }, [history, loggedUser]);
+  }, [navigate, loggedUser]);
 
   const submitHandler = (e) => {
     e.preventDefault();
     saveShippingAddress({ address, city, postalCode, country });
-    history.push('/payment');
+    navigate('/payment');
   };
 
   return (

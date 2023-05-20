@@ -1,6 +1,6 @@
 /* eslint-disable eqeqeq */
 import React, { useState, useEffect } from 'react';
-import { Link, useRouteMatch, useHistory } from 'react-router-dom';
+import { Link, useParams, useNavigate } from 'react-router-dom';
 import { Form, Button } from 'react-bootstrap';
 import { Loader } from '../../components/Loader';
 import { Message } from '../../components/Message';
@@ -12,9 +12,8 @@ export const UserEditScreen = () => {
   const [user, setUser] = useState({});
   const [error, setError] = useState(false);
   const [loading, setLoading] = useState(false);
-  const history = useHistory();
-  const match = useRouteMatch();
-  const userId = match.params.id;
+  const navigate = useNavigate();
+  const { id: userId } = useParams();
   const { userLogin } = useUserInfo();
   const { userInfo } = userLogin;
   const { name, email, isAdmin } = user;
@@ -43,7 +42,7 @@ export const UserEditScreen = () => {
     setLoading(true);
     updateUser(userId, { name, email, isAdmin }, userInfo.token)
       .then(_ => {
-        history.push('/admin/userlist');
+        navigate('/admin/userlist');
         // todo update global state if authenticated user is modified
       })
       .catch(error => setError(error.message))

@@ -1,14 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import LinkContainer from 'react-router-bootstrap/lib/LinkContainer';
 import { Table, Button, Row, Col } from 'react-bootstrap';
-import { useHistory } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Loader } from '../../components/Loader';
 import { Message } from '../../components/Message';
 import { useUserInfo } from '../../hooks/useUserInfo';
 import { getProducts, deleteProduct, createProduct } from '../../api/productsAPI';
 
 export const ProductListScreen = () => {
-  const history = useHistory();
+  const navigate = useNavigate();
   const { userLogin } = useUserInfo();
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -20,7 +19,7 @@ export const ProductListScreen = () => {
     setLoading(true);
     setError(false);
     if (userInfo && !userInfo.isAdmin) {
-      history.push('/login');
+      navigate('/login');
     }
 
     getProducts()
@@ -30,7 +29,7 @@ export const ProductListScreen = () => {
       .catch(error => setError(error.message))
       .finally(() => setLoading(false));
   }, [
-    history,
+    navigate,
     userInfo
   ]);
 
@@ -50,7 +49,7 @@ export const ProductListScreen = () => {
     setError(false);
     createProduct(userInfo.token)
       .then(createdProduct => {
-        history.push(`/admin/product/${createdProduct.id}/edit`);
+        navigate(`/admin/product/${createdProduct.id}/edit`);
       })
       .catch(error => setError(error.message));
   };
@@ -96,11 +95,11 @@ export const ProductListScreen = () => {
                 <td>{product.category}</td>
                 <td>{product.brand}</td>
                 <td>
-                  <LinkContainer to={`/admin/product/${product.id}/edit`}>
+                  <Link to={`/admin/product/${product.id}/edit`}>
                     <Button variant='light' className='btn-sm'>
                       <i className='fas fa-edit'></i>
                     </Button>
-                  </LinkContainer>
+                  </Link>
                   <Button
                     variant='danger'
                     className='btn-sm'

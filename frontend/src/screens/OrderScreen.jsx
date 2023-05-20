@@ -2,18 +2,16 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Row, Col, ListGroup, Image, Card, Button, Alert } from 'react-bootstrap';
-import { useRouteMatch, Link } from 'react-router-dom';
+import { useParams, Link, useNavigate } from 'react-router-dom';
 import { Loader } from '../components/Loader';
 import { Message } from '../components/Message';
 import { PayPalButton } from 'react-paypal-button-v2';
 import { useUserInfo } from '../hooks/useUserInfo';
 import { deliverOrder, getOrderDetails, payOrder } from '../api/orderAPI';
-import { useHistory } from 'react-router-dom/cjs/react-router-dom.min';
 
 export const OrderScreen = () => {
-  const history = useHistory();
-  const match = useRouteMatch();
-  const orderId = match.params.id;
+  const navigate = useNavigate();
+  const { id: orderId } = useParams();
   const [sdkReady, setSdkReady] = useState(false);
   const [order, setOrder] = useState();
   const [loading, setLoading] = useState(false);
@@ -34,7 +32,7 @@ export const OrderScreen = () => {
 
   useEffect(() => {
     if (!userInfo) {
-      history.push('/login');
+      navigate('/login');
     }
     const addPayPalScript = async () => {
       const config = {

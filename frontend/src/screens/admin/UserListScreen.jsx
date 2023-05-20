@@ -1,23 +1,22 @@
 import React, { useEffect, useState } from 'react';
-import { LinkContainer } from 'react-router-bootstrap';
+import { Link, useNavigate } from 'react-router-dom';
 import { Table, Button } from 'react-bootstrap';
 import { Loader } from '../../components/Loader';
 import { Message } from '../../components/Message';
 import { useUserInfo } from '../../hooks/useUserInfo';
-import { useHistory } from 'react-router-dom/cjs/react-router-dom.min';
 import { deleteUser, getUsers } from '../../api/adminAPI';
 
 export const UserListScreen = () => {
   const [users, setUsers] = useState([]);
   const [error, setError] = useState(false);
   const [loading, setLoading] = useState(false);
-  const history = useHistory();
+  const navigate = useNavigate();
   const { userLogin } = useUserInfo();
   const { userInfo } = userLogin;
 
   useEffect(() => {
     if (!userInfo && !userInfo.isAdmin) {
-      history.push('/login');
+      navigate('/login');
       return;
     }
     setLoading(true);
@@ -73,11 +72,11 @@ export const UserListScreen = () => {
                     )}
               </td>
               <td>
-                <LinkContainer to={`user/${user.id}/edit`}>
+                <Link to={`/admin/user/${user.id}/edit`}>
                   <Button variant='light' className='btn-sm'>
                     <i className='fas fa-edit'></i>
                   </Button>
-                </LinkContainer>
+                </Link>
                 <Button
                   variant='danger'
                   className='btn-sm'

@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 import React, { useEffect, useState } from 'react';
-import { Link, useRouteMatch, useHistory } from 'react-router-dom';
+import { Link, useParams, useNavigate } from 'react-router-dom';
 import { Row, Col, Image, ListGroup, Card, Button, Form } from 'react-bootstrap';
 import { Rating } from '../components/Rating';
 import { Loader } from '../components/Loader';
@@ -9,8 +9,8 @@ import { useUserInfo } from '../hooks/useUserInfo';
 import { addProductReview, getProductDetails } from '../api/productsAPI';
 
 export const ProductScreen = () => {
-  const history = useHistory();
-  const match = useRouteMatch();
+  const navigate = useNavigate();
+  const match = useParams();
   const [quantity, setQuantity] = useState(1);
   const [product, setProduct] = useState({});
   const [error, setError] = useState(undefined);
@@ -20,7 +20,7 @@ export const ProductScreen = () => {
   useEffect(() => {
     setLoading(true);
     setError(undefined);
-    getProductDetails(match.params.id)
+    getProductDetails(match.id)
       .then((data) => {
         setProduct(data);
       })
@@ -29,7 +29,7 @@ export const ProductScreen = () => {
   }, [match, addSuccessReview]);
 
   const addToCartHandler = () => {
-    history.push(`/cart/${match.params.id}?qty=${quantity}`);
+    navigate(`/cart/${match.id}?qty=${quantity}`);
   };
 
   return (
@@ -145,11 +145,11 @@ export const Reviews = ({ product, setAddReview }) => {
   const [rating, setRating] = useState(0);
   const [comment, setComment] = useState('');
   const [error, setError] = useState(undefined);
-  const match = useRouteMatch();
+  const match = useParams();
 
   const submitHandler = (e) => {
     e.preventDefault();
-    addProductReview(match.params.id, { rating, comment }, userInfo.token)
+    addProductReview(match.id, { rating, comment }, userInfo.token)
       .then(_ => {
         setAddReview(true);
         setRating(0);

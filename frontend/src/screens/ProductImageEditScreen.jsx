@@ -1,13 +1,12 @@
 /* eslint-disable react/prop-types */
 import React, { useEffect, useState } from 'react';
 import { Alert, Button, Col, Form, Row } from 'react-bootstrap';
-import { useRouteMatch } from 'react-router-dom/cjs/react-router-dom.min';
+import { useParams } from 'react-router-dom';
 import { useUserInfo } from '../hooks/useUserInfo';
 import { getProductDetails, updateProductImage } from '../api/productsAPI';
 
 export const ProductImageEditScreen = () => {
-  const match = useRouteMatch();
-  const productId = match.params.id;
+  const { id: productId } = useParams();
   const { userLogin } = useUserInfo();
   const { userInfo } = userLogin;
   const [uploading, setUploading] = useState(false);

@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Link, useRouteMatch, useHistory, useLocation } from 'react-router-dom';
+import { Link, useParams, useNavigate, useLocation } from 'react-router-dom';
 import { Row, Col, ListGroup, Image, Form, Button, Card } from 'react-bootstrap';
 import { Message } from '../components/Message';
 import { useCart } from '../hooks/useCart';
@@ -7,9 +7,8 @@ import { useCart } from '../hooks/useCart';
 export const CartScreen = () => {
   const { cart, addToCart, removeFromCart } = useCart();
   const location = useLocation();
-  const history = useHistory();
-  const match = useRouteMatch();
-  const productId = match.params.id;
+  const navigate = useNavigate();
+  const { id: productId } = useParams();
   const quantity = location.search ? Number(location.search.split('=')[1]) : 1;
   const { cartItems } = cart;
 
@@ -24,7 +23,7 @@ export const CartScreen = () => {
   };
 
   const checkoutHandler = () => {
-    history.push('/shipping');
+    navigate('/shipping');
   };
 
   return (

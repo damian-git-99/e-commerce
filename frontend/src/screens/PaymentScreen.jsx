@@ -2,16 +2,16 @@ import React, { useState } from 'react';
 import { Form, Button, Col } from 'react-bootstrap';
 import { CheckoutSteps } from '../components/CheckoutSteps';
 import { FormContainer } from '../components/FormContainer';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useCart } from '../hooks/useCart';
 
 const PaymentScreen = () => {
   const { cart, savePaymentMethod } = useCart();
-  const history = useHistory();
+  const navigate = useNavigate();
   const { shippingAddress } = cart;
 
   if (!shippingAddress) {
-    history.push('/shipping');
+    navigate('/shipping');
   }
 
   const [paymentMethod, setPaymentMethod] = useState('PayPal');
@@ -19,7 +19,7 @@ const PaymentScreen = () => {
   const submitHandler = (e) => {
     e.preventDefault();
     savePaymentMethod(paymentMethod);
-    history.push('/placeorder');
+    navigate('/placeorder');
   };
 
   return (

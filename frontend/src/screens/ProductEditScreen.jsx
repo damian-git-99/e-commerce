@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Form, Button, Alert } from 'react-bootstrap';
-import { useHistory, Link, useRouteMatch } from 'react-router-dom';
+import { useNavigate, Link, useParams } from 'react-router-dom';
 import { FormContainer } from '../components/FormContainer';
 import { useUserInfo } from '../hooks/useUserInfo';
 import { getProductDetails, updateProduct } from '../api/productsAPI';
@@ -14,10 +14,9 @@ export const ProductEditScreen = () => {
     countInStock: 0,
     brand: ''
   };
-  const history = useHistory();
+  const navigate = useNavigate();
   const { userLogin } = useUserInfo();
-  const match = useRouteMatch();
-  const productId = match.params.id;
+  const { id: productId } = useParams();
   const [form, setForm] = useState(initialState);
   const [error, setError] = useState(false);
   const { userInfo } = userLogin;
@@ -49,7 +48,7 @@ export const ProductEditScreen = () => {
     e.preventDefault();
     updateProduct(productId, { ...form }, userInfo.token)
       .then(_ => {
-        history.push('/admin/productlist');
+        navigate('/admin/productlist');
       })
       .catch(error => setError(error.message));
   };
