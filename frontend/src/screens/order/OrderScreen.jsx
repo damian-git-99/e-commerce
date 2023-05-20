@@ -1,18 +1,15 @@
 /* eslint-disable react/prop-types */
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
 import { Row, Col, ListGroup, Image, Card, Button, Alert } from 'react-bootstrap';
 import { useParams, Link } from 'react-router-dom';
-import { PayPalButton } from 'react-paypal-button-v2';
 import { deliverOrder, getOrderDetails, payOrder } from '../../api/orderAPI';
 import { Loader } from '../../components/Loader';
 import { useUserInfo } from '../../hooks/useUserInfo';
+import { PayPalButton } from './PayPalButton';
 
 export const OrderScreen = () => {
   const { id: orderId } = useParams();
-  const [sdkReady, setSdkReady] = useState(false);
   const [order, setOrder] = useState();
-  const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
   const { userLogin } = useUserInfo();
   const { userInfo } = userLogin;
@@ -29,32 +26,10 @@ export const OrderScreen = () => {
   }
 
   useEffect(() => {
-    const addPayPalScript = async () => {
-      const config = {
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${userInfo.token}`
-        }
-      };
-      const { data: clientId } = await axios.get('http://localhost:5000/api/config/paypal', config);
-      const script = document.createElement('script');
-      script.type = 'text/javascript';
-      script.src = `https://www.paypal.com/sdk/js?client-id=${clientId}`;
-      script.async = true;
-      script.onload = () => {
-        setSdkReady(true);
-      };
-      document.body.appendChild(script);
-    };
     getOrderDetails(orderId, userInfo.token)
       .then(data => {
         setOrder(data);
       });
-
-    if (!order?.isPaid) {
-      if (!window.paypal) addPayPalScript();
-      else setSdkReady(true);
-    }
   }, [orderId]);
 
   const successPaymentHandler = (paymentResult) => {
@@ -64,19 +39,19 @@ export const OrderScreen = () => {
       update_time: paymentResult.update_time,
       email_address: paymentResult.payer.email_address
     };
-    setLoading(true);
     setError(false);
     payOrder(orderId, data, userInfo.token)
       .then(data => {
+        console.log(data);
         setOrder({
           ...order,
-          isPaid: true
+          isPaid: true,
+          paidAt: data.paidAt
         });
       })
       .catch(err => {
         setError(err.message);
-      })
-      .finally(() => setLoading(false));
+      });
   };
 
   return (
@@ -195,17 +170,10 @@ export const OrderScreen = () => {
               </ListGroup.Item>
               {!order.isPaid && (
                 <ListGroup.Item>
-                  {loading && <Loader />}
-                  {!sdkReady
-                    ? (
-                    <Loader />
-                      )
-                    : (
-                    <PayPalButton
+                  <PayPalButton
                       amount={order.totalPrice}
-                      onSuccess={successPaymentHandler}
+                      onSuccess={(paymentResult) => successPaymentHandler(paymentResult)}
                     />
-                      )}
                 </ListGroup.Item>
               )}
               <DeliverOrder order={order} userInfo={userInfo} setOrder={setOrder} />
