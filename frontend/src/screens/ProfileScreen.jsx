@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Table, Form, Button, Row, Col } from 'react-bootstrap';
 import { Loader } from '../components/Loader';
 import { Message } from '../components/Message';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { useUserInfo } from '../hooks/useUserInfo';
 import axios from 'axios';
 import { getUserOrders } from '../api/orderAPI';
@@ -139,16 +139,11 @@ export const EditProfile = () => {
 };
 
 export const MyOrders = () => {
-  const navigate = useNavigate();
   const [orders, setOrders] = useState([]);
   const [error, setError] = useState(undefined);
   const [loading, setLoading] = useState(false);
   const { userLogin } = useUserInfo();
   const { userInfo: loggedUser } = userLogin;
-
-  if (!loggedUser) {
-    navigate('/login');
-  }
 
   useEffect(() => {
     setError(undefined);

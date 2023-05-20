@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Row, Col, ListGroup, Image, Card, Button, Alert } from 'react-bootstrap';
-import { useParams, Link, useNavigate } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import { Loader } from '../components/Loader';
 import { Message } from '../components/Message';
 import { PayPalButton } from 'react-paypal-button-v2';
@@ -10,7 +10,6 @@ import { useUserInfo } from '../hooks/useUserInfo';
 import { deliverOrder, getOrderDetails, payOrder } from '../api/orderAPI';
 
 export const OrderScreen = () => {
-  const navigate = useNavigate();
   const { id: orderId } = useParams();
   const [sdkReady, setSdkReady] = useState(false);
   const [order, setOrder] = useState();
@@ -31,9 +30,6 @@ export const OrderScreen = () => {
   }
 
   useEffect(() => {
-    if (!userInfo) {
-      navigate('/login');
-    }
     const addPayPalScript = async () => {
       const config = {
         headers: {

@@ -1,14 +1,12 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Form, Button } from 'react-bootstrap';
 import { FormContainer } from '../components/FormContainer';
 import { useNavigate } from 'react-router-dom';
 import { CheckoutSteps } from '../components/CheckoutSteps';
-import { useUserInfo } from '../hooks/useUserInfo';
 import { useCart } from '../hooks/useCart';
 
 export const ShippingScreen = () => {
   const { cart, saveShippingAddress } = useCart();
-  const { userLogin } = useUserInfo();
   const navigate = useNavigate();
   const { shippingAddress } = cart;
 
@@ -16,13 +14,6 @@ export const ShippingScreen = () => {
   const [city, setCity] = useState(shippingAddress.city);
   const [postalCode, setPostalCode] = useState(shippingAddress.postalCode);
   const [country, setCountry] = useState(shippingAddress.country);
-  const { userInfo: loggedUser } = userLogin;
-
-  useEffect(() => {
-    if (!loggedUser) {
-      navigate('/');
-    }
-  }, [navigate, loggedUser]);
 
   const submitHandler = (e) => {
     e.preventDefault();

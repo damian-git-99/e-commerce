@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { Table, Button } from 'react-bootstrap';
 import { Loader } from '../../components/Loader';
 import { Message } from '../../components/Message';
@@ -10,15 +10,10 @@ export const UserListScreen = () => {
   const [users, setUsers] = useState([]);
   const [error, setError] = useState(false);
   const [loading, setLoading] = useState(false);
-  const navigate = useNavigate();
   const { userLogin } = useUserInfo();
   const { userInfo } = userLogin;
 
   useEffect(() => {
-    if (!userInfo && !userInfo.isAdmin) {
-      navigate('/login');
-      return;
-    }
     setLoading(true);
     setError(false);
     getUsers(userInfo.token)

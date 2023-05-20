@@ -15,18 +15,14 @@ export const OrderListScreen = () => {
   const { userInfo } = userLogin;
 
   useEffect(() => {
-    if (userInfo && userInfo.isAdmin) {
-      setError(false);
-      setLoading(true);
-      getOrders(userInfo.token)
-        .then(data => {
-          setOrders(data);
-        })
-        .catch(error => setError(error.message))
-        .finally(() => setLoading(false));
-    } else {
-      navigate('/login');
-    }
+    setError(false);
+    setLoading(true);
+    getOrders(userInfo.token)
+      .then(data => {
+        setOrders(data);
+      })
+      .catch(error => setError(error.message))
+      .finally(() => setLoading(false));
   }, [navigate, userInfo]);
 
   return (

@@ -18,9 +18,6 @@ export const ProductListScreen = () => {
   useEffect(() => {
     setLoading(true);
     setError(false);
-    if (userInfo && !userInfo.isAdmin) {
-      navigate('/login');
-    }
 
     getProducts()
       .then(data => {
