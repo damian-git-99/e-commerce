@@ -3,11 +3,10 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Row, Col, ListGroup, Image, Card, Button, Alert } from 'react-bootstrap';
 import { useParams, Link } from 'react-router-dom';
-import { Loader } from '../components/Loader';
-import { Message } from '../components/Message';
 import { PayPalButton } from 'react-paypal-button-v2';
-import { useUserInfo } from '../hooks/useUserInfo';
-import { deliverOrder, getOrderDetails, payOrder } from '../api/orderAPI';
+import { deliverOrder, getOrderDetails, payOrder } from '../../api/orderAPI';
+import { Loader } from '../../components/Loader';
+import { useUserInfo } from '../../hooks/useUserInfo';
 
 export const OrderScreen = () => {
   const { id: orderId } = useParams();
@@ -105,12 +104,12 @@ export const OrderScreen = () => {
               </p>
               {order.isDelivered
                 ? (
-                <Message variant="success">
+                <Alert variant="success">
                   Delivered on {order.deliveredAt}
-                </Message>
+                </Alert>
                   )
                 : (
-                <Message variant="danger">Not Delivered</Message>
+                <Alert variant="danger">Not Delivered</Alert>
                   )}
             </ListGroup.Item>
 
@@ -122,10 +121,10 @@ export const OrderScreen = () => {
               </p>
               {order.isPaid
                 ? (
-                <Message variant="success">Paid on {order.paidAt}</Message>
+                <Alert variant="success">Paid on {order.paidAt}</Alert>
                   )
                 : (
-                <Message variant="danger">Not Paid</Message>
+                <Alert variant="danger">Not Paid</Alert>
                   )}
             </ListGroup.Item>
 
@@ -133,7 +132,7 @@ export const OrderScreen = () => {
               <h2>Order Items</h2>
               {order.orderItems.length === 0
                 ? (
-                <Message>Order is empty</Message>
+                <Alert>Order is empty</Alert>
                   )
                 : (
                 <ListGroup variant="flush">

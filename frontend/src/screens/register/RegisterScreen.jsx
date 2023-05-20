@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { Form, Button, Row, Col } from 'react-bootstrap';
-import { Message } from '../components/Message';
-import { Loader } from '../components/Loader';
-import { FormContainer } from '../components/FormContainer';
-import { useUserInfo } from '../hooks/useUserInfo';
+import { Message } from '../../components/Message';
+import { Loader } from '../../components/Loader';
+import { FormContainer } from '../../components/FormContainer';
+import { useUserInfo } from '../../hooks/useUserInfo';
 
 export const RegisterScreen = () => {
   const { userLogin, register } = useUserInfo();

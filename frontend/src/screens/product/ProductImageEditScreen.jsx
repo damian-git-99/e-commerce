@@ -2,8 +2,8 @@
 import React, { useEffect, useState } from 'react';
 import { Alert, Button, Col, Form, Row } from 'react-bootstrap';
 import { useParams } from 'react-router-dom';
-import { useUserInfo } from '../hooks/useUserInfo';
-import { getProductDetails, updateProductImage } from '../api/productsAPI';
+import { useUserInfo } from '../../hooks/useUserInfo';
+import { getProductDetails, updateProductImage } from '../../api/productsAPI';
 
 export const ProductImageEditScreen = () => {
   const { id: productId } = useParams();

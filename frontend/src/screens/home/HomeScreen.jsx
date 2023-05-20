@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { Row, Col } from 'react-bootstrap';
 import { useParams } from 'react-router-dom';
-import { Loader } from '../components/Loader';
-import { Message } from '../components/Message';
-import { Product } from '../components/Product';
-import { getProducts } from '../api/productsAPI';
+import { Loader } from '../../components/Loader';
+import { Message } from '../../components/Message';
+import { Product } from '../../components/Product';
+import { getProducts } from '../../api/productsAPI';
 
 export const HomeScreen = () => {
   const match = useParams();

@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { Form, Button, Row, Col } from 'react-bootstrap';
 import { useNavigate, Link } from 'react-router-dom';
-import { FormContainer } from '../components/FormContainer';
-import { Message } from '../components/Message';
-import { Loader } from '../components/Loader';
-import { useUserInfo } from '../hooks/useUserInfo';
+import { FormContainer } from '../../components/FormContainer';
+import { Message } from '../../components/Message';
+import { Loader } from '../../components/Loader';
+import { useUserInfo } from '../../hooks/useUserInfo';
 
 export const LoginScreen = () => {
   const navigate = useNavigate();

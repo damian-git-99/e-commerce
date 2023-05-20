@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { Table, Form, Button, Row, Col } from 'react-bootstrap';
-import { Loader } from '../components/Loader';
-import { Message } from '../components/Message';
+import { Loader } from '../../components/Loader';
+import { Message } from '../../components/Message';
 import { Link } from 'react-router-dom';
-import { useUserInfo } from '../hooks/useUserInfo';
+import { useUserInfo } from '../../hooks/useUserInfo';
 import axios from 'axios';
-import { getUserOrders } from '../api/orderAPI';
+import { getUserOrders } from '../../api/orderAPI';
 
 export const ProfileScreen = () => {
   return (

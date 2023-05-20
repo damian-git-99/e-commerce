@@ -1,29 +1,29 @@
 import React from 'react';
 import { Route, Routes } from 'react-router-dom';
-import { HomeScreen } from '../screens/HomeScreen';
-import { OrderScreen } from '../screens/OrderScreen';
-import { ShippingScreen } from '../screens/ShippingScreen';
-import PaymentScreen from '../screens/PaymentScreen';
-import { PlaceOrderScreen } from '../screens/PlaceOrderScreen';
-import { LoginScreen } from '../screens/LoginScreen';
-import { RegisterScreen } from '../screens/RegisterScreen';
-import { ProfileScreen } from '../screens/ProfileScreen';
-import { ProductScreen } from '../screens/ProductScreen';
-import { CartScreen } from '../screens/CartScreen';
-import { UserListScreen } from '../screens/admin/UserListScreen';
-import { UserEditScreen } from '../screens/admin/UserEditScreen';
-import { ProductListScreen } from '../screens/admin/ProductListScreen';
-import { ProductEditScreen } from '../screens/ProductEditScreen';
-import { ProductImageEditScreen } from '../screens/ProductImageEditScreen';
-import { OrderListScreen } from '../screens/OrderListScreen';
-import { AuthenticatedRoutes } from './AuthenticatedRoutes';
+import { HomeScreen } from '../screens/home/HomeScreen';
+import { LoginScreen } from '../screens/login/LoginScreen';
+import { RegisterScreen } from '../screens/register/RegisterScreen';
+import { CartScreen } from '../screens/cart/CartScreen';
+import { ShippingScreen } from '../screens/payment/ShippingScreen';
+import PaymentScreen from '../screens/payment/PaymentScreen';
+import { PlaceOrderScreen } from '../screens/order/PlaceOrderScreen';
+import { ProfileScreen } from '../screens/profile/ProfileScreen';
+import { ProductEditScreen } from '../screens/product/ProductEditScreen';
+import { ProductImageEditScreen } from '../screens/product/ProductImageEditScreen';
+import { OrderListScreen } from '../screens/order/OrderListScreen';
 import { AdminRoutes } from './AdminRoutes';
+import { AuthenticatedRoutes } from './AuthenticatedRoutes';
+import { ProductScreen } from '../screens/product/ProductScreen';
+import { OrderScreen } from '../screens/order/OrderScreen';
+import { ProductListScreen } from '../screens/admin/ProductListScreen';
+import { UserEditScreen } from '../screens/admin/UserEditScreen';
+import { UserListScreen } from '../screens/admin/UserListScreen';
 
 export const AppRoutes = () => {
   return (
       <Routes>
         <Route path='/' element={<HomeScreen />} />
-        <Route path='/search/:keyword' element={<HomeScreen/>} />
+        <Route path='/search/:keyword' element={<HomeScreen />} />
         <Route path='/login' element={<LoginScreen />} />
         <Route path='/register' element={<RegisterScreen />} />
         <Route path='/product/:id' element={<ProductScreen />} />

@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Button, Row, Col, ListGroup, Image, Card } from 'react-bootstrap';
-import { CheckoutSteps } from '../components/CheckoutSteps';
-import { Message } from '../components/Message';
-import { useCart } from '../hooks/useCart';
-import { createOrder } from '../api/orderAPI';
-import { useUserInfo } from '../hooks/useUserInfo';
-import { Loader } from '../components/Loader';
+import { CheckoutSteps } from '../../components/CheckoutSteps';
+import { Message } from '../../components/Message';
+import { useCart } from '../../hooks/useCart';
+import { createOrder } from '../../api/orderAPI';
+import { useUserInfo } from '../../hooks/useUserInfo';
+import { Loader } from '../../components/Loader';
 
 export const PlaceOrderScreen = () => {
   const { cart } = useCart();

@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { Form, Button, Alert } from 'react-bootstrap';
 import { useNavigate, Link, useParams } from 'react-router-dom';
-import { FormContainer } from '../components/FormContainer';
-import { useUserInfo } from '../hooks/useUserInfo';
-import { getProductDetails, updateProduct } from '../api/productsAPI';
+import { FormContainer } from '../../components/FormContainer';
+import { useUserInfo } from '../../hooks/useUserInfo';
+import { getProductDetails, updateProduct } from '../../api/productsAPI';
 
 export const ProductEditScreen = () => {
   const initialState = {

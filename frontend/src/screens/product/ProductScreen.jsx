@@ -1,12 +1,11 @@
 /* eslint-disable react/prop-types */
 import React, { useEffect, useState } from 'react';
 import { Link, useParams, useNavigate } from 'react-router-dom';
-import { Row, Col, Image, ListGroup, Card, Button, Form } from 'react-bootstrap';
-import { Rating } from '../components/Rating';
-import { Loader } from '../components/Loader';
-import { Message } from '../components/Message';
-import { useUserInfo } from '../hooks/useUserInfo';
-import { addProductReview, getProductDetails } from '../api/productsAPI';
+import { Row, Col, Image, ListGroup, Card, Button, Form, Alert } from 'react-bootstrap';
+import { addProductReview, getProductDetails } from '../../api/productsAPI';
+import { Loader } from '../../components/Loader';
+import { Rating } from '../../components/Rating';
+import { useUserInfo } from '../../hooks/useUserInfo';
 
 export const ProductScreen = () => {
   const navigate = useNavigate();
@@ -43,7 +42,7 @@ export const ProductScreen = () => {
           )
         : error
           ? (
-        <Message variant='danger'>{error}</Message>
+        <Alert variant='danger'>{error}</Alert>
             )
           : (
         <>
@@ -163,7 +162,7 @@ export const Reviews = ({ product, setAddReview }) => {
   return (
     <>
       <h2>Reviews</h2>
-            {product && product.reviews && product.reviews.length === 0 && <Message>No Reviews</Message>}
+            {product && product.reviews && product.reviews.length === 0 && <Alert>No Reviews</Alert>}
               <ListGroup variant='flush'>
                 {product && product.reviews && product.reviews.map((review) => (
                   <ListGroup.Item key={review.id}>
@@ -176,7 +175,7 @@ export const Reviews = ({ product, setAddReview }) => {
                 <ListGroup.Item>
                   <h2>Write a Customer Review</h2>
                   {error && (
-                    <Message variant='danger'>{error}</Message>
+                    <Alert variant='danger'>{error}</Alert>
                   )}
                   {/* todo: move to another component */}
                   {userInfo
@@ -212,9 +211,9 @@ export const Reviews = ({ product, setAddReview }) => {
                     </Form>
                       )
                     : (
-                    <Message>
+                    <Alert>
                       Please <Link to='/login'>sign in</Link> to write a review{' '}
-                    </Message>
+                    </Alert>
                       )}
                 </ListGroup.Item>
               </ListGroup>

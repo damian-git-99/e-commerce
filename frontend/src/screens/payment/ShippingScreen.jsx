@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { Form, Button } from 'react-bootstrap';
-import { FormContainer } from '../components/FormContainer';
+import { FormContainer } from '../../components/FormContainer';
 import { useNavigate } from 'react-router-dom';
-import { CheckoutSteps } from '../components/CheckoutSteps';
-import { useCart } from '../hooks/useCart';
+import { CheckoutSteps } from '../../components/CheckoutSteps';
+import { useCart } from '../../hooks/useCart';
 
 export const ShippingScreen = () => {
   const { cart, saveShippingAddress } = useCart();

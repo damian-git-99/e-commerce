@@ -1,8 +1,8 @@
 import React, { useEffect } from 'react';
 import { Link, useParams, useNavigate, useLocation } from 'react-router-dom';
 import { Row, Col, ListGroup, Image, Form, Button, Card } from 'react-bootstrap';
-import { Message } from '../components/Message';
-import { useCart } from '../hooks/useCart';
+import { Message } from '../../components/Message';
+import { useCart } from '../../hooks/useCart';
 
 export const CartScreen = () => {
   const { cart, addToCart, removeFromCart } = useCart();

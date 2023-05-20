@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Table, Button } from 'react-bootstrap';
-import { Message } from '../components/Message';
-import { Loader } from '../components/Loader';
-import { useUserInfo } from '../hooks/useUserInfo';
-import { getOrders } from '../api/orderAPI';
+import { Message } from '../../components/Message';
+import { Loader } from '../../components/Loader';
+import { useUserInfo } from '../../hooks/useUserInfo';
+import { getOrders } from '../../api/orderAPI';
 
 export const OrderListScreen = () => {
   const navigate = useNavigate();

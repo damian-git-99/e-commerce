@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { Form, Button, Col } from 'react-bootstrap';
-import { CheckoutSteps } from '../components/CheckoutSteps';
-import { FormContainer } from '../components/FormContainer';
+import { CheckoutSteps } from '../../components/CheckoutSteps';
+import { FormContainer } from '../../components/FormContainer';
 import { useNavigate } from 'react-router-dom';
-import { useCart } from '../hooks/useCart';
+import { useCart } from '../../hooks/useCart';
 
 const PaymentScreen = () => {
   const { cart, savePaymentMethod } = useCart();
