@@ -18,7 +18,6 @@ export const LoginScreen = () => {
   const { loading, error, userInfo: loggedUser } = userLogin;
 
   useEffect(() => {
-    /* Redirecting the user to the home page if the user is logged in. */
     if (loggedUser) {
       history.push('/');
     }
