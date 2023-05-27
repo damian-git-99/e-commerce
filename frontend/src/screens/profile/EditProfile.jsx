@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useUserInfo } from '../../hooks/useUserInfo';
 import { Alert, Button, Form } from 'react-bootstrap';
 import { Loader } from '../../components/Loader';
-import axios from 'axios';
+import { getUserDetails } from '../../api/userAPI';
 
 export const EditProfile = () => {
   const initialState = {
@@ -21,29 +21,15 @@ export const EditProfile = () => {
   const { email, password, name, confirmPassword } = form;
 
   useEffect(() => {
-    async function getUserDetails () {
-      try {
-        setError(undefined);
-        setLoading(true);
-        const config = {
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${loggedUser.token}`
-          }
-        };
-        const { data } = await axios.get('http://localhost:5000/api/users/profile', config);
-        const { email, name } = data;
+    getUserDetails(loggedUser.token)
+      .then(data => {
         setform({
-          name,
-          email
+          name: data.name,
+          email: data.email
         });
-      } catch (error) {
-        setError(error.message);
-      } finally {
-        setLoading(false);
-      }
-    }
-    getUserDetails();
+      })
+      .catch(error => setError(error.message))
+      .finally(() => setLoading(false));
   }, []);
 
   const handleChange = (e) => {

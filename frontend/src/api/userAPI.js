@@ -34,6 +34,22 @@ export async function getUserDetailsAdmin (userId, token) {
   }
 }
 
+export async function getUserDetails (token) {
+  try {
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    };
+
+    const { data } = await axios.get('http://localhost:5000/api/users/profile', config);
+    return data;
+  } catch (error) {
+    const message = getErrorMessage(error);
+    throw new Error(message);
+  }
+}
+
 export async function deleteUser (userId, token) {
   try {
     const config = {
