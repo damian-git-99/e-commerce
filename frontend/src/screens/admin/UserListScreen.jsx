@@ -4,7 +4,7 @@ import { Table, Button } from 'react-bootstrap';
 import { Loader } from '../../components/Loader';
 import { Message } from '../../components/Message';
 import { useUserInfo } from '../../hooks/useUserInfo';
-import { deleteUser, getUsers } from '../../api/adminAPI';
+import { deleteUser, getUsers } from '../../api/userAPI';
 
 export const UserListScreen = () => {
   const [users, setUsers] = useState([]);

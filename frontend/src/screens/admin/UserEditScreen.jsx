@@ -5,7 +5,7 @@ import { Form, Button } from 'react-bootstrap';
 import { Loader } from '../../components/Loader';
 import { Message } from '../../components/Message';
 import { FormContainer } from '../../components/FormContainer';
-import { getUserDetailsAdmin, updateUser } from '../../api/adminAPI';
+import { getUserDetailsAdmin, updateUser } from '../../api/userAPI';
 import { useUserInfo } from '../../hooks/useUserInfo';
 
 export const UserEditScreen = () => {
