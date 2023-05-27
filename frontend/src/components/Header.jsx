@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import {
   Container,
@@ -10,8 +10,12 @@ import { SearchBox } from './SearchBox';
 import { useUserInfo } from '../hooks/useUserInfo';
 
 export const Header = () => {
-  const { userLogin, logout } = useUserInfo();
+  const { userLogin, logout, renewToken } = useUserInfo();
   const { userInfo } = userLogin;
+
+  useEffect(() => {
+    renewToken();
+  }, []);
 
   const logoutHandler = () => {
     logout();

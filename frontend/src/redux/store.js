@@ -32,11 +32,6 @@ const shippingAddressFromStorage = localStorage.getItem('shippingAddress')
   ? JSON.parse(localStorage.getItem('shippingAddress'))
   : {};
 
-// todo: check if userInfo is still valid, if not, clear it from local storage
-// todo: check if  token is in local storage
-// todo: make request to the backend to verify if token is still valid
-// todo: if is not valid, remove from local storage
-
 const initialState = {
   cart: {
     cartItems: cartItemsFromStorage,

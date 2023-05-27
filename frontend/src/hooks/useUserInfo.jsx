@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from 'react-redux';
-import { login, logout, register, updateUserProfile } from '../redux/actions/userActions';
+import { login, logout, register, renewToken, updateUserProfile } from '../redux/actions/userActions';
 
 export const useUserInfo = () => {
   const userLogin = useSelector((state) => state.userLogin);
@@ -11,6 +11,10 @@ export const useUserInfo = () => {
 
   const registerHandle = (name, email, password) => {
     dispatch(register(name, email, password));
+  };
+
+  const renewTokenHandle = () => {
+    dispatch(renewToken());
   };
 
   const updateUserProfileHandle = (user) => {
@@ -26,6 +30,7 @@ export const useUserInfo = () => {
     login: loginHandle,
     updateUserProfile: updateUserProfileHandle,
     register: registerHandle,
-    logout: logoutHandle
+    logout: logoutHandle,
+    renewToken: renewTokenHandle
   };
 };

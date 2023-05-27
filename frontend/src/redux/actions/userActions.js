@@ -45,6 +45,37 @@ export const login = (email, password) => {
   };
 };
 
+export const renewToken = () => {
+  return async (dispatch, getState) => {
+    try {
+      const {
+        userLogin: { userInfo }
+      } = getState();
+
+      const config = {
+        headers: {
+          Authorization: `Bearer ${userInfo.token}`
+        }
+      };
+
+      const { data } = await axios.get(
+        `${URL}/renew-token`,
+        config
+      );
+
+      dispatch({
+        type: USER_LOGIN_TYPES.USER_LOGIN_SUCCESS,
+        payload: data
+      });
+
+      localStorage.setItem('userInfo', JSON.stringify(data));
+    } catch (error) {
+      dispatch({ type: USER_LOGIN_TYPES.USER_LOGOUT });
+      dispatch({ type: USER_DETAILS_TYPES.USER_DETAILS_RESET });
+    }
+  };
+};
+
 export const logout = () => (dispatch) => {
   localStorage.removeItem('userInfo');
   dispatch({ type: USER_LOGIN_TYPES.USER_LOGOUT });
