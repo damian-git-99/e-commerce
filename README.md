@@ -1,4 +1,5 @@
 # E-commerce
+
 E-commerce website using the MERN technology stack, with the addition of PayPal integration and Cloudinary for products image.
 
 The website will feature a user-friendly interface for customers to browse products, add items to their cart, and complete purchases securely through PayPal's payment gateway. Customers will also be able to leave reviews and ratings for products they have purchased, and view their order history.
@@ -7,11 +8,12 @@ As an admin user, you will have access to a dashboard where you can manage the w
 
 Additionally, we will be utilizing Cloudinary for efficient image management.
 
-
 ![](https://i.ibb.co/WvXrhyy/Captura-de-pantalla-2023-02-19-125522.png)
 ![](https://i.ibb.co/GH7cSkX/Captura-de-pantalla-2023-02-19-125704.png)
+
 ## User Stories
-- Customers 
+
+- Customers
   - Signup: As a new user, I want to be able to sign up for an account so that I can access the features of the website.
   - Signin: As a registered user, I want to be able to sign in to my account so that I can view my previous purchases and access my cart.
   - Logout: As a user, I want to be able to log out of my account when I am done using the website.
@@ -30,7 +32,9 @@ Additionally, we will be utilizing Cloudinary for efficient image management.
 ## Run Project with docker
 
 ## Setting up Cloudinary
+
 To use Cloudinary in your application, you'll need to create an account and obtain your authentication credentials. Follow these steps to set up Cloudinary:
+
 - Sign up on the Cloudinary website and create an account.
 - Once you've created your account, log in to the Cloudinary management console.
 - In the "Dashboard" section of the console, click on the "Create a New Cloud" button.
@@ -50,10 +54,11 @@ To use Cloudinary in your application, you'll need to create an account and obta
   - `cloudinary_api_secret`
 - cd to the root of the project
 - Run the command `docker-compose up -d`
-- Frontend App runs on port 3000
+- Frontend App runs on port 5173
 - Backend App runs on port 5000
 
 ## Users by default
+
 - Admin user:
   - email: admin@example.com
   - password: 123456
