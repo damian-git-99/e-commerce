@@ -1,7 +1,8 @@
 const { Router } = require('express');
 const { check } = require('express-validator');
 const validateFields = require('../utils/middlewares/expressValidator');
-const { login, signUp } = require('./authController');
+const { login, signUp, renewToken } = require('./authController');
+const { validateJwt } = require('../utils/middlewares/validateJWT');
 const router = Router();
 
 // @route /api/users
@@ -17,6 +18,8 @@ router.post('/signup', [
   check('name', 'The name cannot be empty').notEmpty(),
   validateFields
 ], signUp);
+
+router.get('/renew-token', validateJwt, renewToken);
 
 module.exports = {
   authRouter: router

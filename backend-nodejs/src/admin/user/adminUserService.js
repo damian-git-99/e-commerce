@@ -26,9 +26,10 @@ const updateUser = async (userId, newUser) => {
     throw new UserNotFoundException();
   }
 
-  const { name, email, password } = newUser;
+  const { name, email, password, isAdmin } = newUser;
   user.name = name || user.name;
   user.email = email || user.email;
+  user.isAdmin = isAdmin !== undefined ? isAdmin : user.isAdmin;
 
   if (password) {
     user.password = encryptPassword(password);

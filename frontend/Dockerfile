@@ -1,10 +1,14 @@
-FROM node:16.3.0-alpine
+# Base image
+FROM node:16.14.0-alpine3.14
+# Set working directory
 WORKDIR /app
-COPY package.json .
-COPY package-lock.json .
-RUN npm ci 
+# Copy package.json and package-lock.json files to container
+COPY package*.json ./
+# Install dependencies
+RUN npm install
+# Copy the rest of the application files to container
 COPY . .
-RUN npm run build
-ENV NODE_ENV production
-EXPOSE 3000
-CMD [ "npx", "serve", "build" ]
+# Expose the port that the application will be listening on
+EXPOSE 5173
+# Start the application
+CMD [ "npm", "run", "dev" ]

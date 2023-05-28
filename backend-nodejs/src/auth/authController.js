@@ -1,5 +1,6 @@
 const asyncHandler = require('express-async-handler');
 const authService = require('./authService');
+const { generateToken } = require('../utils/generateToken');
 
 // @route POST /api/users/login
 const login = asyncHandler(async (req, res) => {
@@ -33,7 +34,21 @@ const signUp = asyncHandler(async (req, res) => {
   });
 });
 
+// @route GET /api/users/renew-token
+const renewToken = asyncHandler(async (req, res) => {
+  const user = req.user;
+  const token = generateToken({ id: user.id });
+  return res.status(200).json({
+    id: user.id,
+    name: user.name,
+    email: user.email,
+    isAdmin: user.isAdmin,
+    token
+  });
+});
+
 module.exports = {
   login,
-  signUp
+  signUp,
+  renewToken
 };
